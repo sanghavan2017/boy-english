@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Boy English 🐸</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4FF;min-height:100vh;display:flex;justify-content:center;padding:0}
+.app{width:100%;max-width:420px;background:#fff;min-height:100vh;display:flex;flex-direction:column;position:relative}
+
+/* ---- SETUP ---- */
+.setup{padding:32px 24px;display:flex;flex-direction:column;gap:16px}
+.logo{text-align:center;margin-bottom:8px}
+.logo .pika{display:block;width:110px;height:110px;margin:0 auto}
+.ninja-float{animation:bob 2.4s ease-in-out infinite;transform-origin:55px 65px}
+.ninja-star{animation:spin 3s ease-in-out infinite;transform-origin:55px 22px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{0%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}100%{transform:rotate(-15deg)}}
+.logo h1{font-size:26px;font-weight:700;color:#1a1a2e;margin-top:10px}
+.logo p{font-size:14px;color:#666;margin-top:4px}
+.badge-sgk{display:inline-block;background:#EEF2FF;color:#4338CA;font-size:11px;padding:4px 14px;border-radius:20px;margin-top:8px;font-weight:600;letter-spacing:.03em}
+.form-group{background:#F8FAFF;border:1px solid #E2E8F0;border-radius:14px;padding:16px}
+.form-group label{font-size:11px;color:#888;display:block;margin-bottom:7px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.form-group input,.form-group select{width:100%;font-size:14px;padding:11px 13px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;color:#1a1a2e;outline:none;transition:border .15s}
+.form-group input:focus,.form-group select:focus{border-color:#6366F1}
+.key-note{font-size:11px;color:#94A3B8;margin-top:7px;display:flex;align-items:center;gap:4px}
+.btn-start{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(99,102,241,.3);transition:opacity .15s}
+.btn-start:active{opacity:.9}
+
+/* ---- MAIN ---- */
+.main{display:none;flex-direction:column;flex:1}
+.topbar{padding:12px 16px;background:#fff;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.pika-av{width:40px;height:40px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:22px;border:2px solid #C7D2FE;flex-shrink:0}
+.topbar-info{flex:1;min-width:0}
+.topbar-info h2{font-size:14px;font-weight:700;color:#1a1a2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-info p{font-size:11px;color:#94A3B8}
+.icon-btn{background:none;border:none;cursor:pointer;color:#94A3B8;padding:6px;border-radius:8px;font-size:20px;transition:all .15s;display:flex;align-items:center}
+.icon-btn:hover{background:#F1F5F9;color:#6366F1}
+
+/* progress */
+.prog-wrap{padding:10px 16px 6px;background:#fff}
+.prog-labels{display:flex;justify-content:space-between;font-size:11px;color:#94A3B8;margin-bottom:5px}
+.prog-track{height:7px;background:#EEF2FF;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#6366F1,#8B5CF6);border-radius:4px;transition:width .5s ease}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 16px}
+.stat{background:#F8FAFF;border-radius:12px;padding:10px 6px;text-align:center;border:1px solid #E2E8F0}
+.stat-n{font-size:20px;font-weight:700;color:#1a1a2e}
+.stat-l{font-size:10px;color:#94A3B8;margin-top:2px}
+
+/* badges row */
+.badges-row{padding:4px 16px 8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.badges-row::-webkit-scrollbar{display:none}
+.badge-chip{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;background:#F1F5F9;color:#64748B;border:1px solid #E2E8F0}
+.badge-chip.earned{background:#FEF3C7;color:#92400E;border-color:#FCD34D}
+
+/* topics */
+.topic-wrap{padding:4px 16px 8px}
+.topic-lbl{font-size:10px;color:#94A3B8;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid #E2E8F0;background:#fff;color:#64748B;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .15s}
+.chip.on{background:#6366F1;border-color:#6366F1;color:#fff}
+.chip:hover:not(.on){background:#F8FAFF;border-color:#C7D2FE}
+
+/* chat */
+.chat{margin:0 16px 8px;background:#F8FAFF;border-radius:16px;border:1px solid #E2E8F0;padding:14px;display:flex;flex-direction:column;gap:9px;min-height:220px;max-height:320px;overflow-y:auto}
+.bbl{max-width:85%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.55;word-break:break-word}
+.bbl.ai{background:#fff;border:1px solid #E2E8F0;color:#1a1a2e;align-self:flex-start;border-radius:4px 16px 16px 16px}
+.bbl.user{background:#6366F1;color:#fff;align-self:flex-end;border-radius:16px 4px 16px 16px}
+.bbl.hint{background:#ECFDF5;color:#065F46;font-size:12px;align-self:flex-start;border-radius:4px 16px 16px 16px;border:1px solid #A7F3D0}
+.bbl.good{background:#EEF2FF;color:#3730A3;font-size:12px;align-self:flex-start;border-radius:4px 16px 16px 16px;border:1px solid #C7D2FE}
+.bbl.try{background:#FFFBEB;color:#92400E;font-size:12px;align-self:flex-start;border-radius:4px 16px 16px 16px;border:1px solid #FCD34D}
+.bbl.err{background:#FEF2F2;color:#991B1B;font-size:12px;align-self:flex-start;border-radius:4px 16px 16px 16px}
+.typing{display:flex;align-items:center;gap:5px;padding:10px 14px;background:#fff;border:1px solid #E2E8F0;border-radius:4px 16px 16px 16px;align-self:flex-start}
+.dot{width:7px;height:7px;border-radius:50%;background:#94A3B8;animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.spk-btn{background:none;border:none;cursor:pointer;color:#6366F1;padding:0 0 0 5px;font-size:13px;opacity:.8;vertical-align:middle}
+.spk-btn:hover{opacity:1}
+
+/* input area */
+.input-area{padding:0 16px 8px;display:flex;flex-direction:column;gap:8px}
+.quick-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.q-btn{padding:9px 4px;border-radius:12px;border:1px solid #E2E8F0;background:#fff;color:#64748B;font-size:11px;font-weight:500;cursor:pointer;text-align:center;line-height:1.4;transition:all .15s}
+.q-btn:hover{background:#F8FAFF;border-color:#C7D2FE;color:#6366F1}
+.q-btn span{display:block;font-size:17px;margin-bottom:3px}
+
+/* mic / type toggle */
+.mode-toggle{display:flex;gap:6px}
+.mode-btn{flex:1;padding:9px;border-radius:12px;border:1.5px solid #E2E8F0;background:#fff;color:#94A3B8;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.mode-btn.on{background:#EEF2FF;border-color:#6366F1;color:#4338CA}
+
+.mic-btn{width:100%;padding:15px;border-radius:14px;border:2px solid #6366F1;background:transparent;color:#6366F1;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s}
+.mic-btn:hover{background:#EEF2FF}
+.mic-btn.rec{border-color:#EF4444!important;color:#EF4444!important;background:#FEF2F2!important;border-width:2.5px!important}
+.mic-btn.rec .mic-ic{animation:pulse .75s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+
+.type-row{display:flex;gap:8px}
+.type-input{flex:1;padding:12px 14px;border-radius:12px;border:1.5px solid #CBD5E1;background:#F8FAFF;color:#1a1a2e;font-size:14px;outline:none;transition:border .15s}
+.type-input:focus{border-color:#6366F1}
+.send-btn{padding:12px 16px;border-radius:12px;border:none;background:#6366F1;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.send-btn:active{opacity:.85}
+
+/* PANELS */
+.panel{display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:420px;height:100%;background:#fff;z-index:100;flex-direction:column;overflow-y:auto}
+.panel.show{display:flex}
+.panel-header{padding:16px;border-bottom:1px solid #F1F5F9;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:#fff;z-index:1}
+.panel-header h2{flex:1;font-size:16px;font-weight:700;color:#1a1a2e}
+.close-btn{background:none;border:none;cursor:pointer;color:#94A3B8;font-size:22px;padding:4px;border-radius:8px}
+.close-btn:hover{background:#F1F5F9}
+.panel-body{padding:20px 16px;display:flex;flex-direction:column;gap:16px}
+
+/* parent panel */
+.report-card{background:#F8FAFF;border:1px solid #E2E8F0;border-radius:14px;padding:16px}
+.report-card h3{font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.report-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #F1F5F9;font-size:13px}
+.report-row:last-child{border:none}
+.report-row span:first-child{color:#64748B}
+.report-row span:last-child{font-weight:600;color:#1a1a2e}
+.history-item{background:#fff;border:1px solid #E2E8F0;border-radius:10px;padding:10px 12px;font-size:12px}
+.history-item .hi-date{color:#94A3B8;font-size:11px;margin-bottom:4px}
+.history-item .hi-detail{color:#1a1a2e}
+
+/* badges panel */
+.badges-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.badge-card{background:#F8FAFF;border:1px solid #E2E8F0;border-radius:14px;padding:14px;text-align:center}
+.badge-card.earned{background:#FFFBEB;border-color:#FCD34D}
+.badge-card .bc-ico{font-size:32px;margin-bottom:6px}
+.badge-card .bc-name{font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:3px}
+.badge-card .bc-desc{font-size:11px;color:#94A3B8}
+.badge-card.earned .bc-desc{color:#92400E}
+
+.footer-lnk{text-align:center;font-size:11px;color:#CBD5E1;padding:6px 0 16px;cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SETUP -->
+<div class="setup" id="setupScreen">
+  <div class="logo">
+    <span class="pika"><svg viewBox="0 0 110 120" xmlns="http://www.w3.org/2000/svg">
+<g class="ninja-star">
+<polygon points="55,8 60,20 74,20 63,28 67,40 55,32 43,40 47,28 36,20 50,20" fill="#60A5FA"/>
+<line x1="55" y1="2" x2="55" y2="0" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+<line x1="36" y1="10" x2="30" y2="5" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+<line x1="74" y1="10" x2="80" y2="5" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+<line x1="30" y1="22" x2="24" y2="22" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+<line x1="80" y1="22" x2="86" y2="22" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+</g>
+<g class="ninja-float">
+<ellipse cx="55" cy="82" rx="22" ry="26" fill="#166534"/>
+<ellipse cx="55" cy="82" rx="14" ry="18" fill="#22c55e" opacity="0.3"/>
+<rect x="40" y="46" width="30" height="30" rx="15" fill="#166534"/>
+<ellipse cx="55" cy="46" rx="15" ry="13" fill="#15803d"/>
+<ellipse cx="44" cy="40" rx="8" ry="9" fill="#15803d"/>
+<ellipse cx="66" cy="40" rx="8" ry="9" fill="#15803d"/>
+<ellipse cx="44" cy="39" rx="5" ry="6" fill="#166534"/>
+<ellipse cx="66" cy="39" rx="5" ry="6" fill="#166534"/>
+<ellipse cx="47" cy="57" rx="6" ry="6" fill="#fff"/>
+<ellipse cx="63" cy="57" rx="6" ry="6" fill="#fff"/>
+<ellipse cx="48" cy="58" rx="4" ry="4" fill="#1e1b4b"/>
+<ellipse cx="64" cy="58" rx="4" ry="4" fill="#1e1b4b"/>
+<ellipse cx="49" cy="57" rx="1.5" ry="1.5" fill="#fff"/>
+<ellipse cx="65" cy="57" rx="1.5" ry="1.5" fill="#fff"/>
+<rect x="37" y="64" width="36" height="9" rx="4.5" fill="#111827"/>
+<ellipse cx="47" cy="68" rx="3" ry="2.5" fill="#60A5FA" opacity="0.7"/>
+<ellipse cx="63" cy="68" rx="3" ry="2.5" fill="#60A5FA" opacity="0.7"/>
+<rect x="30" y="72" width="10" height="22" rx="5" fill="#15803d" transform="rotate(-15,35,83)"/>
+<rect x="70" y="72" width="10" height="22" rx="5" fill="#15803d" transform="rotate(15,75,83)"/>
+<ellipse cx="26" cy="93" rx="7" ry="5" fill="#166534" transform="rotate(-15,26,93)"/>
+<ellipse cx="84" cy="93" rx="7" ry="5" fill="#166534" transform="rotate(15,84,93)"/>
+<rect x="44" y="105" width="9" height="18" rx="4" fill="#15803d"/>
+<rect x="57" y="105" width="9" height="18" rx="4" fill="#15803d"/>
+<ellipse cx="46" cy="123" rx="9" ry="4" fill="#166534"/>
+<ellipse cx="64" cy="123" rx="9" ry="4" fill="#166534"/>
+</g>
+</svg></span>
+    <h1>Boy English</h1>
+    <p>Luyện giao tiếp tiếng Anh cùng Pokemon</p>
+    <span class="badge-sgk">📚 Theo chương trình SGK Tiểu học</span>
+  </div>
+  <div class="form-group">
+    <label>🔑 Claude API Key</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off"/>
+    <div class="key-note">🔒 Chỉ lưu trên thiết bị này, không gửi đi đâu ngoài Anthropic</div>
+  </div>
+  <div class="form-group">
+    <label>🎙️ ElevenLabs API Key <span style="font-size:10px;color:#22c55e;font-weight:400">(giọng tự nhiên)</span></label>
+    <input type="password" id="elKey" placeholder="sk_..." autocomplete="off"/>
+    <div class="key-note">🔒 Để trống nếu chưa có — sẽ dùng giọng máy thay thế</div>
+  </div>
+  <div class="form-group">
+    <label>🎤 OpenAI API Key <span style="font-size:10px;color:#22c55e;font-weight:400">(mic mọi thiết bị)</span></label>
+    <input type="password" id="oaiKey" placeholder="sk-..." autocomplete="off"/>
+    <div class="key-note">🔒 Dùng Whisper STT — mic hoạt động trên iPhone, Android</div>
+  </div>
+  <div class="form-group">
+    <label>👦 Tên của con</label>
+    <input type="text" id="childName" placeholder="Ví dụ: Minh, An, Bảo..." maxlength="20"/>
+  </div>
+  <div class="form-group">
+    <label>🏫 Đang học lớp</label>
+    <select id="grade">
+      <option value="3">Lớp 3</option>
+      <option value="4" selected>Lớp 4</option>
+      <option value="5">Lớp 5</option>
+      <option value="6">Lớp 6</option>
+      <option value="7">Lớp 7</option>
+      <option value="8">Lớp 8</option>
+      <option value="9">Lớp 9</option>
+    </select>
+  </div>
+  <button class="btn-start" onclick="startApp()">
+    🐸 Bắt đầu học tiếng Anh!
+  </button>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="mainScreen">
+  <div class="topbar">
+    <div class="pika-av"><svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" width="40" height="40"><ellipse cx="20" cy="26" rx="13" ry="14" fill="#166534"/><rect x="12" y="11" width="16" height="16" rx="8" fill="#166534"/><ellipse cx="20" cy="11" rx="8" ry="7" fill="#15803d"/><ellipse cx="15" cy="20" rx="4" ry="4" fill="#fff"/><ellipse cx="25" cy="20" rx="4" ry="4" fill="#fff"/><ellipse cx="16" cy="21" rx="2.5" ry="2.5" fill="#1e1b4b"/><ellipse cx="26" cy="21" rx="2.5" ry="2.5" fill="#1e1b4b"/><rect x="11" y="25" width="18" height="5" rx="2.5" fill="#111827"/></svg></div>
+    <div class="topbar-info">
+      <h2 id="tbName">Boy English</h2>
+      <p id="tbSub">Lớp 4 · Family</p>
+    </div>
+    <button class="icon-btn" onclick="showPanel('badgesPanel')" title="Huy hiệu">🏆</button>
+    <button class="icon-btn" onclick="showPanel('parentPanel')" title="Phụ huynh">👨‍👩‍👧</button>
+    <button class="icon-btn" onclick="goSettings()" title="Cài đặt">⚙️</button>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="prog-labels"><span id="progLbl">Tiến độ bài học</span><span id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="sStars">0</div><div class="stat-l">⭐ Stars</div></div>
+    <div class="stat"><div class="stat-n" id="sStreak">0</div><div class="stat-l">🔥 Streak</div></div>
+    <div class="stat"><div class="stat-n" id="sTurns">0</div><div class="stat-l">💬 Lượt</div></div>
+  </div>
+
+  <div class="badges-row" id="earnedBadgesRow"></div>
+
+  <div class="topic-wrap">
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <button class="mode-btn on" id="tabSGK" onclick="setTab('sgk')" style="flex:1;padding:7px;font-size:12px;border-radius:10px">📚 SGK</button>
+      <button class="mode-btn" id="tabFun" onclick="setTab('fun')" style="flex:1;padding:7px;font-size:12px;border-radius:10px">🌟 Sở thích</button>
+    </div>
+    <div class="chips" id="chipBar"></div>
+  </div>
+
+  <div class="chat" id="chatWrap"></div>
+
+  <div class="input-area">
+    <div class="quick-btns">
+      <button class="q-btn" onclick="doHint()"><span>💡</span>Gợi ý</button>
+      <button class="q-btn" onclick="doRepeat()"><span>🔊</span>Nghe lại</button>
+      <button class="q-btn" onclick="doSkip()"><span>⏭️</span>Bỏ qua</button>
+    </div>
+    <div class="mode-toggle">
+      <button class="mode-btn on" id="mMic" onclick="setMode('mic')">🎤 Nói</button>
+      <button class="mode-btn" id="mType" onclick="setMode('type')">⌨️ Gõ tay</button>
+    </div>
+    <div id="micArea">
+      <button class="mic-btn" id="micBtn" onclick="handleMic()">
+        <span class="mic-ic">🎤</span>
+        <span id="micLbl">Nhấn để nói</span>
+      </button>
+      <button id="autoMicToggle" onclick="toggleAutoMic()" style="width:100%;margin-top:6px;padding:8px;border-radius:10px;border:1.5px solid #E2E8F0;background:#fff;color:#94A3B8;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s">
+        🔁 Tự động nghe sau mỗi câu
+      </button>
+    </div>
+    <div id="typeArea" style="display:none">
+      <div class="type-row">
+        <input class="type-input" type="text" id="typeInput" placeholder="Gõ câu trả lời tiếng Anh..." onkeydown="if(event.key==='Enter')sendTyped()"/>
+        <button class="send-btn" onclick="sendTyped()">Gửi ➤</button>
+      </div>
+    </div>
+  </div>
+  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp / API key</span>
+</div>
+
+<!-- BADGES PANEL -->
+<div class="panel" id="badgesPanel">
+  <div class="panel-header">
+    <h2>🏆 Huy hiệu của con</h2>
+    <button class="close-btn" onclick="hidePanel('badgesPanel')">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="badges-grid" id="badgesGrid"></div>
+  </div>
+</div>
+
+<!-- PARENT PANEL -->
+<div class="panel" id="parentPanel">
+  <div class="panel-header">
+    <h2>👨‍👩‍👧 Báo cáo phụ huynh</h2>
+    <button class="close-btn" onclick="hidePanel('parentPanel')">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="report-card">
+      <h3>📊 Buổi học hôm nay</h3>
+      <div class="report-row"><span>Chủ đề đang học</span><span id="rTopic">-</span></div>
+      <div class="report-row"><span>Tổng lượt nói/gõ</span><span id="rTurns">0</span></div>
+      <div class="report-row"><span>Câu trả lời tốt</span><span id="rGood">0</span></div>
+      <div class="report-row"><span>Stars nhận được</span><span id="rStars">0 ⭐</span></div>
+      <div class="report-row"><span>Streak cao nhất</span><span id="rMaxStreak">0 🔥</span></div>
+      <div class="report-row"><span>Thời gian học</span><span id="rTime">0 phút</span></div>
+    </div>
+    <div class="report-card">
+      <h3>📈 Tổng cộng</h3>
+      <div class="report-row"><span>Tổng stars toàn thời gian</span><span id="rTotalStars">0 ⭐</span></div>
+      <div class="report-row"><span>Số buổi học</span><span id="rSessions">0</span></div>
+      <div class="report-row"><span>Huy hiệu đạt được</span><span id="rBadges">0 🏆</span></div>
+    </div>
+    <div class="report-card">
+      <h3>📝 Lịch sử gần đây</h3>
+      <div id="historyList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CURRICULUM={
+  3:{
+    'My family':{e:'👨‍👩‍👧',s:'You are a fun friend chatting with an 8-year-old Vietnamese child in English. Start by asking something real and specific, like: so who makes breakfast at your house? or do you have a brother or sister? React with genuine surprise or delight to what they say, then naturally ask a follow-up. Never list questions. Talk like a curious friend, not a teacher testing vocabulary. Sentences under 8 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'My school':{e:'🏫',s:'You are a fun friend chatting with an 8-year-old Vietnamese child in English. Start with something real: like, what is your favorite subject, or do you have a best friend at school? React with genuine curiosity to their answer, then follow up naturally. Do not quiz them. Talk like a curious classmate. Sentences under 8 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'My body':{e:'🧍',s:'You are a playful friend chatting with an 8-year-old Vietnamese child in English. Make it a fun game, like: I am thinking of a body part you use to eat, what is it? Or ask: can you touch your nose and your ear at the same time? Keep it silly and physical. React with laughter and surprise. Sentences under 8 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'My house':{e:'🏠',s:'You are a curious friend visiting an 8-year-old Vietnamese child in their home, chatting in English. Start naturally: wow, do you have your own room? or what is your favorite spot at home? React genuinely, like you are really imagining their house. Ask one follow-up at a time. Sentences under 8 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  4:{
+    'My family':{e:'👨‍👩‍👧',s:'You are a friend chatting casually with a 9-year-old Vietnamese child in English. Ask about real daily moments: like, who wakes you up in the morning? or what does your family do on weekends? React like you are genuinely curious and a little surprised. Follow their lead naturally. Sentences under 10 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Body & Sports':{e:'🏃',s:'You are an energetic sporty friend chatting with a 9-year-old Vietnamese child in English. Start with something exciting: what sport are you good at? or have you ever tried swimming? React with real enthusiasm, share what you like too. Keep it lively and competitive. Sentences under 10 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'My neighborhood':{e:'🏘️',s:'You are a new friend who just moved nearby, chatting with a 9-year-old Vietnamese child in English. You are curious about their area: is there a park near your house? where do you buy snacks? React genuinely like you want to explore their neighborhood. One question at a time. Sentences under 10 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'My hobbies':{e:'🎨',s:'You are a fun friend chatting with a 9-year-old Vietnamese child in English about what they love doing. Start real: what do you do after school? or do you collect anything? React with genuine excitement when they share something. Ask follow-ups like a real friend would. Sentences under 10 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Weather':{e:'⛅',s:'You are a fun friend chatting with a 9-year-old Vietnamese child in English about weather and seasons. Make it personal: do you like rainy days or sunny days? what do you do when it is really hot? React naturally, share your own fake preference too. Sentences under 10 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  5:{
+    'Jobs & future':{e:'👨‍🚀',s:'You are a cool older friend chatting with a 10-year-old Vietnamese child in English about dreams and future. Start with something that sparks imagination: if you could have any job, what would it be? React with genuine interest and ask what they would actually do in that job. Make their dream feel real and exciting. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Countries':{e:'🌏',s:'You are a well-traveled friend chatting with a 10-year-old Vietnamese child in English. Share something intriguing: did you know in Japan kids clean their own school? or ask: if you could visit one country tomorrow, which one? React with real curiosity to their choice and dig deeper. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Environment':{e:'🌱',s:'You are a nature-loving friend chatting with a 10-year-old Vietnamese child in English. Start with something real they can relate to: have you noticed more plastic bags on your street? or what is your favorite animal and is it endangered? React with genuine concern and curiosity. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Sports & health':{e:'⚽',s:'You are a sporty friend chatting with a 10-year-old Vietnamese child in English about staying active and healthy. Make it real: what sport do you play, or do you just watch? or what do you eat for breakfast? React like a real friend who actually cares about health but keeps it fun. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Free time':{e:'🎮',s:'You are a chill friend chatting with a 10-year-old Vietnamese child in English about weekends and free time. Start casual: so what did you do last weekend? or what game are you into right now? React like you actually want to join in on their fun. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  6:{
+    'My new school':{e:'🏫',s:'You are a friendly older student chatting with an 11-year-old Vietnamese student who just started secondary school. You genuinely remember how weird that transition felt. Ask about real things: is your new school much bigger? do you have a different teacher for each subject now? React with empathy and curiosity. Keep the conversation feeling like a real chat, not a lesson. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Free time':{e:'🎮',s:'You are a cool friend chatting with an 11-year-old Vietnamese student in English about what they do for fun. Be real and casual: so after school, do you go straight home or hang out somewhere? or what app do you spend the most time on? React like you are genuinely interested in their life. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Food & health':{e:'🍜',s:'You are a food-loving friend chatting with an 11-year-old Vietnamese student in English. Start with something fun: if you could eat one food every day and never get bored, what would it be? or what do Vietnamese people eat that foreigners find strange? React with genuine curiosity and share your own food opinions. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Cities & places':{e:'🏙️',s:'You are a curious friend chatting with an 11-year-old Vietnamese student in English about places. Start with something concrete: what is the coolest thing about your city? or if you could live anywhere in Vietnam, where would it be? React genuinely and keep the conversation moving like a real chat. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Our past':{e:'📖',s:'You are a nostalgic friend chatting with an 11-year-old Vietnamese student in English about memories. Start warm: what is the best holiday you ever had? or what did you use to do when you were little that you do not do anymore? React with real curiosity and share a short memory of your own to keep it natural. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  7:{
+    'My hobbies':{e:'🎨',s:'You are a passionate friend chatting with a 12-year-old Vietnamese student in English. Get right into it: so what are you obsessed with right now? or is there something you do that most people your age do not do? React with genuine fascination and ask real follow-up questions, not just what and why but how and since when. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Community':{e:'🤝',s:'You are a thoughtful friend chatting with a 12-year-old Vietnamese student in English about the world around them. Start with something they can actually relate to: have you ever helped someone and felt really good about it? or is there anything in your neighborhood that bugs you? React with genuine interest in their opinion, not just polite agreement. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Science & nature':{e:'🔬',s:'You are a science-obsessed friend chatting with a 12-year-old Vietnamese student in English. Hook them with something wild: did you know octopuses have three hearts? or what animal do you think would win in a fight, a crocodile or a gorilla? React with genuine excitement and share crazy facts naturally in the conversation. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Travel':{e:'✈️',s:'You are an adventurous friend chatting with a 12-year-old Vietnamese student in English about travel. Make it personal: have you ever been somewhere that really surprised you? or where is one place in Vietnam you have never been but want to go? React like you are genuinely planning a trip together. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Films & music':{e:'🎬',s:'You are a pop culture friend chatting with a 12-year-old Vietnamese student in English. Get into it: what is the last movie that actually made you emotional? or who is one artist you could listen to all day? React with your own genuine opinions and friendly debate. Sentences under 12 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  8:{
+    'Lifestyle':{e:'🌟',s:'You are a relatable friend chatting with a 13-year-old Vietnamese student in English about daily life. Be real about it: what time do you actually go to sleep on school nights? or how many hours a day are you on your phone, honestly? React without judgment and share your own honest take. Sentences under 14 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Environment':{e:'🌍',s:'You are an eco-conscious friend chatting with a 13-year-old Vietnamese student in English. Do not lecture. Ask for their real opinion: do you actually think one person recycling makes any difference? or what is the worst environmental problem you see in Vietnam right now? React with genuine curiosity and push back a little to get them thinking deeper. Sentences under 14 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Technology':{e:'💻',s:'You are a tech-savvy friend chatting with a 13-year-old Vietnamese student in English. Start with something current: do you think AI is going to change what jobs people do? or what app could you absolutely not live without? React with your own tech opinions and dig into their view. Sentences under 14 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Festivals':{e:'🎉',s:'You are a curious friend chatting with a 13-year-old Vietnamese student in English about celebrations. Make it personal: what is your absolute favorite thing about Tet? or is there a tradition in your family that outsiders would find really strange? React with genuine delight and share something surprising about another culture. Sentences under 14 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Career':{e:'💼',s:'You are an honest friend chatting with a 13-year-old Vietnamese student in English about the future. Be real: do you actually know what you want to do after school, or does nobody? or what skill do you have right now that could be worth money someday? React with genuine curiosity and help them think it through. Sentences under 14 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  9:{
+    'Life skills':{e:'🧠',s:'You are a sharp friend chatting with a 14-year-old Vietnamese student in English about real life. Be direct: when something goes wrong, do you usually deal with it right away or wait? or what is harder for you, working alone or in a group? React with genuine curiosity and share your own honest experience. Sentences under 15 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Global issues':{e:'🌐',s:'You are a switched-on friend chatting with a 14-year-old Vietnamese student in English about the world. Start with something that actually matters to them: do you think young people can actually change anything, or is it all up to adults? or what world problem do you think about most? React thoughtfully and respectfully challenge their thinking. Sentences under 15 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Science & tech':{e:'🚀',s:'You are a genuinely excited friend chatting with a 14-year-old Vietnamese student in English about science and the future. Start with something that blows minds: if AI keeps improving, what job do you think will disappear first? or would you go to Mars if you had the chance, even if you could never come back? React with real enthusiasm. Sentences under 15 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'Vietnamese culture':{e:'🇻🇳',s:'You are a genuinely curious foreign friend chatting with a 14-year-old Vietnamese student in English about Vietnam. You really want to understand: what is something about Vietnamese culture that makes you proud? or is there a tradition you think is fading and you wish it would not? React with authentic interest and ask things you genuinely do not know. Sentences under 15 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'},
+    'High school prep':{e:'📚',s:'You are a supportive older friend chatting with a 14-year-old Vietnamese student in English who is stressed about high school. Be real with them: what part of the upcoming exams scares you the most? or do you have a plan, or does it feel completely overwhelming right now? React with genuine empathy and practical encouragement, not empty cheerleading. Sentences under 15 words. No emoji, asterisks, hashtags, markdown. Plain spoken text only.'}
+  },
+  fun:{
+    'Games':{e:'🎮',s:'You are a super fun English conversation partner who loves gaming, talking with a Vietnamese student aged 10-15. Chat naturally about video games like Minecraft, Roblox, Free Fire, League of Legends, Pokemon. Ask what games they play, strategies, clans, achievements. Be genuinely excited like a fellow gamer. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Movies & Anime':{e:'🎬',s:'You are a cool friendly English conversation partner who loves movies and anime, talking with a Vietnamese student aged 10-15. Chat about popular anime like Naruto, One Piece, Demon Slayer, Attack on Titan, and movies like Marvel, Spider-Man. Ask about favorite characters, plot twists, who would win fights. Be genuinely enthusiastic. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Music & Idols':{e:'🎵',s:'You are a relaxed friendly English conversation partner who loves music and pop culture, talking with a Vietnamese student aged 10-15. Chat about K-pop like BTS, Blackpink, NewJeans, or artists like Taylor Swift, Ed Sheeran. Ask about favorite songs, concerts, idols, dance moves. Be genuinely curious. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Sports':{e:'⚽',s:'You are an energetic sporty English conversation partner talking with a Vietnamese student aged 10-15. Chat about football, badminton, basketball, esports, favorite players like Ronaldo or Messi. Ask about matches watched, positions they play, best moments. React with genuine excitement. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Science':{e:'🚀',s:'You are an enthusiastic English conversation partner who loves science and tech, talking with a Vietnamese student aged 10-15. Chat about AI, space, black holes, dinosaurs, future inventions. Ask what fascinates them, what they want to invent. Be genuinely curious. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Travel':{e:'✈️',s:'You are an adventurous friendly English conversation partner talking with a Vietnamese student aged 10-15. Chat about dream destinations, street food, famous places in Vietnam and worldwide. Ask where they want to go, what they would eat, what they would do. React genuinely. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Food':{e:'🍜',s:'You are a food-loving friendly English conversation partner talking with a Vietnamese student aged 10-15. Chat about Vietnamese food, world cuisine, street food, cooking, weird foods, food trends. Ask about favorite dishes, what they can cook, sweet or spicy preference. Be enthusiastic. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'},
+    'Life & School':{e:'🏫',s:'You are a warm relatable English conversation partner talking with a Vietnamese student aged 10-15. Chat about school life, friendships, hobbies, dreams, social media, TikTok, YouTube. Ask about their day, friends, what makes them happy or stressed. Be genuine and non-judgmental. Sentences under 12 words. Never use emoji, asterisks, hashtags, or markdown. Plain spoken text only.'}
+  }
+};
+
+const BADGES=[
+  {id:'first',ico:'🌱',name:'First Step',desc:'Hoàn thành lượt đầu tiên',check:s=>s.turns>=1},
+  {id:'speak5',ico:'🗣️',name:'Brave Speaker',desc:'Nói 5 câu tiếng Anh',check:s=>s.goodAns>=5},
+  {id:'streak3',ico:'🔥',name:'On Fire!',desc:'Streak 3 câu liên tiếp',check:s=>s.maxStreak>=3},
+  {id:'star10',ico:'⭐',name:'Star Collector',desc:'Đạt 10 stars',check:s=>s.totalStars>=10},
+  {id:'star30',ico:'🌟',name:'Shining Star',desc:'Đạt 30 stars',check:s=>s.totalStars>=30},
+  {id:'streak5',ico:'⚡',name:'Lightning!',desc:'Streak 5 câu liên tiếp',check:s=>s.maxStreak>=5},
+  {id:'sessions3',ico:'📚',name:'Dedicated',desc:'Học 3 buổi',check:s=>s.sessions>=3},
+  {id:'star50',ico:'🏆',name:'Champion',desc:'Đạt 50 stars',check:s=>s.totalStars>=50},
+];
+
+let KEY='',ELKEY='',OAIKEY='',NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,recog=null,inputMode='mic';
+let sess={stars:0,streak:0,turns:0,goodAns:0,maxStreak:0,start:Date.now()};
+let global={totalStars:0,sessions:0,earnedBadges:[],history:[]};
+
+function save(){try{localStorage.setItem('be_key',KEY);localStorage.setItem('be_elkey',ELKEY);localStorage.setItem('be_oaikey',OAIKEY);localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
+function load(){try{KEY=localStorage.getItem('be_key')||'';ELKEY=localStorage.getItem('be_elkey')||'';OAIKEY=localStorage.getItem('be_oaikey')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g)global=JSON.parse(g);}catch(e){}}
+
+function startApp(){
+  const k=document.getElementById('apiKey').value.trim();
+  const n=document.getElementById('childName').value.trim();
+  const g=parseInt(document.getElementById('grade').value);
+  if(!k){alert('Vui lòng nhập Claude API Key!');return}
+  KEY=k;NAME=n||'bạn';GRADE=g;
+  ELKEY=document.getElementById('elKey').value.trim();
+  OAIKEY=document.getElementById('oaiKey').value.trim();
+  global.sessions++;
+  save();
+  document.getElementById('setupScreen').style.display='none';
+  document.getElementById('mainScreen').style.display='flex';
+  document.getElementById('tbName').textContent='Xin chào '+NAME+' ⚡';
+  buildChips();
+  renderBadgesGrid();
+  initVoice();
+  const first=Object.keys(CURRICULUM[GRADE])[0];
+  setTopic(first);
+}
+
+function goSettings(){
+  document.getElementById('mainScreen').style.display='none';
+  document.getElementById('setupScreen').style.display='flex';
+  document.getElementById('apiKey').value=KEY;
+  document.getElementById('elKey').value=ELKEY;
+  document.getElementById('oaiKey').value=OAIKEY;
+  document.getElementById('childName').value=NAME==='bạn'?'':NAME;
+  document.getElementById('grade').value=String(GRADE);
+}
+
+function getCurr(){return CURRICULUM[GRADE]||CURRICULUM[4]}
+
+let currentTab='sgk';
+
+function setTab(tab){
+  currentTab=tab;
+  document.getElementById('tabSGK').classList.toggle('on',tab==='sgk');
+  document.getElementById('tabFun').classList.toggle('on',tab==='fun');
+  const sgkLabel=GRADE>=6?'📚 THCS':'📚 SGK';
+  document.getElementById('tabSGK').textContent=sgkLabel;
+  buildChips();
+  const topics=tab==='fun'?CURRICULUM.fun:getCurr();
+  const first=Object.keys(topics)[0];
+  setTopic(first);
+}
+
+function buildChips(){
+  const bar=document.getElementById('chipBar');bar.innerHTML='';
+  const topics=currentTab==='fun'?CURRICULUM.fun:getCurr();
+  Object.entries(topics).forEach(([name,data],i)=>{
+    const c=document.createElement('div');
+    c.className='chip'+(i===0?' on':'');c.id='chip_'+name;
+    c.textContent=data.e+' '+name;
+    c.onclick=()=>setTopic(name);
+    bar.appendChild(c);
+  });
+}
+
+function setTopic(t){
+  TOPIC=t;HIST=[];
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  const ch=document.getElementById('chip_'+t);if(ch)ch.classList.add('on');
+  document.getElementById('tbSub').textContent='Lớp '+GRADE+' · '+t;
+  document.getElementById('chatWrap').innerHTML='';
+  updateProg(0);
+  askPika();
+}
+
+async function askPika(userMsg){
+  const chat=document.getElementById('chatWrap');
+  if(userMsg){
+    HIST.push({role:'user',content:userMsg});
+    addBubble('user',userMsg);
+  }
+  const typing=document.createElement('div');
+  typing.className='typing';
+  typing.innerHTML='<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  chat.appendChild(typing);chat.scrollTop=chat.scrollHeight;
+  const topics=currentTab==='fun'?CURRICULUM.fun:getCurr();
+  const baseSys=topics[TOPIC]?.s||'You are a friendly English conversation partner.';
+
+  // First message: just start the conversation naturally
+  if(!userMsg){
+    const sys=baseSys+' Do not say the child name. Start with a friendly hi and one natural question. Plain text only, no emoji or markdown.';
+    try{
+      const r=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:150,system:sys,messages:[{role:'user',content:'Hello!'}]})
+      });
+      const d=await r.json();
+      try{chat.removeChild(typing)}catch(x){}
+      if(d.error)throw new Error(d.error.message);
+      const reply=d.content[0].text.trim();
+      lastAI=reply;
+      HIST.push({role:'assistant',content:reply});
+      addBubble('ai',reply,true);
+      speakEn(reply);
+    }catch(e){
+      try{chat.removeChild(typing)}catch(x){}
+      addBubble('err','⚠️ Lỗi: '+e.message);
+    }
+    return;
+  }
+
+  // Subsequent messages: AI replies + evaluates in one call
+  const sys=baseSys+` Do not say the child name. You must reply in this exact format and nothing else:
+SCORE:[good/try]
+REPLY:[your natural conversational reply here]
+
+SCORE good = the child made a real attempt in English, even if grammar is broken or words are few — any genuine effort counts.
+SCORE try = the child said nothing meaningful, typed random keys, or clearly did not try.
+Your REPLY must react warmly and naturally to what they said, acknowledge what they got right, gently model the correct form if needed without making it feel like a correction, then continue the conversation. Plain text only in REPLY, no emoji, no markdown, no asterisks.`;
+
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:250,system:sys,messages:HIST})
+    });
+    const d=await r.json();
+    try{chat.removeChild(typing)}catch(x){}
+    if(d.error)throw new Error(d.error.message);
+    const raw=d.content[0].text.trim();
+
+    // Parse SCORE and REPLY
+    const scoreMatch=raw.match(/SCORE:\s*(good|try)/i);
+    const replyMatch=raw.match(/REPLY:\s*([\s\S]+)/i);
+    const isGood=!scoreMatch||(scoreMatch[1].toLowerCase()==='good');
+    const reply=replyMatch?replyMatch[1].trim():raw.replace(/SCORE:[^\n]*\n?/i,'').trim();
+
+    lastAI=reply;
+    HIST.push({role:'assistant',content:reply});
+    evalResult(isGood,userMsg);
+    addBubble('ai',reply,true);
+    speakEn(reply);
+    updateProg(Math.min(HIST.filter(m=>m.role==='user').length*15,100));
+  }catch(e){
+    try{chat.removeChild(typing)}catch(x){}
+    addBubble('err','⚠️ Lỗi: '+e.message);
+  }
+}
+
+function addBubble(type,text,withSpk){
+  const chat=document.getElementById('chatWrap');
+  const b=document.createElement('div');b.className='bbl '+type;
+  if(withSpk){
+    const safe=text.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    b.innerHTML=escHtml(text)+' <button class="spk-btn" onclick="speakEn(\''+safe.replace(/\n/g,' ')+'\')" title="Nghe lại">🔊</button>';
+  }else{b.textContent=text;}
+  chat.appendChild(b);chat.scrollTop=chat.scrollHeight;
+}
+
+function updateProg(p){
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progPct').textContent=Math.round(p)+'%';
+}
+
+function setMode(m){
+  inputMode=m;
+  document.getElementById('mMic').classList.toggle('on',m==='mic');
+  document.getElementById('mType').classList.toggle('on',m==='type');
+  document.getElementById('micArea').style.display=m==='mic'?'block':'none';
+  document.getElementById('typeArea').style.display=m==='type'?'block':'none';
+}
+
+function sendTyped(){
+  const inp=document.getElementById('typeInput');
+  const val=inp.value.trim();
+  if(!val)return;
+  inp.value='';
+  askPika(val);
+}
+
+let mediaRec=null,audioChunks=[],recTimer=null,currentAudio=null;
+let autoMicOn=false; // auto-listen after AI speaks
+
+async function handleMic(){
+  if(OAIKEY){await handleWhisperMic();return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){addBubble('err','Cần nhập OpenAI API Key để dùng mic mọi thiết bị. Hoặc dùng Gõ tay!');return;}
+  if(isRec){recog&&recog.stop();return;}
+  recog=new SR();recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
+  recog.onstart=()=>{
+    isRec=true;
+    const btn=document.getElementById('micBtn');
+    btn.classList.add('rec');
+    btn.style.background='#FEF2F2';
+    btn.style.borderColor='#EF4444';
+    btn.style.color='#EF4444';
+    document.getElementById('micLbl').textContent='Đang nghe... nhấn để dừng';
+  };
+  recog.onresult=(e)=>{
+    const said=e.results[0][0].transcript.trim();
+    const conf=e.results[0][0].confidence||0.7;
+    askPika(said);
+  };
+  recog.onerror=()=>{addBubble('err','Lỗi mic. Thêm OpenAI Key để dùng trên mọi thiết bị!');resetMic();};
+  recog.onend=()=>resetMic();
+  recog.start();
+}
+
+let micStream=null; // reuse stream to avoid iOS permission flicker
+
+async function getMicStream(){
+  if(micStream&&micStream.active)return micStream;
+  micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,sampleRate:16000}});
+  return micStream;
+}
+
+async function startAutoMic(){
+  if(inputMode!=='mic'||!OAIKEY)return;
+  // Small delay so user can see AI reply before mic activates
+  setTimeout(()=>{
+    if(!isRec)handleWhisperMic();
+  },600);
+}
+
+async function handleWhisperMic(){
+  // Stop if already recording
+  if(isRec){
+    if(mediaRec&&mediaRec.state==='recording')mediaRec.stop();
+    clearTimeout(recTimer);
+    autoMicOn=false;
+    updateMicBtn();
+    return;
+  }
+  // Stop any playing audio first
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  try{
+    const stream=await getMicStream();
+    audioChunks=[];
+    const mimeType=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'].find(t=>{try{return MediaRecorder.isTypeSupported(t)}catch(e){return false}})||'';
+    mediaRec=new MediaRecorder(stream,mimeType?{mimeType}:{});
+    mediaRec.ondataavailable=e=>{if(e.data&&e.data.size>0)audioChunks.push(e.data);};
+    mediaRec.onstop=async()=>{
+      clearTimeout(recTimer);
+      if(audioChunks.length===0){resetMic();return;}
+      const ext=mimeType.includes('mp4')?'mp4':mimeType.includes('ogg')?'ogg':'webm';
+      await transcribeWhisper(new Blob(audioChunks,{type:mimeType||'audio/webm'}),ext);
+    };
+    mediaRec.onerror=()=>{resetMic();};
+    mediaRec.start(100); // collect chunks every 100ms for stability
+    isRec=true;
+    setMicRecording(true);
+    recTimer=setTimeout(()=>{
+      if(mediaRec&&mediaRec.state==='recording')mediaRec.stop();
+    },25000);
+  }catch(e){
+    if(e.name==='NotAllowedError'||e.name==='PermissionDeniedError')
+      addBubble('err','Cần cho phép dùng mic. Vào Settings → Safari → Microphone → Allow.');
+    else
+      addBubble('err','Không mở được mic: '+e.message);
+    micStream=null;
+    resetMic();
+  }
+}
+
+function updateMicBtn(){
+  const btn=document.getElementById('micBtn');
+  const lbl=document.getElementById('micLbl');
+  if(autoMicOn){
+    btn.style.borderColor='#6366F1';
+    btn.style.color='#6366F1';
+    lbl.textContent=isRec?'Đang nghe... nhấn để dừng':'Tự động nghe (nhấn để tắt)';
+  }else{
+    lbl.textContent=isRec?'Đang nghe... nhấn để dừng':'Nhấn để nói';
+  }
+}
+
+async function transcribeWhisper(blob,ext='webm'){
+  resetMic();
+  document.getElementById('micLbl').textContent='Đang xử lý...';
+  try{
+    const fd=new FormData();
+    fd.append('file',new File([blob],'audio.'+ext,{type:blob.type||'audio/webm'}));
+    fd.append('model','whisper-1');
+    fd.append('language','en');
+    const r=await fetch('https://api.openai.com/v1/audio/transcriptions',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+OAIKEY},
+      body:fd
+    });
+    document.getElementById('micLbl').textContent='Nhấn để nói';
+    if(!r.ok){
+      const err=await r.json().catch(()=>({}));
+      addBubble('err','Lỗi Whisper '+(r.status)+': '+(err?.error?.message||'Kiểm tra lại OpenAI API Key'));
+      return;
+    }
+    const d=await r.json();
+    const said=(d.text||'').trim();
+    if(!said){addBubble('try','Không nghe rõ. Thử nói to và rõ hơn nhé!');return;}
+    askPika(said);
+  }catch(e){
+    document.getElementById('micLbl').textContent='Nhấn để nói';
+    addBubble('err','Lỗi kết nối Whisper: '+e.message);
+  }
+}
+
+function evalResult(isGood,said){
+  const praise=['Great job! Keep going!','Excellent! That was really good!','Nice one! You are doing great!','Well said! Keep it up!','Good answer! I understood you perfectly!'];
+  const retry=['Good effort! Try to say a little more.','Almost there! Can you add one more word?','That is a start! Try again with a full sentence.'];
+  if(isGood){
+    sess.stars++;sess.streak++;sess.goodAns++;global.totalStars++;
+    if(sess.streak>sess.maxStreak)sess.maxStreak=sess.streak;
+    document.getElementById('sStars').textContent=sess.stars;
+    document.getElementById('sStreak').textContent=sess.streak;
+    addBubble('good',praise[Math.floor(Math.random()*praise.length)]);
+  }else{
+    sess.streak=0;document.getElementById('sStreak').textContent=0;
+    addBubble('try',retry[Math.floor(Math.random()*retry.length)]);
+  }
+  checkBadges();
+  saveSession(said,isGood);
+  save();
+  renderEarnedBadgesRow();
+}
+
+function saveSession(said,good){
+  const now=new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  global.history.unshift({date:now,topic:TOPIC,said:said,good:good});
+  if(global.history.length>30)global.history=global.history.slice(0,30);
+}
+
+function checkBadges(){
+  const state={turns:sess.turns,goodAns:sess.goodAns,maxStreak:sess.maxStreak,totalStars:global.totalStars,sessions:global.sessions};
+  BADGES.forEach(b=>{
+    if(!global.earnedBadges.includes(b.id)&&b.check(state)){
+      global.earnedBadges.push(b.id);
+      addBubble('good','🏆 Huy hiệu mới: '+b.ico+' '+b.name+'! '+b.desc);
+    }
+  });
+}
+
+function renderBadgesGrid(){
+  const grid=document.getElementById('badgesGrid');grid.innerHTML='';
+  BADGES.forEach(b=>{
+    const earned=global.earnedBadges.includes(b.id);
+    const card=document.createElement('div');
+    card.className='badge-card'+(earned?' earned':'');
+    card.innerHTML='<div class="bc-ico">'+(earned?b.ico:'🔒')+'</div><div class="bc-name">'+b.name+'</div><div class="bc-desc">'+b.desc+'</div>';
+    grid.appendChild(card);
+  });
+}
+
+function renderEarnedBadgesRow(){
+  const row=document.getElementById('earnedBadgesRow');row.innerHTML='';
+  global.earnedBadges.forEach(id=>{
+    const b=BADGES.find(x=>x.id===id);if(!b)return;
+    const chip=document.createElement('div');
+    chip.className='badge-chip earned';chip.textContent=b.ico+' '+b.name;
+    row.appendChild(chip);
+  });
+}
+
+function doHint(){
+  const hints=['Try: "Yes, I have..." / "No, I don\'t..."','Try: "My ... is / are ..."','Try: "I like..." / "I don\'t like..."','Try: "There is..." / "There are..."','Try: "I can..." / "I can\'t..."','Try: "He/She is..."','Try: "Every day, I..."','Try: "I want to be a..."','Try: "It is..." (weather/things)'];
+  addBubble('hint','💡 '+hints[Math.floor(Math.random()*hints.length)]);
+}
+
+function doRepeat(){if(lastAI)speakEn(lastAI);}
+
+function doSkip(){askPika("I'm not sure. Please ask me something a little easier.");}
+
+function showPanel(id){
+  if(id==='parentPanel')fillParentPanel();
+  if(id==='badgesPanel')renderBadgesGrid();
+  document.getElementById(id).classList.add('show');
+}
+
+function hidePanel(id){document.getElementById(id).classList.remove('show');}
+
+function fillParentPanel(){
+  const mins=Math.round((Date.now()-sess.start)/60000);
+  document.getElementById('rTopic').textContent=TOPIC||'-';
+  document.getElementById('rTurns').textContent=sess.turns;
+  document.getElementById('rGood').textContent=sess.goodAns+' câu';
+  document.getElementById('rStars').textContent=sess.stars+' ⭐';
+  document.getElementById('rMaxStreak').textContent=sess.maxStreak+' 🔥';
+  document.getElementById('rTime').textContent=mins+' phút';
+  document.getElementById('rTotalStars').textContent=global.totalStars+' ⭐';
+  document.getElementById('rSessions').textContent=global.sessions+' buổi';
+  document.getElementById('rBadges').textContent=global.earnedBadges.length+' 🏆';
+  const hl=document.getElementById('historyList');hl.innerHTML='';
+  if(global.history.length===0){hl.innerHTML='<p style="color:#94A3B8;font-size:13px;text-align:center;padding:12px">Chưa có lịch sử</p>';return}
+  global.history.slice(0,8).forEach(h=>{
+    const d=document.createElement('div');d.className='history-item';
+    d.innerHTML='<div class="hi-date">'+h.date+' · '+h.topic+'</div><div class="hi-detail">'+(h.good?'✅':'🔄')+' "'+h.said+'"</div>';
+    hl.appendChild(d);
+  });
+}
+
+function cleanForSpeech(text){
+  return text
+    .replace(/[\u{1F000}-\u{1FFFF}]/gu,'')
+    .replace(/[\u{2600}-\u{27BF}]/gu,'')
+    .replace(/[\u{FE00}-\u{FEFF}]/gu,'')
+    .replace(/[^\x00-\x7F\s]/g,' ')
+    .replace(/\*+/g,'')
+    .replace(/#/g,'')
+    .replace(/\?+/g,'.')
+    .replace(/!+/g,'.')
+    .replace(/\.{2,}/g,'.')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+}
+
+async function speakElevenLabs(text){
+  const clean=cleanForSpeech(text);
+  if(!clean||!ELKEY)return false;
+  // Try models in order — eleven_turbo_v2_5 most compatible with library voices
+  for(const model of['eleven_turbo_v2_5','eleven_turbo_v2','eleven_multilingual_v2']){
+    try{
+      const body={
+        text:clean,
+        model_id:model,
+        voice_settings:{stability:0.35,similarity_boost:0.90,style:0.45,use_speaker_boost:true}
+      };
+      const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/PGoKnSD4gKn2aS99wOR2',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','xi-api-key':ELKEY},
+        body:JSON.stringify(body)
+      });
+      if(!r.ok){
+        const errData=await r.json().catch(()=>({}));
+        const msg=errData?.detail?.message||errData?.detail||r.status;
+        console.warn('ElevenLabs',model,'failed:',msg);
+        // Show error only on last attempt
+        if(model==='eleven_multilingual_v2'){
+          addBubble('err','ElevenLabs lỗi: '+msg+' — đang dùng giọng máy thay thế');
+        }
+        continue;
+      }
+      const blob=await r.blob();
+      const url=URL.createObjectURL(blob);
+      const audio=new Audio(url);
+      audio.playbackRate=1.0;
+      currentAudio=audio;
+      console.log('ElevenLabs OK with model:',model);
+      return new Promise(resolve=>{
+        audio.onended=()=>{URL.revokeObjectURL(url);currentAudio=null;resolve(true);if(autoMicOn)startAutoMic();};
+        audio.onerror=()=>{URL.revokeObjectURL(url);currentAudio=null;resolve(false);};
+        audio.play().catch(e=>{console.warn('audio.play failed:',e);resolve(false);});
+      });
+    }catch(e){console.warn('ElevenLabs fetch error:',e);continue;}
+  }
+  return false;
+}
+
+async function speakEn(text){
+  if(ELKEY){
+    const ok=await speakElevenLabs(text);
+    if(ok)return;
+  }
+  // Fallback: Web Speech API
+  if(!('speechSynthesis' in window)){if(autoMicOn)startAutoMic();return;}
+  window.speechSynthesis.cancel();
+  const clean=cleanForSpeech(text);
+  if(!clean){if(autoMicOn)startAutoMic();return;}
+  const u=new SpeechSynthesisUtterance(clean);
+  u.lang='en-US';u.rate=0.82;u.pitch=1.1;u.volume=1;
+  const pick=()=>{
+    const vv=window.speechSynthesis.getVoices();
+    const pref=[
+      v=>v.name==='Google US English'&&v.lang==='en-US',
+      v=>v.name.includes('Samantha')&&v.lang.startsWith('en'),
+      v=>v.name.includes('Karen')&&v.lang.startsWith('en'),
+      v=>v.name.includes('Aria')&&v.lang.startsWith('en-US'),
+      v=>v.lang==='en-US',v=>v.lang.startsWith('en-US'),v=>v.lang.startsWith('en')
+    ];
+    for(const fn of pref){const v=vv.find(fn);if(v)return v;}return null;
+  };
+  const v=pick();if(v)u.voice=v;
+  u.onend=()=>{if(autoMicOn)startAutoMic();};
+  window.speechSynthesis.speak(u);
+}
+
+function setMicRecording(on){
+  const btn=document.getElementById('micBtn');
+  if(on){
+    btn.classList.add('rec');
+    btn.style.background='#FEF2F2';
+    btn.style.borderColor='#EF4444';
+    btn.style.color='#EF4444';
+    document.getElementById('micLbl').textContent='Đang nghe... nhấn để dừng';
+  }else{
+    btn.classList.remove('rec');
+    btn.style.background='';
+    btn.style.borderColor='';
+    btn.style.color='';
+    document.getElementById('micLbl').textContent='Nhấn để nói';
+  }
+}
+
+function toggleAutoMic(){
+  autoMicOn=!autoMicOn;
+  const btn=document.getElementById('autoMicToggle');
+  if(autoMicOn){
+    btn.style.background='#EEF2FF';
+    btn.style.borderColor='#6366F1';
+    btn.style.color='#4338CA';
+    btn.textContent='🔁 Tự động nghe: BẬT (nhấn để tắt)';
+  }else{
+    btn.style.background='#fff';
+    btn.style.borderColor='#E2E8F0';
+    btn.style.color='#94A3B8';
+    btn.textContent='🔁 Tự động nghe sau mỗi câu';
+  }
+}
+
+function resetMic(){
+  isRec=false;
+  clearTimeout(recTimer);
+  setMicRecording(false);
+}
+
+function initVoice(){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged=()=>{window.speechSynthesis.getVoices()};
+  }
+}
+
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+load();
+if(KEY)document.getElementById('apiKey').value=KEY;
+if(ELKEY)document.getElementById('elKey').value=ELKEY;
+if(OAIKEY)document.getElementById('oaiKey').value=OAIKEY;
+if(NAME&&NAME!=='bạn')document.getElementById('childName').value=NAME;
+if(GRADE)document.getElementById('grade').value=String(GRADE);
+renderEarnedBadgesRow();
+</script>
+</body>
+</html>
