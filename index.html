@@ -925,7 +925,7 @@ async function speakElevenLabs(text){
     const blob=await r.blob();
     const url=URL.createObjectURL(blob);
     const audio=new Audio(url);
-    audio.playbackRate=0.95;
+    audio.playbackRate=0.85;
     audio.play();audio.onended=()=>URL.revokeObjectURL(url);
     return true;
   }catch(e){return false;}
