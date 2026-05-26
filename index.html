@@ -151,6 +151,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .badge-card .bc-desc{font-size:11px;color:#94A3B8}
 .badge-card.earned .bc-desc{color:#92400E}
 
+
+.scroll-row{position:relative;display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.scroll-row .chips,.scroll-row .tab-bar,.scroll-row .sub-sel-wrap{flex:1;min-width:0;margin-bottom:0}
+.arr-btn{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1.5px solid #E2E8F0;background:#fff;color:#6366F1;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0}
+.arr-btn:hover{background:#EEF2FF;border-color:#6366F1}
+.arr-btn:active{transform:scale(.92)}
+
 .footer-lnk{text-align:center;font-size:11px;color:#CBD5E1;padding:6px 0 16px;cursor:pointer;text-decoration:underline}
 </style>
 </head>
@@ -265,16 +272,28 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 
   <div class="topic-wrap">
     <!-- 4-tab bar -->
-    <div class="tab-bar">
-      <button class="tab-btn on" id="tabSGK" onclick="setTab('sgk')">📚 SGK</button>
-      <button class="tab-btn" id="tabFun" onclick="setTab('fun')">🌟 Sở thích</button>
-      <button class="tab-btn" id="tabVUS" onclick="setTab('vus')">📖 VUS</button>
-      <button class="tab-btn" id="tabTOEIC" onclick="setTab('toeic')">🎯 TOEIC</button>
+    <div class="scroll-row">
+      <button class="arr-btn" onclick="scrollRow('tabBar',-120)">&#8249;</button>
+      <div class="tab-bar" id="tabBar">
+        <button class="tab-btn on" id="tabSGK" onclick="setTab('sgk')">📚 SGK</button>
+        <button class="tab-btn" id="tabFun" onclick="setTab('fun')">🌟 Sở thích</button>
+        <button class="tab-btn" id="tabVUS" onclick="setTab('vus')">📖 VUS</button>
+        <button class="tab-btn" id="tabTOEIC" onclick="setTab('toeic')">🎯 TOEIC</button>
+      </div>
+      <button class="arr-btn" onclick="scrollRow('tabBar',120)">&#8250;</button>
     </div>
     <!-- sub-selector: VUS level / TOEIC part -->
-    <div class="sub-sel-wrap" id="subSelWrap" style="display:none"></div>
+    <div class="scroll-row" id="subSelRow" style="display:none">
+      <button class="arr-btn" onclick="scrollRow('subSelWrap',-100)">&#8249;</button>
+      <div class="sub-sel-wrap" id="subSelWrap"></div>
+      <button class="arr-btn" onclick="scrollRow('subSelWrap',100)">&#8250;</button>
+    </div>
     <!-- topic chips -->
-    <div class="chips-wrap"><div class="chips" id="chipBar"></div></div>
+    <div class="scroll-row">
+      <button class="arr-btn" onclick="scrollRow('chipBar',-120)">&#8249;</button>
+      <div class="chips-wrap" style="flex:1;min-width:0"><div class="chips" id="chipBar"></div></div>
+      <button class="arr-btn" onclick="scrollRow('chipBar',120)">&#8250;</button>
+    </div>
   </div>
 
   <div class="chat" id="chatWrap"></div>
@@ -553,7 +572,7 @@ function goSettings(){
 }
 
 function setTab(tab){
-  currentTab=tab;
+  stopAllAudio();currentTab=tab;
   // update tab button styles
   ['SGK','Fun','VUS','TOEIC'].forEach(t=>{
     const btn=document.getElementById('tab'+t);
@@ -622,7 +641,7 @@ function buildChips(){
 }
 
 function setTopic(t){
-  TOPIC=t;HIST=[];
+  stopAllAudio();TOPIC=t;HIST=[];
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
   const safeid='chip_'+t.replace(/\s+/g,'_');
   const ch=document.getElementById(safeid);if(ch)ch.classList.add('on');
@@ -840,6 +859,16 @@ function doHint(){
   const generalHints=['Try: "Yes, I have..." / "No, I don\'t..."','Try: "My ... is / are ..."','Try: "I like..." / "I don\'t like..."','Try: "There is..." / "There are..."','Try: "I can..." / "I can\'t..."','Try: "Every day, I..."','Try: "I want to be a..."'];
   const hints=currentTab==='toeic'?toeicHints:generalHints;
   addBubble('hint','💡 '+hints[Math.floor(Math.random()*hints.length)]);
+}
+
+
+function scrollRow(id, delta){
+  const el=document.getElementById(id);
+  if(el){el.scrollBy({left:delta,behavior:'smooth'});}
+}
+
+function stopAllAudio(){
+  window.speechSynthesis&&window.speechSynthesis.cancel();
 }
 
 function doRepeat(){if(lastAI)speakEn(lastAI);}
