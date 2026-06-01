@@ -543,7 +543,7 @@ let currentTOEICPart='listening';
 
 function lg(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
 function save(){try{localStorage.setItem('be_key',KEY);localStorage.setItem('be_elkey',ELKEY);localStorage.setItem('be_oaikey',OAIKEY);localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
-function load(){try{KEY=localStorage.getItem('be_key')||'';ELKEY=localStorage.getItem('be_elkey')||'';OAIKEY=localStorage.getItem('be_oaikey')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g)global=JSON.parse(g);}catch(e){}}
+function load(){try{KEY=localStorage.getItem('be_key')||'';ELKEY=localStorage.getItem('be_elkey')||'';OAIKEY=localStorage.getItem('be_oaikey')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
 
 function startApp(){
   const k=document.getElementById('apiKey').value.trim();
@@ -884,6 +884,7 @@ function doHint(){
 
 // Topic memory - remember what was discussed per topic
 function getTopicMemory(tab, topic){
+  if(!global.topicMemory)global.topicMemory={};
   const key=tab+'__'+topic;
   return (global.topicMemory[key]||[]).slice(-6); // last 6 exchanges
 }
