@@ -530,7 +530,7 @@ const BADGES=[
 
 let KEY='',ELKEY='',OAIKEY='',NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,recog=null,inputMode='mic';
 let sess={stars:0,streak:0,turns:0,goodAns:0,maxStreak:0,start:Date.now(),toeicTurns:0,vusTurns:0};
-let global={totalStars:0,sessions:0,earnedBadges:[],history:[]};
+let global={totalStars:0,sessions:0,earnedBadges:[],history:[],topicMemory:{}};
 
 // tab state
 let currentTab='sgk'; // sgk | fun | vus | toeic
@@ -664,8 +664,17 @@ async function askPika(userMsg){
   chat.appendChild(typing);chat.scrollTop=chat.scrollHeight;
 
   const topics=getTopics();
-  const sys=(topics[TOPIC]?.s||'You are a friendly English teacher.')+' Do not say the learner\'s name in your responses.';
-  const msgs=HIST.length?HIST:[{role:'user',content:'Hello! Please start the session. Greet briefly and ask your first question about the topic. Keep it short and natural.'}];
+  const memCtx=buildMemoryContext(currentTab,TOPIC);
+  const sys=(topics[TOPIC]?.s||'You are a friendly English teacher.')+' Do not say the learner\'s name in your responses.'+memCtx;
+  const openings=[
+    'Hello! Please start. Greet briefly and ask your first question. Keep it short and natural.',
+    'Hi! Start the conversation with a different angle than usual. Ask something specific and unexpected about this topic.',
+    'Hey! Begin with a fun or surprising question about this topic that most people would not think to ask.',
+    'Start our session. Skip generic questions. Jump straight into something interesting and specific.',
+    'Hello! Open with a personal question related to this topic that feels like real conversation.'
+  ];
+  const opener=openings[Math.floor(Math.random()*openings.length)];
+  const msgs=HIST.length?HIST:[{role:'user',content:opener}];
   const maxTok=currentTab==='toeic'?300:200;
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{
@@ -679,6 +688,12 @@ async function askPika(userMsg){
     const reply=d.content[0].text.trim();
     lastAI=reply;
     HIST.push({role:'assistant',content:reply});
+    // save last user message + AI reply to topic memory
+    const lastUser=HIST.filter(m=>m.role==='user').slice(-1)[0];
+    if(lastUser&&lastUser.content!=='Hello! Please start the session. Greet briefly and ask your first question about the topic. Keep it short and natural.'){
+      saveTopicMemory(currentTab,TOPIC,lastUser.content,reply);
+      save();
+    }
     addBubble('ai',reply,true);
     speakEn(reply);
     updateProg(Math.min(HIST.filter(m=>m.role==='user').length*18,100));
@@ -861,6 +876,27 @@ function doHint(){
   addBubble('hint','💡 '+hints[Math.floor(Math.random()*hints.length)]);
 }
 
+
+
+// Topic memory - remember what was discussed per topic
+function getTopicMemory(tab, topic){
+  const key=tab+'__'+topic;
+  return (global.topicMemory[key]||[]).slice(-6); // last 6 exchanges
+}
+
+function saveTopicMemory(tab, topic, userMsg, aiMsg){
+  const key=tab+'__'+topic;
+  if(!global.topicMemory[key]) global.topicMemory[key]=[];
+  global.topicMemory[key].push({u:userMsg,a:aiMsg});
+  if(global.topicMemory[key].length>10) global.topicMemory[key]=global.topicMemory[key].slice(-10);
+}
+
+function buildMemoryContext(tab, topic){
+  const mem=getTopicMemory(tab, topic);
+  if(!mem.length) return '';
+  const summary=mem.map(m=>'Student said: "'+m.u+'" / You responded about: "'+m.a.slice(0,60)+'..."').join(' | ');
+  return ' MEMORY OF PAST SESSIONS on this topic: '+summary+'. Do NOT repeat these exact questions or topics. Start from a different angle, ask about something new you have not covered yet.';
+}
 
 function scrollRow(id, delta){
   const el=document.getElementById(id);
