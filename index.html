@@ -96,6 +96,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .quick-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .q-btn{padding:9px 4px;border-radius:12px;border:1px solid #E2E8F0;background:#fff;color:#64748B;font-size:11px;font-weight:600;cursor:pointer;text-align:center;line-height:1.4;transition:all .15s}
 .q-btn:hover{background:#F8FAFF;border-color:#C7D2FE;color:#6366F1}
+.q-btn:active{transform:scale(.95);background:#EEF2FF;border-color:#6366F1;color:#4338CA}
+.q-btn.playing{background:#EEF2FF;border-color:#6366F1;color:#4338CA;box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.q-btn.stopping{background:#FEF2F2;border-color:#EF4444;color:#EF4444}
 .q-btn span{display:block;font-size:17px;margin-bottom:3px}
 
 /* mic / type toggle */
@@ -529,6 +532,7 @@ const BADGES=[
 ];
 
 let KEY='',ELKEY='',OAIKEY='',NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,recog=null,inputMode='mic';
+let currentAudio=null;
 let sess={stars:0,streak:0,turns:0,goodAns:0,maxStreak:0,start:Date.now(),toeicTurns:0,vusTurns:0};
 let global={totalStars:0,sessions:0,earnedBadges:[],history:[],topicMemory:{}};
 
@@ -905,10 +909,30 @@ function scrollRow(id, delta){
 
 function stopAllAudio(){
   window.speechSynthesis&&window.speechSynthesis.cancel();
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
 }
 
-function doRepeat(){if(lastAI)speakEn(lastAI);}
-function doStop(){window.speechSynthesis&&window.speechSynthesis.cancel();}
+function doRepeat(){
+  if(!lastAI)return;
+  // visual feedback
+  const btns=document.querySelectorAll('.q-btn');
+  btns.forEach(b=>{if(b.textContent.includes('Nghe lại')){
+    b.classList.add('playing');
+    setTimeout(()=>b.classList.remove('playing'),2000);
+  }});
+  speakEn(lastAI);
+}
+function doStop(){
+  stopAllAudio();
+  const btn=document.querySelector('.q-btn.playing');
+  if(btn){btn.classList.remove('playing');}
+  // flash stop button red briefly
+  const btns=document.querySelectorAll('.q-btn');
+  btns.forEach(b=>{if(b.textContent.includes('Dừng')){
+    b.classList.add('stopping');
+    setTimeout(()=>b.classList.remove('stopping'),600);
+  }});
+}
 
 function doSkip(){
   const msg=currentTab==='toeic'?"I'm not sure how to answer that. Can you give me an easier question?"
@@ -960,9 +984,12 @@ async function speakElevenLabs(text){
     if(!r.ok)return false;
     const blob=await r.blob();
     const url=URL.createObjectURL(blob);
+    if(currentAudio){currentAudio.pause();currentAudio=null;}
     const audio=new Audio(url);
     audio.playbackRate=0.85;
-    audio.play();audio.onended=()=>URL.revokeObjectURL(url);
+    currentAudio=audio;
+    audio.play();
+    audio.onended=()=>{URL.revokeObjectURL(url);currentAudio=null;};
     return true;
   }catch(e){return false;}
 }
