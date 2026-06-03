@@ -212,6 +212,21 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     <span class="badge-sgk">📚 SGK · 📖 VUS Look · 🎯 TOEIC</span>
   </div>
   <div class="form-group">
+    <label>🔑 Claude API Key</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off"/>
+    <div class="key-note">🔒 Chỉ lưu trên thiết bị này, không gửi đi đâu ngoài Anthropic</div>
+  </div>
+  <div class="form-group">
+    <label>🎙️ ElevenLabs API Key <span style="font-size:10px;color:#22c55e;font-weight:400">(giọng tự nhiên)</span></label>
+    <input type="password" id="elKey" placeholder="sk_..." autocomplete="off"/>
+    <div class="key-note">🔒 Để trống nếu chưa có — sẽ dùng giọng máy thay thế</div>
+  </div>
+  <div class="form-group">
+    <label>🎤 OpenAI API Key <span style="font-size:10px;color:#22c55e;font-weight:400">(mic mọi thiết bị)</span></label>
+    <input type="password" id="oaiKey" placeholder="sk-..." autocomplete="off"/>
+    <div class="key-note">🔒 Dùng Whisper STT — mic hoạt động trên iPhone, Android</div>
+  </div>
+  <div class="form-group">
     <label>👦 Tên của bạn</label>
     <input type="text" id="childName" placeholder="Ví dụ: Minh, An, Bảo..." maxlength="20"/>
   </div>
@@ -310,7 +325,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       </div>
     </div>
   </div>
-  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp</span>
+  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp / API key</span>
 </div>
 
 <!-- BADGES PANEL -->
@@ -516,7 +531,7 @@ const BADGES=[
   {id:'vus1',ico:'📖',name:'VUS Explorer',desc:'Luyện 10 lượt VUS',check:s=>s.vusTurns>=10},
 ];
 
-let NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,recog=null,inputMode='mic';
+let KEY='',ELKEY='',OAIKEY='',NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,recog=null,inputMode='mic';
 let currentAudio=null;
 let sess={stars:0,streak:0,turns:0,goodAns:0,maxStreak:0,start:Date.now(),toeicTurns:0,vusTurns:0};
 let global={totalStars:0,sessions:0,earnedBadges:[],history:[],topicMemory:{}};
@@ -526,25 +541,26 @@ let currentTab='sgk'; // sgk | fun | vus | toeic
 let currentVUSLevel=4;
 let currentTOEICPart='listening';
 
-// Keys — hardcoded cho giai đoạn test
-const KEY='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';
-const ELKEY='sk_23f3ab7c219c0c0e796cb5ef80f86b6743bc14d33ebb7504';
-const OAIKEY='';
-
 function lg(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
-function save(){try{localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
-function load(){try{NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
+function save(){try{localStorage.setItem('be_key',KEY);localStorage.setItem('be_elkey',ELKEY);localStorage.setItem('be_oaikey',OAIKEY);localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
+function load(){try{KEY=localStorage.getItem('be_key')||'';ELKEY=localStorage.getItem('be_elkey')||'';OAIKEY=localStorage.getItem('be_oaikey')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
 
 function startApp(){
+  const k=document.getElementById('apiKey').value.trim();
   const n=document.getElementById('childName').value.trim();
   const g=parseInt(document.getElementById('grade').value);
-  NAME=n||'bạn';GRADE=g;
+  if(!k){alert('Vui lòng nhập Claude API Key!');return;}
+  KEY=k;NAME=n||'bạn';GRADE=g;
+  ELKEY=document.getElementById('elKey').value.trim();
+  OAIKEY=document.getElementById('oaiKey').value.trim();
   global.sessions++;
   save();
   document.getElementById('setupScreen').style.display='none';
   document.getElementById('mainScreen').style.display='flex';
   document.getElementById('tbName').textContent='Xin chào '+NAME+' ⚡';
-  buildChips();renderBadgesGrid();initVoice();
+  buildChips();
+  renderBadgesGrid();
+  initVoice();
   const first=Object.keys(CURRICULUM_SGK[GRADE])[0];
   setTopic(first);
 }
@@ -552,6 +568,9 @@ function startApp(){
 function goSettings(){
   document.getElementById('mainScreen').style.display='none';
   document.getElementById('setupScreen').style.display='flex';
+  document.getElementById('apiKey').value=KEY;
+  document.getElementById('elKey').value=ELKEY;
+  document.getElementById('oaiKey').value=OAIKEY;
   document.getElementById('childName').value=NAME==='bạn'?'':NAME;
   document.getElementById('grade').value=String(GRADE);
 }
@@ -1000,16 +1019,11 @@ function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 
 // init
 load();
-if(NAME&&NAME!=='bạn'){
-  document.getElementById('setupScreen').style.display='none';
-  document.getElementById('mainScreen').style.display='flex';
-  document.getElementById('tbName').textContent='Xin chào '+NAME+' ⚡';
-  buildChips();renderBadgesGrid();renderEarnedBadgesRow();initVoice();
-  const first=Object.keys(CURRICULUM_SGK[GRADE])[0];
-  setTopic(first);
-}else{
-  document.getElementById('setupScreen').style.display='flex';
-}
+if(KEY)document.getElementById('apiKey').value=KEY;
+const elk=lg('be_elkey');if(elk)document.getElementById('elKey').value=elk;
+const oak=lg('be_oaikey');if(oak)document.getElementById('oaiKey').value=oak;
+if(NAME&&NAME!=='bạn')document.getElementById('childName').value=NAME;
+if(GRADE)document.getElementById('grade').value=String(GRADE);
 renderEarnedBadgesRow();
 </script>
 </body>
