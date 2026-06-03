@@ -10,24 +10,6 @@
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F4FF;min-height:100vh;display:flex;justify-content:center;padding:0;font-size:15px}
 .app{width:100%;max-width:480px;background:#fff;min-height:100vh;display:flex;flex-direction:column;position:relative}@media(min-width:600px){.app{max-width:560px;border-radius:16px;margin:16px auto;min-height:calc(100vh - 32px);box-shadow:0 4px 32px rgba(0,0,0,.08)}}
 
-/* ===== ONBOARDING ===== */
-.onboarding{position:fixed;inset:0;background:rgba(15,15,30,.75);z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.onboarding.hide{display:none}
-.ob-card{width:100%;max-width:480px;background:#fff;border-radius:28px 28px 0 0;padding:0 0 32px;overflow:hidden;animation:slideUp .35s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.ob-progress{display:flex;gap:5px;padding:16px 24px 0}
-.ob-dot{flex:1;height:4px;border-radius:2px;background:#E2E8F0;transition:background .3s}
-.ob-dot.done{background:#6366F1}
-.ob-body{padding:20px 24px 16px;text-align:center}
-.ob-illo{width:100%;height:160px;border-radius:16px;background:#F8FAFF;border:2px solid #E2E8F0;display:flex;align-items:center;justify-content:center;margin-bottom:16px;overflow:hidden}
-.illo-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:10px}
-.ob-step-title{font-size:19px;font-weight:800;color:#1a1a2e;margin-bottom:7px}
-.ob-step-desc{font-size:13px;color:#64748B;line-height:1.6}
-.ob-step-desc strong{color:#6366F1}
-.ob-actions{display:flex;gap:10px;padding:0 24px}
-.ob-skip{flex:1;padding:13px;border-radius:14px;border:1.5px solid #E2E8F0;background:#fff;color:#94A3B8;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.ob-next{flex:2;padding:13px;border-radius:14px;border:none;background:linear-gradient(135deg,#6366F1,#8B5CF6);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 14px rgba(99,102,241,.3)}
-
 /* ---- SETUP ---- */
 .setup{padding:32px 24px;display:flex;flex-direction:column;gap:16px}
 .logo{text-align:center;margin-bottom:8px}
@@ -185,27 +167,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 <body>
 <div class="app">
 
-<!-- ===== ONBOARDING ===== -->
-<div class="onboarding" id="onboarding">
-  <div class="ob-card">
-    <div class="ob-progress">
-      <div class="ob-dot done" id="d0"></div>
-      <div class="ob-dot" id="d1"></div>
-      <div class="ob-dot" id="d2"></div>
-      <div class="ob-dot" id="d3"></div>
-    </div>
-    <div class="ob-body">
-      <div class="ob-illo" id="obIllo"></div>
-      <div class="ob-step-title" id="obTitle"></div>
-      <div class="ob-step-desc" id="obDesc"></div>
-    </div>
-    <div class="ob-actions">
-      <button class="ob-skip" onclick="skipOnboarding()">Bỏ qua</button>
-      <button class="ob-next" id="obNextBtn" onclick="nextSlide()">Tiếp theo →</button>
-    </div>
-  </div>
-</div>
-
 <!-- SETUP -->
 <div class="setup" id="setupScreen">
   <div class="logo">
@@ -349,7 +310,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       </div>
     </div>
   </div>
-  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp / API key</span>
+  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp</span>
 </div>
 
 <!-- BADGES PANEL -->
@@ -565,10 +526,10 @@ let currentTab='sgk'; // sgk | fun | vus | toeic
 let currentVUSLevel=4;
 let currentTOEICPart='listening';
 
-// =============================================
-// PROXY — key ẩn, user không cần nhập
-// =============================================
-const PROXY='https://boy-english-proxy.sang-havan2017.workers.dev';
+// Keys — hardcoded cho giai đoạn test
+const KEY='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';
+const ELKEY='sk_23f3ab7c219c0c0e796cb5ef80f86b6743bc14d33ebb7504';
+const OAIKEY='';
 
 function lg(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
 function save(){try{localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
@@ -583,9 +544,7 @@ function startApp(){
   document.getElementById('setupScreen').style.display='none';
   document.getElementById('mainScreen').style.display='flex';
   document.getElementById('tbName').textContent='Xin chào '+NAME+' ⚡';
-  buildChips();
-  renderBadgesGrid();
-  initVoice();
+  buildChips();renderBadgesGrid();initVoice();
   const first=Object.keys(CURRICULUM_SGK[GRADE])[0];
   setTopic(first);
 }
@@ -703,9 +662,9 @@ async function askPika(userMsg){
   const msgs=HIST.length?HIST:[{role:'user',content:opener}];
   const maxTok=currentTab==='toeic'?300:200;
   try{
-    const r=await fetch(PROXY+'/claude',{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTok,system:sys,messages:msgs})
     });
     const d=await r.json();
@@ -770,8 +729,9 @@ function sendTyped(){
 let mediaRec=null,audioChunks=[];
 
 async function handleMic(){
+  if(OAIKEY){await handleWhisperMic();return;}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){addBubble('err','Trình duyệt không hỗ trợ mic. Hãy dùng Chrome hoặc Gõ tay!');return;}
+  if(!SR){addBubble('err','Cần nhập OpenAI API Key để dùng mic mọi thiết bị. Hoặc dùng Gõ tay!');return;}
   if(isRec){recog&&recog.stop();return;}
   recog=new SR();recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
   recog.onstart=()=>{isRec=true;setMicRec(true);};
@@ -784,9 +744,22 @@ async function handleMic(){
     evalResult(said.split(' ').filter(Boolean).length>=2&&conf>=0.45,said);
     askPika(said);
   };
-  recog.onerror=()=>{addBubble('err','Lỗi mic. Thử dùng Chrome nhé!');resetMic();};
+  recog.onerror=()=>{addBubble('err','Lỗi mic. Thêm OpenAI Key để dùng trên mọi thiết bị!');resetMic();};
   recog.onend=()=>resetMic();
   recog.start();
+}
+
+async function handleWhisperMic(){
+  if(isRec){mediaRec&&mediaRec.stop();return;}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    audioChunks=[];
+    mediaRec=new MediaRecorder(stream);
+    mediaRec.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data);};
+    mediaRec.onstop=async()=>{stream.getTracks().forEach(t=>t.stop());await transcribeWhisper(new Blob(audioChunks,{type:'audio/webm'}));};
+    mediaRec.start();
+    isRec=true;setMicRec(true);
+  }catch(e){addBubble('err','Cần cho phép dùng mic trong trình duyệt!');resetMic();}
 }
 
 function setMicRec(on){
@@ -794,6 +767,28 @@ function setMicRec(on){
   if(on){btn.classList.add('rec');document.getElementById('micLbl').textContent='Đang nghe... nhấn để dừng';}
   else{btn.classList.remove('rec');btn.style.background='';btn.style.borderColor='';btn.style.color='';document.getElementById('micLbl').textContent='Nhấn để nói';}
 }
+
+async function transcribeWhisper(blob){
+  resetMic();
+  document.getElementById('micLbl').textContent='Đang xử lý...';
+  try{
+    const fd=new FormData();
+    fd.append('file',new File([blob],'audio.webm',{type:'audio/webm'}));
+    fd.append('model','whisper-1');fd.append('language','en');
+    const r=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+OAIKEY},body:fd});
+    const d=await r.json();
+    document.getElementById('micLbl').textContent='Nhấn để nói';
+    if(d.error){addBubble('err','Lỗi Whisper: '+d.error.message);return;}
+    const said=(d.text||'').trim();
+    if(!said){addBubble('try','Không nghe rõ. Thử lại nhé!');return;}
+    sess.turns++;document.getElementById('sTurns').textContent=sess.turns;
+    if(currentTab==='toeic')sess.toeicTurns++;
+    if(currentTab==='vus')sess.vusTurns++;
+    evalResult(said.split(' ').filter(Boolean).length>=2,said);
+    askPika(said);
+  }catch(e){document.getElementById('micLbl').textContent='Nhấn để nói';addBubble('err','Lỗi kết nối: '+e.message);}
+}
+
 function resetMic(){isRec=false;setMicRec(false);}
 
 function evalResult(isGood,said){
@@ -961,11 +956,11 @@ function cleanForSpeech(text){
 
 async function speakElevenLabs(text){
   const clean=cleanForSpeech(text);
-  if(!clean)return false;
+  if(!clean||!ELKEY)return false;
   try{
-    const r=await fetch(PROXY+'/elevenlabs/nPczCjzI2devNBz1zQrb',{
+    const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/nPczCjzI2devNBz1zQrb',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','xi-api-key':ELKEY},
       body:JSON.stringify({text:clean,model_id:'eleven_turbo_v2',voice_settings:{stability:0.6,similarity_boost:0.8,style:0.2,use_speaker_boost:true}})
     });
     if(!r.ok)return false;
@@ -982,7 +977,7 @@ async function speakElevenLabs(text){
 }
 
 async function speakEn(text){
-  const ok=await speakElevenLabs(text);if(ok)return;
+  if(ELKEY){const ok=await speakElevenLabs(text);if(ok)return;}
   if(!('speechSynthesis' in window))return;
   window.speechSynthesis.cancel();
   const clean=cleanForSpeech(text);if(!clean)return;
@@ -1003,134 +998,17 @@ function initVoice(){
 
 function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-// =============================================
-// ONBOARDING
-// =============================================
-const SLIDES=[
-  {
-    title:'Chào mừng đến Boy English! 🐸',
-    desc:'App luyện nói tiếng Anh theo SGK, VUS Look, và TOEIC. <strong>Miễn phí</strong> — không cần đăng ký!',
-    illo:`<div class="illo-wrap"><svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg" width="200">
-      <rect width="220" height="140" fill="#F8FAFF" rx="12"/>
-      <ellipse cx="80" cy="80" rx="34" ry="40" fill="#166534"/>
-      <rect x="50" y="42" width="60" height="46" rx="22" fill="#166534"/>
-      <ellipse cx="80" cy="42" rx="22" ry="20" fill="#15803d"/>
-      <ellipse cx="68" cy="58" rx="9" ry="9" fill="#fff"/><ellipse cx="92" cy="58" rx="9" ry="9" fill="#fff"/>
-      <ellipse cx="69" cy="59" rx="6" ry="6" fill="#1e1b4b"/><ellipse cx="93" cy="59" rx="6" ry="6" fill="#1e1b4b"/>
-      <rect x="58" y="68" width="44" height="12" rx="6" fill="#111827"/>
-      <rect x="112" y="20" width="90" height="36" rx="10" fill="#6366F1"/>
-      <polygon points="118,56 126,46 134,56" fill="#6366F1"/>
-      <text x="157" y="36" font-size="11" text-anchor="middle" fill="white" font-family="sans-serif">📚 SGK · VUS</text>
-      <text x="157" y="50" font-size="11" text-anchor="middle" fill="white" font-family="sans-serif">🎯 TOEIC · Sở thích</text>
-    </svg></div>`
-  },
-  {
-    title:'Bước 1: Nhập tên & chọn lớp',
-    desc:'Chỉ cần nhập <strong>tên</strong> và chọn <strong>lớp</strong>. App tự chọn nội dung phù hợp — không cần tài khoản!',
-    illo:`<div class="illo-wrap"><svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" width="280">
-      <rect width="300" height="150" fill="#F8FAFF" rx="12"/>
-      <rect x="20" y="10" width="120" height="130" rx="14" fill="#fff" stroke="#E2E8F0" stroke-width="2"/>
-      <rect x="32" y="26" width="96" height="26" rx="8" fill="#F8FAFF" stroke="#6366F1" stroke-width="2"/>
-      <text x="42" y="43" font-size="11" fill="#6366F1" font-family="sans-serif">👦 Tên: Minh</text>
-      <rect x="32" y="62" width="96" height="26" rx="8" fill="#EEF2FF" stroke="#6366F1" stroke-width="2"/>
-      <text x="42" y="79" font-size="11" fill="#4338CA" font-family="sans-serif">🏫 Lớp 4 ▾</text>
-      <rect x="32" y="102" width="96" height="28" rx="10" fill="#6366F1"/>
-      <text x="80" y="121" font-size="11" fill="white" text-anchor="middle" font-family="sans-serif">🐸 Bắt đầu!</text>
-      <text x="168" y="82" font-size="26" fill="#6366F1">→</text>
-      <rect x="192" y="30" width="96" height="90" rx="10" fill="#fff" stroke="#E2E8F0" stroke-width="2"/>
-      <text x="240" y="56" font-size="9" fill="#94A3B8" text-anchor="middle" font-family="sans-serif">Xin chào Minh ⚡</text>
-      <rect x="202" y="62" width="76" height="15" rx="6" fill="#6366F1"/>
-      <text x="240" y="73" font-size="8" fill="white" text-anchor="middle" font-family="sans-serif">📚 SGK | 📖 VUS | 🎯 TOEIC</text>
-      <rect x="202" y="83" width="34" height="13" rx="6" fill="#EEF2FF"/>
-      <text x="219" y="93" font-size="7.5" fill="#4338CA" text-anchor="middle" font-family="sans-serif">Family</text>
-      <rect x="240" y="83" width="38" height="13" rx="6" fill="#F1F5F9"/>
-      <text x="259" y="93" font-size="7.5" fill="#64748B" text-anchor="middle" font-family="sans-serif">Sports</text>
-    </svg></div>`
-  },
-  {
-    title:'Bước 2: Chọn tab & chủ đề',
-    desc:'<strong>📚 SGK</strong> theo lớp · <strong>📖 VUS Look 1–7</strong> · <strong>🎯 TOEIC</strong> · <strong>🌟 Sở thích</strong>. Chọn chủ đề bất kỳ để bắt đầu!',
-    illo:`<div class="illo-wrap"><svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" width="280">
-      <rect width="300" height="150" fill="#F8FAFF" rx="12"/>
-      <rect x="10" y="12" width="280" height="30" rx="8" fill="#F1F5F9"/>
-      <rect x="14" y="16" width="60" height="22" rx="6" fill="#6366F1"/>
-      <text x="44" y="31" font-size="9" fill="white" text-anchor="middle" font-family="sans-serif">📚 SGK</text>
-      <rect x="78" y="16" width="60" height="22" rx="6" fill="#F1F5F9"/>
-      <text x="108" y="31" font-size="9" fill="#64748B" text-anchor="middle" font-family="sans-serif">📖 VUS</text>
-      <rect x="142" y="16" width="60" height="22" rx="6" fill="#F1F5F9"/>
-      <text x="172" y="31" font-size="9" fill="#64748B" text-anchor="middle" font-family="sans-serif">🎯 TOEIC</text>
-      <rect x="206" y="16" width="76" height="22" rx="6" fill="#F1F5F9"/>
-      <text x="244" y="31" font-size="9" fill="#64748B" text-anchor="middle" font-family="sans-serif">🌟 Sở thích</text>
-      <text x="10" y="62" font-size="9" fill="#94A3B8" font-family="sans-serif">Chủ đề:</text>
-      <rect x="10" y="68" width="70" height="20" rx="10" fill="#6366F1"/>
-      <text x="45" y="82" font-size="8" fill="white" text-anchor="middle" font-family="sans-serif">👨‍👩‍👧 Family</text>
-      <rect x="86" y="68" width="80" height="20" rx="10" fill="#F8FAFF" stroke="#E2E8F0" stroke-width="1.5"/>
-      <text x="126" y="82" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">🏃 Body&Sports</text>
-      <rect x="172" y="68" width="76" height="20" rx="10" fill="#F8FAFF" stroke="#E2E8F0" stroke-width="1.5"/>
-      <text x="210" y="82" font-size="8" fill="#64748B" text-anchor="middle" font-family="sans-serif">🏘️ Neighborhood</text>
-      <rect x="10" y="100" width="200" height="22" rx="8" fill="#fff" stroke="#E2E8F0" stroke-width="1.5"/>
-      <text x="110" y="115" font-size="9" fill="#1a1a2e" text-anchor="middle" font-family="sans-serif">🐸 "Do you have brothers or sisters?"  🔊</text>
-      <rect x="220" y="100" width="70" height="22" rx="8" fill="#6366F1"/>
-      <text x="255" y="115" font-size="9" fill="white" text-anchor="middle" font-family="sans-serif">Yes I do! 🎤</text>
-    </svg></div>`
-  },
-  {
-    title:'Bước 3: Nói hoặc gõ câu trả lời',
-    desc:'Nhấn <strong>🎤 Nói</strong> → đọc câu tiếng Anh → Ninja Ếch chấm điểm. Hoặc <strong>⌨️ Gõ tay</strong> nếu không có mic.',
-    illo:`<div class="illo-wrap"><svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" width="280">
-      <rect width="300" height="150" fill="#F8FAFF" rx="12"/>
-      <rect x="10" y="10" width="185" height="34" rx="10" fill="#fff" stroke="#E2E8F0" stroke-width="1.5"/>
-      <text x="22" y="24" font-size="9" fill="#1a1a2e" font-family="sans-serif">🐸 "What sports do you like?"</text>
-      <text x="22" y="38" font-size="9" fill="#6366F1" font-family="sans-serif">🔊 Nghe lại</text>
-      <rect x="106" y="54" width="184" height="26" rx="10" fill="#6366F1"/>
-      <text x="198" y="71" font-size="9" fill="white" text-anchor="middle" font-family="sans-serif">I like playing football! ⚽</text>
-      <rect x="10" y="92" width="190" height="22" rx="8" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1.5"/>
-      <text x="105" y="107" font-size="9" fill="#3730A3" text-anchor="middle" font-family="sans-serif">⭐ Great answer! Well done!</text>
-      <rect x="10" y="122" width="280" height="22" rx="10" fill="transparent" stroke="#6366F1" stroke-width="2"/>
-      <text x="150" y="137" font-size="10" fill="#6366F1" text-anchor="middle" font-family="sans-serif">🎤 Nhấn để nói</text>
-    </svg></div>`
-  }
-];
-
-let obStep=0;
-function renderSlide(i){
-  const s=SLIDES[i];
-  document.getElementById('obIllo').innerHTML=s.illo;
-  document.getElementById('obTitle').textContent=s.title;
-  document.getElementById('obDesc').innerHTML=s.desc;
-  document.querySelectorAll('.ob-dot').forEach((d,idx)=>d.classList.toggle('done',idx<=i));
-  document.getElementById('obNextBtn').textContent=i===SLIDES.length-1?'Bắt đầu! 🐸':'Tiếp theo →';
-}
-function nextSlide(){
-  if(obStep<SLIDES.length-1){obStep++;renderSlide(obStep);}
-  else skipOnboarding();
-}
-function skipOnboarding(){
-  document.getElementById('onboarding').classList.add('hide');
-  localStorage.setItem('be_ob_done','1');
-  showSetupOrMain();
-}
-function showSetupOrMain(){
-  load();
-  if(NAME&&NAME!=='bạn'){
-    document.getElementById('setupScreen').style.display='none';
-    document.getElementById('mainScreen').style.display='flex';
-    document.getElementById('tbName').textContent='Xin chào '+NAME+' ⚡';
-    buildChips();renderBadgesGrid();renderEarnedBadgesRow();initVoice();
-    const first=Object.keys(CURRICULUM_SGK[GRADE])[0];
-    setTopic(first);
-  }else{
-    document.getElementById('setupScreen').style.display='flex';
-  }
-}
-
 // init
-const obDone=localStorage.getItem('be_ob_done');
-if(obDone){
-  document.getElementById('onboarding').classList.add('hide');
-  showSetupOrMain();
+load();
+if(NAME&&NAME!=='bạn'){
+  document.getElementById('setupScreen').style.display='none';
+  document.getElementById('mainScreen').style.display='flex';
+  document.getElementById('tbName').textContent='Xin chào '+NAME+' ⚡';
+  buildChips();renderBadgesGrid();renderEarnedBadgesRow();initVoice();
+  const first=Object.keys(CURRICULUM_SGK[GRADE])[0];
+  setTopic(first);
 }else{
-  renderSlide(0);
+  document.getElementById('setupScreen').style.display='flex';
 }
 renderEarnedBadgesRow();
 </script>
