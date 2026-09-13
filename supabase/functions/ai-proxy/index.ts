@@ -97,20 +97,25 @@ Deno.serve(async (req: Request) => {
 
   const maxTokens = Math.min(Math.max(Number(body.max_tokens) || 200, 1), 300);
 
-  const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": anthropicKey,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: CLAUDE_MODEL,
-      max_tokens: maxTokens,
-      system: body.system ?? "You are a friendly English teacher.",
-      messages: body.messages ?? [],
-    }),
-  });
+  let claudeRes: Response;
+  try {
+    claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": anthropicKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: CLAUDE_MODEL,
+        max_tokens: maxTokens,
+        system: body.system ?? "You are a friendly English teacher.",
+        messages: body.messages ?? [],
+      }),
+    });
+  } catch {
+    return jsonResponse({ error: { message: "Upstream request failed. Please try again." } }, 502, origin);
+  }
 
   const claudeData = await claudeRes.json();
 
