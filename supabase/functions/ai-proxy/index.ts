@@ -99,6 +99,24 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: { message: "Invalid request body" } }, 400, origin);
   }
 
+  const tooLong = { error: { message: "Tin nhắn quá dài. Vui lòng gửi ngắn gọn hơn." } };
+
+  if (typeof body.system === "string" && body.system.length > 3000) {
+    return jsonResponse(tooLong, 400, origin);
+  }
+  if (!Array.isArray(body.messages) || body.messages.length > 30) {
+    return jsonResponse({ error: { message: "Yêu cầu không hợp lệ." } }, 400, origin);
+  }
+  for (const m of body.messages) {
+    if (
+      typeof m !== "object" || m === null ||
+      typeof (m as { content?: unknown }).content !== "string" ||
+      (m as { content: string }).content.length > 4000
+    ) {
+      return jsonResponse(tooLong, 400, origin);
+    }
+  }
+
   const maxTokens = Math.min(Math.max(Number(body.max_tokens) || 200, 1), 300);
 
   let claudeRes: Response;
