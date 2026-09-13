@@ -9,6 +9,7 @@ function corsHeaders(origin: string | null): Record<string, string> {
   const headers: Record<string, string> = {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "authorization, content-type",
+    "Access-Control-Max-Age": "3600",
   };
   if (!origin || origin === ALLOWED_ORIGIN) {
     headers["Access-Control-Allow-Origin"] = origin ?? "*";
@@ -70,18 +71,21 @@ Deno.serve(async (req: Request) => {
     !!profile.premium_until && new Date(profile.premium_until).getTime() > Date.now();
 
   const today = todayInVietnam();
-
-  const { data: usageRow } = await supabase
-    .from("usage_daily")
-    .select("count")
-    .eq("user_id", userId)
-    .eq("usage_date", today)
-    .maybeSingle();
-
-  const currentCount = usageRow?.count ?? 0;
   const limit = isPremium ? PREMIUM_SAFETY_CAP : FREE_DAILY_LIMIT;
 
-  if (currentCount >= limit) {
+  const { data: usageResult, error: usageErr } = await supabase.rpc("bump_usage", {
+    p_user: userId,
+    p_date: today,
+    p_limit: limit,
+  });
+
+  if (usageErr) {
+    return jsonResponse({ error: { message: "Lỗi hệ thống. Thử lại sau nhé!" } }, 500, origin);
+  }
+
+  const usageRow = Array.isArray(usageResult) ? usageResult[0] : usageResult;
+
+  if (!usageRow?.allowed) {
     const message = isPremium
       ? "Đã đạt giới hạn an toàn hôm nay. Vui lòng thử lại vào ngày mai."
       : "Hết lượt miễn phí hôm nay rồi! Nâng cấp để học không giới hạn.";
@@ -117,13 +121,11 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: { message: "Upstream request failed. Please try again." } }, 502, origin);
   }
 
-  const claudeData = await claudeRes.json();
-
-  if (claudeRes.ok) {
-    await supabase.from("usage_daily").upsert(
-      { user_id: userId, usage_date: today, count: currentCount + 1 },
-      { onConflict: "user_id,usage_date" },
-    );
+  let claudeData: unknown;
+  try {
+    claudeData = await claudeRes.json();
+  } catch {
+    return jsonResponse({ error: { message: "Máy chủ AI đang bận. Thử lại sau nhé!" } }, 502, origin);
   }
 
   return jsonResponse(claudeData, claudeRes.status, origin);

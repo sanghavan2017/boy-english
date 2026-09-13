@@ -593,8 +593,8 @@ let currentVUSLevel=4;
 let currentTOEICPart='listening';
 
 function lg(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
-function save(){try{localStorage.setItem('be_elkey',ELKEY);localStorage.setItem('be_oaikey',OAIKEY);localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
-function load(){try{ELKEY=localStorage.getItem('be_elkey')||'';OAIKEY=localStorage.getItem('be_oaikey')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
+function save(){try{localStorage.setItem('bef_elkey',ELKEY);localStorage.setItem('bef_oaikey',OAIKEY);localStorage.setItem('bef_name',NAME);localStorage.setItem('bef_grade',String(GRADE));localStorage.setItem('bef_global',JSON.stringify(global));}catch(e){}}
+function load(){try{ELKEY=localStorage.getItem('bef_elkey')||'';OAIKEY=localStorage.getItem('bef_oaikey')||'';NAME=localStorage.getItem('bef_name')||'';GRADE=parseInt(localStorage.getItem('bef_grade')||'4');const g=localStorage.getItem('bef_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
 
 async function sendMagicLink(){
   const email=document.getElementById('loginEmail').value.trim();
@@ -624,6 +624,7 @@ function applySession(session){
     accessToken='';
     document.getElementById('loginScreen').style.display='flex';
     document.getElementById('setupScreen').style.display='none';
+    document.getElementById('mainScreen').style.display='none';
   }
 }
 
@@ -757,6 +758,7 @@ async function askPika(userMsg){
     'Hello! Open with a personal question related to this topic that feels like real conversation.'
   ];
   const opener=openings[Math.floor(Math.random()*openings.length)];
+  if(HIST.length>12)HIST=HIST.slice(-12);
   const msgs=HIST.length?HIST:[{role:'user',content:opener}];
   const maxTok=currentTab==='toeic'?300:200;
   try{
@@ -769,9 +771,10 @@ async function askPika(userMsg){
     try{chat.removeChild(typing)}catch(x){}
     if(d.error){
       if(d.error.code==='LIMIT_REACHED'){addBubble('hint','🎉 '+d.error.message);return;}
-      throw new Error(d.error.message);
+      throw new Error('Không nhận được phản hồi. Thử lại nhé!');
     }
-    const reply=d.content[0].text.trim();
+    const reply=(d.content&&d.content[0]&&d.content[0].text||'').trim();
+    if(!reply){throw new Error('Không nhận được phản hồi. Thử lại nhé!');}
     lastAI=reply;
     HIST.push({role:'assistant',content:reply});
     // save last user message + AI reply to topic memory
@@ -1102,8 +1105,8 @@ function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 // init
 load();
 initAuth();
-const elk=lg('be_elkey');if(elk)document.getElementById('elKey').value=elk;
-const oak=lg('be_oaikey');if(oak)document.getElementById('oaiKey').value=oak;
+const elk=lg('bef_elkey');if(elk)document.getElementById('elKey').value=elk;
+const oak=lg('bef_oaikey');if(oak)document.getElementById('oaiKey').value=oak;
 if(NAME&&NAME!=='bạn')document.getElementById('childName').value=NAME;
 if(GRADE)document.getElementById('grade').value=String(GRADE);
 renderEarnedBadgesRow();
