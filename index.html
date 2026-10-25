@@ -212,19 +212,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     <span class="badge-sgk">📚 SGK · 📖 VUS Look · 🎯 TOEIC</span>
   </div>
   <div class="form-group">
-    <label>🔑 Claude API Key</label>
-    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off"/>
-    <div class="key-note">🔒 Chỉ lưu trên thiết bị này, không gửi đi đâu ngoài Anthropic</div>
-  </div>
-  <div class="form-group">
-    <label>🎙️ ElevenLabs API Key <span style="font-size:10px;color:#22c55e;font-weight:400">(giọng tự nhiên)</span></label>
-    <input type="password" id="elKey" placeholder="sk_..." autocomplete="off"/>
-    <div class="key-note">🔒 Để trống nếu chưa có — sẽ dùng giọng máy thay thế</div>
-  </div>
-  <div class="form-group">
-    <label>🎤 OpenAI API Key <span style="font-size:10px;color:#22c55e;font-weight:400">(mic mọi thiết bị)</span></label>
-    <input type="password" id="oaiKey" placeholder="sk-..." autocomplete="off"/>
-    <div class="key-note">🔒 Dùng Whisper STT — mic hoạt động trên iPhone, Android</div>
+    <label>🎟️ Mã mời</label>
+    <input type="text" id="inviteCode" placeholder="Ví dụ: BOY-AN-7K2" autocomplete="off" autocapitalize="characters"/>
+    <div class="key-note">🔒 Mã do người mời bạn gửi. Chỉ lưu trên thiết bị này.</div>
   </div>
   <div class="form-group">
     <label>👦 Tên của bạn</label>
@@ -325,7 +315,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       </div>
     </div>
   </div>
-  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp / API key</span>
+  <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp / mã mời</span>
 </div>
 
 <!-- BADGES PANEL -->
@@ -531,7 +521,9 @@ const BADGES=[
   {id:'vus1',ico:'📖',name:'VUS Explorer',desc:'Luyện 10 lượt VUS',check:s=>s.vusTurns>=10},
 ];
 
-let KEY='',ELKEY='',OAIKEY='',NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,recog=null,inputMode='mic';
+// Địa chỉ backend (Cloudflare Worker). Điền sau khi triển khai Worker — xem GD1/HUONG_DAN_TRIEN_KHAI.md
+const API_BASE='https://boyenglishapi.sang-havan2017.workers.dev';
+let CODE='',NAME='',GRADE=4,TOPIC='',HIST=[],lastAI='',isRec=false,inputMode='mic';
 let currentAudio=null;
 let sess={stars:0,streak:0,turns:0,goodAns:0,maxStreak:0,start:Date.now(),toeicTurns:0,vusTurns:0};
 let global={totalStars:0,sessions:0,earnedBadges:[],history:[],topicMemory:{}};
@@ -541,18 +533,32 @@ let currentTab='sgk'; // sgk | fun | vus | toeic
 let currentVUSLevel=4;
 let currentTOEICPart='listening';
 
-function lg(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
-function save(){try{localStorage.setItem('be_key',KEY);localStorage.setItem('be_elkey',ELKEY);localStorage.setItem('be_oaikey',OAIKEY);localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
-function load(){try{KEY=localStorage.getItem('be_key')||'';ELKEY=localStorage.getItem('be_elkey')||'';OAIKEY=localStorage.getItem('be_oaikey')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
+// Gọi backend. Trả về Response; lỗi 401/429 được dịch sang tiếng Việt bởi errMsg()
+function api(path,opts){
+  opts=opts||{};
+  const headers=Object.assign({'X-Invite-Code':CODE},opts.headers||{});
+  return fetch(API_BASE+path,Object.assign({method:'POST'},opts,{headers}));
+}
+async function errMsg(r){
+  try{const d=await r.json();if(d.error&&d.error.message)return d.error.message;}catch(e){}
+  return 'Lỗi kết nối ('+r.status+')';
+}
+function save(){try{localStorage.setItem('be_code',CODE);localStorage.setItem('be_name',NAME);localStorage.setItem('be_grade',String(GRADE));localStorage.setItem('be_global',JSON.stringify(global));}catch(e){}}
+function load(){try{CODE=localStorage.getItem('be_code')||'';NAME=localStorage.getItem('be_name')||'';GRADE=parseInt(localStorage.getItem('be_grade')||'4');const g=localStorage.getItem('be_global');if(g){global=JSON.parse(g);}if(!global.topicMemory)global.topicMemory={};if(!global.earnedBadges)global.earnedBadges=[];if(!global.history)global.history=[];}catch(e){}}
 
-function startApp(){
-  const k=document.getElementById('apiKey').value.trim();
+async function startApp(){
+  const k=document.getElementById('inviteCode').value.trim().toUpperCase();
   const n=document.getElementById('childName').value.trim();
   const g=parseInt(document.getElementById('grade').value);
-  if(!k){alert('Vui lòng nhập Claude API Key!');return;}
-  KEY=k;NAME=n||'bạn';GRADE=g;
-  ELKEY=document.getElementById('elKey').value.trim();
-  OAIKEY=document.getElementById('oaiKey').value.trim();
+  if(!k){alert('Vui lòng nhập mã mời!');return;}
+  CODE=k;
+  const btn=document.querySelector('.btn-start');btn.disabled=true;
+  try{
+    const r=await api('/check');
+    if(!r.ok){alert(await errMsg(r));btn.disabled=false;return;}
+  }catch(e){alert('Không kết nối được. Kiểm tra mạng rồi thử lại nhé!');btn.disabled=false;return;}
+  btn.disabled=false;
+  NAME=n||'bạn';GRADE=g;
   global.sessions++;
   save();
   document.getElementById('setupScreen').style.display='none';
@@ -568,9 +574,7 @@ function startApp(){
 function goSettings(){
   document.getElementById('mainScreen').style.display='none';
   document.getElementById('setupScreen').style.display='flex';
-  document.getElementById('apiKey').value=KEY;
-  document.getElementById('elKey').value=ELKEY;
-  document.getElementById('oaiKey').value=OAIKEY;
+  document.getElementById('inviteCode').value=CODE;
   document.getElementById('childName').value=NAME==='bạn'?'':NAME;
   document.getElementById('grade').value=String(GRADE);
 }
@@ -677,30 +681,30 @@ async function askPika(userMsg){
     'Start our session. Skip generic questions. Jump straight into something interesting and specific.',
     'Hello! Open with a personal question related to this topic that feels like real conversation.'
   ];
-  const opener=openings[Math.floor(Math.random()*openings.length)];
-  const msgs=HIST.length?HIST:[{role:'user',content:opener}];
+  // Tin nhắn đầu tiên gửi AI luôn là của "user" (yêu cầu của API); đánh dấu opener để không tính là lượt của bé
+  if(!HIST.length)HIST.push({role:'user',content:openings[Math.floor(Math.random()*openings.length)],opener:true});
   const maxTok=currentTab==='toeic'?300:200;
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:maxTok,system:sys,messages:msgs})
+    const r=await api('/chat',{
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({max_tokens:maxTok,system:sys,messages:HIST.map(m=>({role:m.role,content:m.content}))})
     });
-    const d=await r.json();
     try{chat.removeChild(typing)}catch(x){}
-    if(d.error)throw new Error(d.error.message);
-    const reply=d.content[0].text.trim();
+    if(!r.ok)throw new Error(await errMsg(r));
+    const d=await r.json();
+    const reply=(d.text||'').trim();
+    if(!reply)throw new Error('AI chưa trả lời, thử lại nhé!');
     lastAI=reply;
     HIST.push({role:'assistant',content:reply});
     // save last user message + AI reply to topic memory
     const lastUser=HIST.filter(m=>m.role==='user').slice(-1)[0];
-    if(lastUser&&lastUser.content!=='Hello! Please start the session. Greet briefly and ask your first question about the topic. Keep it short and natural.'){
+    if(lastUser&&!lastUser.opener){
       saveTopicMemory(currentTab,TOPIC,lastUser.content,reply);
       save();
     }
     addBubble('ai',reply,true);
     speakEn(reply);
-    updateProg(Math.min(HIST.filter(m=>m.role==='user').length*18,100));
+    updateProg(Math.min(HIST.filter(m=>m.role==='user'&&!m.opener).length*18,100));
   }catch(e){
     try{chat.removeChild(typing)}catch(x){}
     addBubble('err','⚠️ Lỗi: '+e.message);
@@ -711,8 +715,11 @@ function addBubble(type,text,withSpk){
   const chat=document.getElementById('chatWrap');
   const b=document.createElement('div');b.className='bbl '+type;
   if(withSpk){
-    const safe=text.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-    b.innerHTML=escHtml(text)+' <button class="spk-btn" onclick="speakEn(\''+safe.replace(/\n/g,' ')+'\')" title="Nghe lại">🔊</button>';
+    b.appendChild(document.createTextNode(text+' '));
+    const spk=document.createElement('button');
+    spk.className='spk-btn';spk.title='Nghe lại';spk.textContent='🔊';
+    spk.onclick=()=>speakEn(text);
+    b.appendChild(spk);
   }else{b.textContent=text;}
   chat.appendChild(b);chat.scrollTop=chat.scrollHeight;
 }
@@ -747,35 +754,17 @@ function sendTyped(){
 
 let mediaRec=null,audioChunks=[];
 
+// Mic: ghi âm rồi gửi backend để nghe thành chữ (Whisper). Chọn định dạng mà thiết bị hỗ trợ (iPhone dùng mp4, Chrome dùng webm).
 async function handleMic(){
-  if(OAIKEY){await handleWhisperMic();return;}
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){addBubble('err','Cần nhập OpenAI API Key để dùng mic mọi thiết bị. Hoặc dùng Gõ tay!');return;}
-  if(isRec){recog&&recog.stop();return;}
-  recog=new SR();recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
-  recog.onstart=()=>{isRec=true;setMicRec(true);};
-  recog.onresult=(e)=>{
-    const said=e.results[0][0].transcript.trim();
-    const conf=e.results[0][0].confidence||0.7;
-    sess.turns++;document.getElementById('sTurns').textContent=sess.turns;
-    if(currentTab==='toeic')sess.toeicTurns++;
-    if(currentTab==='vus')sess.vusTurns++;
-    evalResult(said.split(' ').filter(Boolean).length>=2&&conf>=0.45,said);
-    askPika(said);
-  };
-  recog.onerror=()=>{addBubble('err','Lỗi mic. Thêm OpenAI Key để dùng trên mọi thiết bị!');resetMic();};
-  recog.onend=()=>resetMic();
-  recog.start();
-}
-
-async function handleWhisperMic(){
   if(isRec){mediaRec&&mediaRec.stop();return;}
+  if(!window.MediaRecorder||!navigator.mediaDevices){addBubble('err','Trình duyệt này chưa hỗ trợ mic. Bạn dùng Gõ tay nhé!');return;}
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
     audioChunks=[];
-    mediaRec=new MediaRecorder(stream);
+    const mime=['audio/webm;codecs=opus','audio/webm','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+    mediaRec=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream);
     mediaRec.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data);};
-    mediaRec.onstop=async()=>{stream.getTracks().forEach(t=>t.stop());await transcribeWhisper(new Blob(audioChunks,{type:'audio/webm'}));};
+    mediaRec.onstop=async()=>{stream.getTracks().forEach(t=>t.stop());await transcribeWhisper(new Blob(audioChunks,{type:mediaRec.mimeType||mime||'audio/webm'}));};
     mediaRec.start();
     isRec=true;setMicRec(true);
   }catch(e){addBubble('err','Cần cho phép dùng mic trong trình duyệt!');resetMic();}
@@ -792,12 +781,12 @@ async function transcribeWhisper(blob){
   document.getElementById('micLbl').textContent='Đang xử lý...';
   try{
     const fd=new FormData();
-    fd.append('file',new File([blob],'audio.webm',{type:'audio/webm'}));
-    fd.append('model','whisper-1');fd.append('language','en');
-    const r=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+OAIKEY},body:fd});
-    const d=await r.json();
+    const ext=blob.type.includes('mp4')?'mp4':'webm';
+    fd.append('file',new File([blob],'audio.'+ext,{type:blob.type}));
+    const r=await api('/stt',{body:fd});
     document.getElementById('micLbl').textContent='Nhấn để nói';
-    if(d.error){addBubble('err','Lỗi Whisper: '+d.error.message);return;}
+    if(!r.ok){addBubble('err','⚠️ '+await errMsg(r));return;}
+    const d=await r.json();
     const said=(d.text||'').trim();
     if(!said){addBubble('try','Không nghe rõ. Thử lại nhé!');return;}
     sess.turns++;document.getElementById('sTurns').textContent=sess.turns;
@@ -975,13 +964,9 @@ function cleanForSpeech(text){
 
 async function speakElevenLabs(text){
   const clean=cleanForSpeech(text);
-  if(!clean||!ELKEY)return false;
+  if(!clean)return false;
   try{
-    const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/nPczCjzI2devNBz1zQrb',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','xi-api-key':ELKEY},
-      body:JSON.stringify({text:clean,model_id:'eleven_turbo_v2',voice_settings:{stability:0.6,similarity_boost:0.8,style:0.2,use_speaker_boost:true}})
-    });
+    const r=await api('/tts',{headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean})});
     if(!r.ok)return false;
     const blob=await r.blob();
     const url=URL.createObjectURL(blob);
@@ -996,7 +981,7 @@ async function speakElevenLabs(text){
 }
 
 async function speakEn(text){
-  if(ELKEY){const ok=await speakElevenLabs(text);if(ok)return;}
+  const ok=await speakElevenLabs(text);if(ok)return; // hết ngân sách/lỗi mạng -> dùng giọng máy bên dưới
   if(!('speechSynthesis' in window))return;
   window.speechSynthesis.cancel();
   const clean=cleanForSpeech(text);if(!clean)return;
@@ -1019,9 +1004,7 @@ function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 
 // init
 load();
-if(KEY)document.getElementById('apiKey').value=KEY;
-const elk=lg('be_elkey');if(elk)document.getElementById('elKey').value=elk;
-const oak=lg('be_oaikey');if(oak)document.getElementById('oaiKey').value=oak;
+if(CODE)document.getElementById('inviteCode').value=CODE;
 if(NAME&&NAME!=='bạn')document.getElementById('childName').value=NAME;
 if(GRADE)document.getElementById('grade').value=String(GRADE);
 renderEarnedBadgesRow();
