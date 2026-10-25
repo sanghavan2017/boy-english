@@ -967,18 +967,38 @@ async function speakElevenLabs(text){
   if(!clean)return false;
   try{
     const r=await api('/tts',{headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean})});
-    if(!r.ok)return false;
+    if(!r.ok){
+      // Hết ngân sách giọng đọc: báo bé 1 lần để khỏi bất ngờ khi giọng đổi sang giọng máy
+      if(r.status===429&&!ttsNoticeShown){ttsNoticeShown=true;addBubble('hint','🔈 '+await errMsg(r));}
+      return false;
+    }
     const blob=await r.blob();
     const url=URL.createObjectURL(blob);
     if(currentAudio){currentAudio.pause();currentAudio=null;}
-    const audio=new Audio(url);
-    audio.playbackRate=0.85;
+    const audio=ttsEl; // dùng lại đúng phần tử đã được "mở khoá" bằng lần chạm đầu tiên (iPhone chặn tự phát nếu không có thao tác của người dùng)
+    audio.src=url;
+    audio.defaultPlaybackRate=0.85;audio.playbackRate=0.85;
     currentAudio=audio;
-    audio.play();
     audio.onended=()=>{URL.revokeObjectURL(url);currentAudio=null;};
+    await audio.play();
     return true;
   }catch(e){return false;}
 }
+
+// iPhone/Safari chỉ cho phát âm thanh sau khi người dùng chạm màn hình. Lần chạm đầu tiên "mở khoá" phần tử âm thanh để các lần phát sau (không có chạm) vẫn nghe được.
+const ttsEl=new Audio();
+let ttsNoticeShown=false,audioUnlocked=false;
+function unlockAudio(){
+  if(audioUnlocked)return;
+  audioUnlocked=true;
+  try{
+    ttsEl.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
+    const p=ttsEl.play();if(p&&p.catch)p.catch(()=>{audioUnlocked=false;});
+    if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(' ');u.volume=0;window.speechSynthesis.speak(u);}
+  }catch(e){audioUnlocked=false;}
+}
+document.addEventListener('click',unlockAudio);
+document.addEventListener('touchend',unlockAudio);
 
 async function speakEn(text){
   const ok=await speakElevenLabs(text);if(ok)return; // hết ngân sách/lỗi mạng -> dùng giọng máy bên dưới
