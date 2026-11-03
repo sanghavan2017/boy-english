@@ -1681,6 +1681,20 @@ function prQuestion(body){
   const item=PR.q[PR.i],q=item.q;
   const bar=prEl('div','pr-bar');const fill=prEl('div');fill.style.width=(PR.i/PR.q.length*100)+'%';bar.appendChild(fill);body.appendChild(bar);
   body.appendChild(prEl('div','pr-su','Câu '+(PR.i+1)+' / '+PR.q.length+(item.retry?' · làm lại câu đã sai':'')));
+  // Âm thanh: nút 🔊 đọc câu hỏi (chỗ trống đọc là "blank") và các đáp án; công tắc "Tự đọc" lưu lại cho lần sau
+  let qText='';
+  const audioRow=prEl('div');audioRow.style.cssText='display:flex;gap:10px;align-items:center;flex-wrap:wrap';
+  if(!q.say){
+    const sp=prEl('button','pr-btn sec','🔊 Nghe câu hỏi');
+    sp.style.cssText='width:auto;padding:8px 14px;font-size:13px';
+    sp.onclick=()=>prSpeak(qText);
+    const auto=prEl('button','pr-link');
+    const showAuto=()=>{auto.textContent='Tự đọc: '+(P().autoRead?'Bật ✅':'Tắt');};
+    showAuto();
+    auto.onclick=()=>{P().autoRead=!P().autoRead;save();showAuto();if(P().autoRead)prSpeak(qText);else stopAllAudio();};
+    audioRow.appendChild(sp);audioRow.appendChild(auto);
+    body.appendChild(audioRow);
+  }
   const fb=prEl('div');
   const nextBtn=prEl('button','pr-btn',PR.i+1<PR.q.length?'Next ➜':'Xem kết quả');
   nextBtn.style.display='none';
@@ -1704,6 +1718,7 @@ function prQuestion(body){
     const ans=prEl('div','pr-words pr-ans'),pool=prEl('div','pr-words');
     let words=prShuffle(q.w);
     while(words.join(' ')===q.a[0]&&words.length>1)words=prShuffle(q.w);
+    qText='Put the words in order. '+words.join('. ')+'.';
     const btns=[];
     const check=prEl('button','pr-btn','Check');check.disabled=true;
     const redraw=()=>{
@@ -1724,6 +1739,7 @@ function prQuestion(body){
     if(q.t==='mc'){
       const opts=[];
       const order=prShuffle(q.o.map((_,k)=>k)); // xáo thứ tự để vị trí đáp án đúng không đoán được
+      qText=q.q.replace(/_+/g,' blank ')+' Choices. '+order.map(k=>q.o[k]).join('. ')+'.';
       order.forEach(k=>{
         const b=prEl('button','pr-opt',q.o[k]);
         b.onclick=()=>{
@@ -1735,6 +1751,7 @@ function prQuestion(body){
         opts.push(b);body.appendChild(b);
       });
     }else{
+      qText=q.q.replace(/_+/g,' blank ');
       const inp=prEl('input','pr-in');inp.type='text';inp.placeholder='Type your answer...';
       inp.setAttribute('autocomplete','off');inp.setAttribute('autocapitalize','off');inp.setAttribute('autocorrect','off');
       const check=prEl('button','pr-btn','Check');
@@ -1747,6 +1764,7 @@ function prQuestion(body){
   body.appendChild(fb);
   body.appendChild(nextBtn);
   body.appendChild(prViBtn(q.vi));
+  if(P().autoRead&&!q.say&&qText)prSpeak(qText); // đang trong thao tác bấm của bé nên điện thoại cho phép phát
 }
 
 function prFinish(){
