@@ -162,6 +162,45 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .arr-btn:active{transform:scale(.92)}
 
 .footer-lnk{text-align:center;font-size:11px;color:#CBD5E1;padding:6px 0 16px;cursor:pointer;text-decoration:underline}
+
+/* ---- PRACTICE (Phòng luyện tập) ---- */
+.tab-btn.pr-on{background:#DCFCE7;border-color:#16A34A;color:#166534}
+.pr-sec{font-size:12px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.05em;margin:4px 0 -4px}
+.pr-card{background:#F8FAFF;border:1.5px solid #E2E8F0;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.pr-card:hover{border-color:#86EFAC;background:#F0FDF4}
+.pr-card.locked,.pr-card.soon{opacity:.55;cursor:default}
+.pr-card.done{background:#F0FDF4;border-color:#86EFAC}
+.pr-ico{font-size:26px;flex-shrink:0}
+.pr-ti{font-size:14px;font-weight:700;color:#1a1a2e}
+.pr-su{font-size:11px;color:#94A3B8;margin-top:2px}
+.pr-tag{margin-left:auto;font-size:11px;font-weight:700;color:#16A34A;white-space:nowrap}
+.pr-box{background:#fff;border:1.5px solid #E2E8F0;border-radius:14px;padding:14px}
+.pr-rule{font-size:15px;font-weight:700;color:#1a1a2e;line-height:1.5;margin-bottom:8px}
+.pr-ex{font-size:14px;line-height:1.6;color:#334155;display:flex;align-items:center;gap:4px}
+.pr-ex.ok{color:#166534}.pr-ex.no{color:#991B1B;text-decoration:line-through;text-decoration-color:#FCA5A5}
+.pr-vi{font-size:12px;color:#0369A1;background:#E0F2FE;border-radius:8px;padding:6px 10px;margin-top:8px;display:none}
+.pr-vi.show{display:block}
+.pr-btn{width:100%;padding:14px;border-radius:12px;border:none;background:#16A34A;color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+.pr-btn.sec{background:#fff;color:#16A34A;border:2px solid #16A34A}
+.pr-btn:disabled{opacity:.4;cursor:default}
+.pr-link{background:none;border:none;color:#0369A1;font-size:12px;font-weight:600;cursor:pointer;padding:4px 0;text-align:left}
+.pr-q{font-size:18px;font-weight:700;color:#1a1a2e;line-height:1.5}
+.pr-bar{height:6px;background:#E2E8F0;border-radius:3px;overflow:hidden}
+.pr-bar>div{height:100%;background:#16A34A;transition:width .3s}
+.pr-opt{width:100%;text-align:left;padding:13px 14px;border-radius:12px;border:1.5px solid #CBD5E1;background:#fff;color:#1a1a2e;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.pr-opt:hover:not(:disabled){border-color:#16A34A;background:#F0FDF4}
+.pr-opt.ok{background:#DCFCE7;border-color:#16A34A}
+.pr-opt.bad{background:#FEE2E2;border-color:#EF4444}
+.pr-in{width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid #CBD5E1;font-size:16px;font-family:inherit;outline:none}
+.pr-in:focus{border-color:#16A34A}
+.pr-words{display:flex;flex-wrap:wrap;gap:8px;min-height:44px}
+.pr-ans{padding:10px;border:2px dashed #CBD5E1;border-radius:12px;min-height:52px}
+.pr-w{padding:9px 14px;border-radius:10px;border:1.5px solid #CBD5E1;background:#fff;font-size:15px;font-weight:600;cursor:pointer}
+.pr-w:disabled{opacity:.3}
+.pr-fb{border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
+.pr-fb.ok{background:#DCFCE7;color:#166534}.pr-fb.bad{background:#FEE2E2;color:#991B1B}
+.pr-big{font-size:46px;text-align:center}
+.pr-score{font-size:30px;font-weight:800;text-align:center;color:#1a1a2e}
 </style>
 </head>
 <body>
@@ -272,6 +311,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
         <button class="tab-btn" id="tabFun" onclick="setTab('fun')">🌟 Sở thích</button>
         <button class="tab-btn" id="tabVUS" onclick="setTab('vus')">📖 VUS</button>
         <button class="tab-btn" id="tabTOEIC" onclick="setTab('toeic')">🎯 TOEIC</button>
+        <button class="tab-btn pr-on" onclick="openPractice()">📝 Luyện tập</button>
       </div>
       <button class="arr-btn" onclick="scrollRow('tabBar',120)">&#8250;</button>
     </div>
@@ -316,6 +356,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     </div>
   </div>
   <span class="footer-lnk" onclick="goSettings()">Đổi tên / lớp / mã mời</span>
+</div>
+
+<!-- PRACTICE PANEL -->
+<div class="panel" id="practicePanel">
+  <div class="panel-header">
+    <button class="close-btn" id="prBack" onclick="prBack()">←</button>
+    <h2 id="prTitle">📝 Luyện tập</h2>
+    <button class="close-btn" onclick="closePractice()">✕</button>
+  </div>
+  <div class="panel-body" id="prBody"></div>
 </div>
 
 <!-- BADGES PANEL -->
@@ -519,6 +569,10 @@ const BADGES=[
   {id:'star50',ico:'🏆',name:'Champion',desc:'Đạt 50 stars',check:s=>s.totalStars>=50},
   {id:'toeic1',ico:'🎯',name:'TOEIC Starter',desc:'Luyện 10 lượt TOEIC',check:s=>s.toeicTurns>=10},
   {id:'vus1',ico:'📖',name:'VUS Explorer',desc:'Luyện 10 lượt VUS',check:s=>s.vusTurns>=10},
+  {id:'gram1',ico:'🧠',name:'Grammar Hero',desc:'Đạt 9/10 bài kiểm tra ngữ pháp',check:s=>s.gramBest>=9},
+  {id:'wordwiz',ico:'🪄',name:'Word Wizard',desc:'Học xong flashcard của 3 unit',check:s=>s.wordSets>=3},
+  {id:'unit7',ico:'🎓',name:'Unit Master',desc:'Đạt 8/10 quiz cuối của cả 7 unit',check:s=>s.unitsPassed>=7},
+  {id:'free5',ico:'🌍',name:'Free Explorer',desc:'Hoàn thành 5 chủ đề bài tập tự do',check:s=>s.freeDone>=5},
 ];
 
 // Địa chỉ backend (Cloudflare Worker). Điền sau khi triển khai Worker — xem GD1/HUONG_DAN_TRIEN_KHAI.md
@@ -567,8 +621,7 @@ async function startApp(){
   buildChips();
   renderBadgesGrid();
   initVoice();
-  const first=Object.keys(CURRICULUM_SGK[GRADE])[0];
-  setTopic(first);
+  showIdle();
 }
 
 function goSettings(){
@@ -599,9 +652,7 @@ function setTab(tab){
   if(tab==='vus') buildVUSSubSel();
   if(tab==='toeic') buildTOEICSubSel();
   buildChips();
-  const topics=getTopics();
-  const first=Object.keys(topics)[0];
-  setTopic(first);
+  showIdle();
 }
 
 function buildVUSSubSel(){
@@ -611,7 +662,7 @@ function buildVUSSubSel(){
     const c=document.createElement('div');
     c.className='sub-chip'+(lv===currentVUSLevel?' on':'');
     c.textContent='Look '+lv;
-    c.onclick=()=>{currentVUSLevel=lv;buildVUSSubSel();buildChips();const first=Object.keys(CURRICULUM_VUS[lv])[0];setTopic(first);};
+    c.onclick=()=>{currentVUSLevel=lv;buildVUSSubSel();buildChips();showIdle();};
     wrap.appendChild(c);
   });
 }
@@ -623,7 +674,7 @@ function buildTOEICSubSel(){
     const c=document.createElement('div');
     c.className='sub-chip'+(p.k===currentTOEICPart?' toeic-on':'');
     c.textContent=p.l;
-    c.onclick=()=>{currentTOEICPart=p.k;buildTOEICSubSel();buildChips();const first=Object.keys(CURRICULUM_TOEIC[p.k])[0];setTopic(first);};
+    c.onclick=()=>{currentTOEICPart=p.k;buildTOEICSubSel();buildChips();showIdle();};
     wrap.appendChild(c);
   });
 }
@@ -641,11 +692,27 @@ function buildChips(){
   const topics=getTopics();
   Object.entries(topics).forEach(([name,data],i)=>{
     const c=document.createElement('div');
-    c.className='chip'+(i===0?' on':'');c.id='chip_'+name.replace(/\s+/g,'_');
+    c.className='chip';c.id='chip_'+name.replace(/\s+/g,'_');
     c.textContent=data.e+' '+name;
     c.onclick=()=>setTopic(name);
     bar.appendChild(c);
   });
+}
+
+// Chưa chọn chủ đề: không gọi AI, không phát giọng; chờ bé bấm một chủ đề
+function showIdle(){
+  stopAllAudio();TOPIC='';HIST=[];lastAI='';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  const tabLabel=currentTab==='vus'?'Look '+currentVUSLevel:currentTab==='toeic'?'TOEIC':currentTab==='fun'?'Sở thích':'Lớp '+GRADE;
+  document.getElementById('tbSub').textContent=tabLabel+' · Chọn chủ đề để bắt đầu';
+  document.getElementById('chatWrap').innerHTML='';
+  addBubble('hint','👆 Chọn một chủ đề ở phía trên để bắt đầu nói chuyện nhé!');
+  updateProg(0);
+}
+function needTopic(){
+  if(TOPIC)return false;
+  addBubble('hint','👆 Hãy chọn một chủ đề ở phía trên trước nhé!');
+  return true;
 }
 
 function setTopic(t){
@@ -741,6 +808,7 @@ function sendTyped(){
   const inp=document.getElementById('typeInput');
   const val=inp.value.trim();
   if(!val)return;
+  if(needTopic())return;
   inp.value='';
   sess.turns++;
   document.getElementById('sTurns').textContent=sess.turns;
@@ -756,6 +824,7 @@ let mediaRec=null,audioChunks=[];
 
 // Mic: ghi âm rồi gửi backend để nghe thành chữ (Whisper). Chọn định dạng mà thiết bị hỗ trợ (iPhone dùng mp4, Chrome dùng webm).
 async function handleMic(){
+  if(!isRec&&needTopic())return;
   if(isRec){mediaRec&&mediaRec.stop();return;}
   if(!window.MediaRecorder||!navigator.mediaDevices){addBubble('err','Trình duyệt này chưa hỗ trợ mic. Bạn dùng Gõ tay nhé!');return;}
   try{
@@ -824,7 +893,7 @@ function saveSession(said,good){
 }
 
 function checkBadges(){
-  const state={turns:sess.turns,goodAns:sess.goodAns,maxStreak:sess.maxStreak,totalStars:global.totalStars,sessions:global.sessions,toeicTurns:sess.toeicTurns,vusTurns:sess.vusTurns};
+  const state={turns:sess.turns,goodAns:sess.goodAns,maxStreak:sess.maxStreak,totalStars:global.totalStars,sessions:global.sessions,toeicTurns:sess.toeicTurns,vusTurns:sess.vusTurns,gramBest:Math.max(0,...PR_STAGES.map(s=>((global.practice||{}).best||{})[s.id]||0)),wordSets:Object.keys((global.practice||{}).cardsDone||{}).length,freeDone:Object.keys((global.practice||{}).freeDone||{}).length,unitsPassed:PR_UNITS.filter(u=>((global.practice||{}).passed||{})[u.id]).length};
   BADGES.forEach(b=>{
     if(!global.earnedBadges.includes(b.id)&&b.check(state)){
       global.earnedBadges.push(b.id);
@@ -925,6 +994,7 @@ function doStop(){
 }
 
 function doSkip(){
+  if(needTopic())return;
   const msg=currentTab==='toeic'?"I'm not sure how to answer that. Can you give me an easier question?"
     :"I'm not sure. Please ask me something a little easier.";
   askPika(msg);
@@ -952,7 +1022,7 @@ function fillParentPanel(){
   if(global.history.length===0){hl.innerHTML='<p style="color:#94A3B8;font-size:13px;text-align:center;padding:12px">Chưa có lịch sử</p>';return;}
   global.history.slice(0,8).forEach(h=>{
     const d=document.createElement('div');d.className='history-item';
-    const tabBadge=h.tab==='toeic'?'🎯':h.tab==='vus'?'📖':h.tab==='fun'?'🌟':'📚';
+    const tabBadge=h.tab==='toeic'?'🎯':h.tab==='vus'?'📖':h.tab==='fun'?'🌟':h.tab==='practice'?'📝':'📚';
     d.innerHTML='<div class="hi-date">'+h.date+' '+tabBadge+' '+h.topic+'</div><div class="hi-detail">'+(h.good?'✅':'🔄')+' "'+escHtml(h.said)+'"</div>';
     hl.appendChild(d);
   });
@@ -1021,6 +1091,1116 @@ function initVoice(){
 }
 
 function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ===================== PRACTICE (Phòng luyện tập) =====================
+// Thêm bài mới: thêm một chặng vào PR_STAGES (hoặc thêm câu vào practice/test). Không cần sửa code giao diện bên dưới.
+// Loại câu: mc(đề, [lựa chọn], vị trí đúng, giải thích, nhãn lỗi, nghĩa tiếng Việt) | fl(đề có ___, đáp án, ...) | od([từ xáo], câu đúng, ...)
+const mc=(q,o,a,why,tag,vi)=>({t:'mc',q,o,a,why,tag,vi});
+const fl=(q,a,why,tag,vi)=>({t:'fill',q,a:Array.isArray(a)?a:[a],why,tag,vi});
+const od=(w,a,why,tag,vi)=>({t:'order',w,a:Array.isArray(a)?a:[a],why,tag,vi});
+
+const PR_TAGS={
+  'base':'Dùng động từ nguyên mẫu sau I / you / we / they',
+  'third-s':'Thêm -s với he / she / it',
+  'es-ies':'Chính tả -es / -ies',
+  'neg':'Câu phủ định (don\'t / doesn\'t)',
+  'ques':'Câu hỏi (Do / Does)',
+  'signal':'Từ chỉ thói quen',
+  'be':'am / is / are',
+  'ing':'Chính tả thêm -ing',
+  'cont-neg':'Phủ định thì tiếp diễn (isn\'t / aren\'t)',
+  'cont-q':'Câu hỏi thì tiếp diễn (Is / Are ... ?)',
+  'signal-now':'Từ báo "đang xảy ra" (now, Look!, Listen!)',
+  'choose':'Chọn thì: hiện tại đơn hay tiếp diễn',
+  'stative':'Động từ không dùng -ing (like, want, know...)',
+  'was-were':'was / were',
+  'ed':'Chính tả thêm -ed',
+  'ed-sound':'Cách đọc -ed',
+  'irreg':'Động từ bất quy tắc',
+  'did-neg':'Phủ định quá khứ (didn\'t)',
+  'did-q':'Câu hỏi quá khứ (Did ... ?)',
+  'tense':'Chọn thì: hiện tại hay quá khứ',
+  'going-to':'be going to',
+  'will':'will + động từ nguyên mẫu',
+  'future-neg':'Phủ định tương lai (won\'t / not going to)',
+  'prep-time':'Giới từ thời gian (in / on / at)',
+  'prep-place':'Giới từ nơi chốn',
+  'article':'Mạo từ a / an / the',
+  'compare':'So sánh hơn / nhất',
+  'wh':'Từ để hỏi (what, where, when...)',
+  'quant':'much / many / some / any',
+  'confuse':'Từ dễ nhầm',
+  'modal':'can / should / must',
+  'vocab':'Từ vựng theo chủ đề Look 4',
+  'unit-grammar':'Ngữ pháp trong unit'
+};
+
+const PR_STAGES=[
+{id:'g1',e:'🌞',title:'Present simple',sub:'Thói quen & sự thật',
+ lesson:[
+  {rule:'We use present simple for habits and facts.',ex:[['I play football every day.',1],['The sun rises in the east.',1]],vi:'Thì hiện tại đơn dùng cho thói quen và sự thật hiển nhiên.'},
+  {rule:'After he, she, it: add -s to the verb.',ex:[['She plays the piano.',1],['She play the piano.',0]],vi:'Với he/she/it, động từ thêm -s.'},
+  {rule:'Add -es after s, sh, ch, x, o. If a verb ends in consonant + y, change y to -ies.',ex:[['He watches TV.',1],['She goes home.',1],['A baby cries.',1],['She studys English.',0]],vi:'Động từ tận cùng s, sh, ch, x, o thì thêm -es. Phụ âm + y thì đổi y thành -ies.'},
+  {rule:"Negative: use don't or doesn't + base verb.",ex:[["I don't like fish.",1],["He doesn't like fish.",1],["He doesn't likes fish.",0]],vi:"Phủ định: don't / doesn't + động từ nguyên mẫu (không thêm -s)."},
+  {rule:'Questions: Do / Does + subject + base verb.',ex:[['Do you like music?',1],['Does she play tennis?',1],["Yes, she does. No, she doesn't.",1]],vi:'Câu hỏi: Do / Does + chủ ngữ + động từ nguyên mẫu.'},
+  {rule:'Words for habits: always, usually, often, sometimes, never, every day.',ex:[['I always brush my teeth.',1],['We sometimes eat out.',1]],vi:'Các từ chỉ thói quen: luôn luôn, thường, hay, thỉnh thoảng, không bao giờ, mỗi ngày.'}
+ ],
+ practice:[
+  mc('I ___ football every Sunday.',['play','plays','playing'],0,'After I, use the base verb: play.','base','Tôi chơi bóng đá mỗi Chủ nhật.'),
+  mc('She ___ English at school.',['study','studies','studys'],1,'study → studies (consonant + y → -ies).','es-ies','Cô ấy học tiếng Anh ở trường.'),
+  mc('My dad ___ to work by bus.',['go','goes','gos'],1,'go → goes. Add -es after o.','es-ies','Bố tôi đi làm bằng xe buýt.'),
+  mc('They ___ milk every morning.',['drink','drinks','drinking'],0,'After they, use the base verb: drink.','base','Họ uống sữa mỗi sáng.'),
+  mc('The cat ___ fish.',['like','likes','liking'],1,'The cat = it. After it, add -s: likes.','third-s','Con mèo thích cá.'),
+  fl('He ___ (watch) cartoons after school.','watches','watch ends in -ch, so add -es: watches.','es-ies','Cậu ấy xem phim hoạt hình sau giờ học.'),
+  fl('We ___ (have) lunch at twelve.','have','After we, use the base verb: have.','base','Chúng tôi ăn trưa lúc 12 giờ.'),
+  fl('My sister ___ (wash) the dishes.','washes','wash ends in -sh, so add -es: washes.','es-ies','Chị tôi rửa bát.'),
+  fl('A bird ___ (fly) in the sky.','flies','fly → flies (consonant + y → -ies).','es-ies','Một con chim bay trên trời.'),
+  mc('He ___ like noodles.',["don't","doesn't","isn't"],1,"After he, use doesn't.",'neg','Cậu ấy không thích mì.'),
+  mc('I ___ play the piano.',["don't","doesn't",'not'],0,"After I, use don't.",'neg','Tôi không chơi đàn piano.'),
+  mc('Choose the correct sentence.',["She doesn't likes tea.","She doesn't like tea.","She don't like tea."],1,"After doesn't, use the base verb: like (no -s).",'neg','Cô ấy không thích trà.'),
+  mc('Choose the correct sentence.',["My mom don't cook on Sundays.","My mom doesn't cooks on Sundays.","My mom doesn't cook on Sundays."],2,"My mom = she. Use doesn't + base verb: cook.",'neg','Mẹ tôi không nấu ăn vào Chủ nhật.'),
+  fl('They ___ to school on Sunday. (not / go)',["don't go","do not go"],"After they, use don't + base verb: don't go.",'neg','Họ không đi học vào Chủ nhật.'),
+  mc('___ you like pizza?',['Do','Does','Are'],0,'After you, use Do.','ques','Bạn có thích pizza không?'),
+  mc('___ she play tennis?',['Do','Does','Is'],1,'After she, use Does.','ques','Cô ấy có chơi quần vợt không?'),
+  mc('Does he ___ homework every day?',['do','does','doing'],0,'After Does, use the base verb: do.','ques','Cậu ấy có làm bài tập mỗi ngày không?'),
+  mc('Choose the correct question.',['Does your brother plays football?','Does your brother play football?','Do your brother play football?'],1,'Does + base verb: Does ... play?','ques','Anh trai bạn có chơi bóng đá không?'),
+  od(['you','Do','like','music?'],'Do you like music?','Question order: Do + you + like + music?','ques','Bạn có thích âm nhạc không?'),
+  od(["doesn't",'He','eat','fish'],"He doesn't eat fish",'Order: He + doesn\'t + base verb + fish.','neg','Cậu ấy không ăn cá.'),
+  mc('I ___ brush my teeth in the morning.',['usually','yesterday','now'],0,'"Usually" shows a habit. "Yesterday" is past. "Now" is for right now.','signal','Tôi thường đánh răng vào buổi sáng.'),
+  od(['every','She','day','walks','to','school'],['She walks to school every day','Every day she walks to school'],'He/She/It + verb with -s: walks.','third-s','Cô ấy đi bộ đến trường mỗi ngày.')
+ ],
+ test:[
+  mc('My brother ___ computer games.',['play','plays','playing'],1,'My brother = he. Add -s: plays.','third-s','Anh trai tôi chơi game máy tính.'),
+  mc('We ___ English on Mondays.',['have','has','haves'],0,'After we, use the base verb: have.','base','Chúng tôi có tiết tiếng Anh vào thứ Hai.'),
+  fl('The teacher ___ (teach) us English.','teaches','teach ends in -ch, so add -es: teaches.','es-ies','Cô giáo dạy chúng tôi tiếng Anh.'),
+  fl('I ___ (go) to bed at nine.','go','After I, use the base verb: go.','base','Tôi đi ngủ lúc 9 giờ.'),
+  mc('She ___ eat meat.',["don't","doesn't","isn't"],1,"After she, use doesn't.",'neg','Cô ấy không ăn thịt.'),
+  mc('Choose the correct sentence.',["He doesn't watch TV in the morning.","He doesn't watches TV in the morning.","He not watch TV in the morning."],0,"doesn't + base verb: watch.",'neg','Cậu ấy không xem TV vào buổi sáng.'),
+  mc('___ your parents work in a hospital?',['Do','Does','Are'],0,'Your parents = they. Use Do.','ques','Bố mẹ bạn có làm việc ở bệnh viện không?'),
+  mc('Choose the correct question.',['Do she like dogs?','Does she likes dogs?','Does she like dogs?'],2,'Does + she + base verb: like.','ques','Cô ấy có thích chó không?'),
+  od(['for','What','breakfast?','you','do','eat'],'What do you eat for breakfast?','Order: What + do + you + eat + for breakfast?','ques','Bạn ăn gì vào bữa sáng?'),
+  fl('She ___ spicy food. (not / like)',["doesn't like","does not like"],"After she, use doesn't + base verb: doesn't like.",'neg','Cô ấy không thích đồ cay.')
+ ]},
+{id:'g2',e:'🎬',title:'Present continuous',sub:'Đang xảy ra lúc nói',
+ lesson:[
+  {rule:'We use present continuous for actions happening now: am / is / are + verb-ing.',ex:[["I am reading a book.",1],["She is playing the piano.",1]],vi:'Thì hiện tại tiếp diễn dùng cho hành động đang xảy ra: am/is/are + động từ-ing.'},
+  {rule:'I am. He / she / it is. You / we / they are.',ex:[["They are running.",1],["He is sleeping.",1],["They is running.",0]],vi:'I dùng am; he/she/it dùng is; you/we/they dùng are.'},
+  {rule:'Spelling -ing: most verbs add -ing. Verb ends in -e: drop e. One vowel + one consonant: double the consonant.',ex:[["play → playing",1],["make → making, write → writing",1],["run → running, swim → swimming",1],["She is makeing a cake.",0]],vi:'Thêm -ing. Động từ tận cùng e thì bỏ e. Một nguyên âm + một phụ âm thì gấp đôi phụ âm.'},
+  {rule:"Negative: am not / isn't / aren't + verb-ing.",ex:[["He isn't sleeping.",1],["They aren't playing.",1],["I am not working.",1]],vi:'Phủ định: am not / isn\'t / aren\'t + động từ-ing.'},
+  {rule:'Questions: Am / Is / Are + subject + verb-ing?',ex:[["Is she cooking?",1],["Are you studying?",1],["Yes, she is. No, she isn't.",1]],vi:'Câu hỏi: Am/Is/Are + chủ ngữ + động từ-ing?'},
+  {rule:'Words for now: now, right now, at the moment, Look!, Listen!',ex:[["Look! The cat is sleeping.",1],["I am studying at the moment.",1]],vi:'Từ báo hiệu đang xảy ra: now, right now, at the moment, Look!, Listen!'}
+ ],
+ practice:[
+  mc("I ___ reading a book now.",["am","is","are"],0,"After I, use am.","be","Bây giờ tôi đang đọc sách."),
+  mc("She ___ playing the piano.",["am","is","are"],1,"After she, use is.","be","Cô ấy đang chơi piano."),
+  mc("They ___ running in the park.",["am","is","are"],2,"After they, use are.","be","Họ đang chạy trong công viên."),
+  mc("The baby ___ sleeping.",["are","is","am"],1,"The baby = it. Use is.","be","Em bé đang ngủ."),
+  mc("We ___ eating lunch right now.",["is","am","are"],2,"After we, use are.","be","Chúng tôi đang ăn trưa."),
+  fl("He is ___ (read) a comic.","reading","Add -ing: reading.","ing","Cậu ấy đang đọc truyện tranh."),
+  fl("She is ___ (make) a cake.","making","make ends in -e. Drop e, add -ing: making.","ing","Cô ấy đang làm bánh."),
+  fl("The dog is ___ (run) fast.","running","run: one vowel + one consonant. Double the n: running.","ing","Con chó đang chạy nhanh."),
+  fl("My dad is ___ (swim) in the pool.","swimming","swim: double the m: swimming.","ing","Bố tôi đang bơi trong hồ."),
+  fl("They are ___ (write) letters.","writing","write ends in -e. Drop e, add -ing: writing.","ing","Họ đang viết thư."),
+  mc("Choose the correct sentence.",["He is play football.","He is playing football.","He playing football."],1,"Use is + verb-ing: is playing.","be","Cậu ấy đang chơi bóng đá."),
+  mc("Choose the correct sentence.",["She is makeing tea.","She is making tea.","She is maked tea."],1,"Drop the e: making.","ing","Cô ấy đang pha trà."),
+  mc("He ___ watching TV.",["isn't","aren't","don't"],0,"After he, use isn't.","cont-neg","Cậu ấy không đang xem TV."),
+  mc("I ___ sleeping.",["am not","isn't","aren't"],0,"After I, use am not.","cont-neg","Tôi không đang ngủ."),
+  mc("They ___ playing games.",["aren't","isn't","don't"],0,"After they, use aren't.","cont-neg","Họ không đang chơi game."),
+  mc("___ you studying English now?",["Is","Are","Do"],1,"After you, use Are.","cont-q","Bây giờ bạn đang học tiếng Anh à?"),
+  mc("___ he cooking dinner?",["Are","Is","Does"],1,"After he, use Is.","cont-q","Cậu ấy đang nấu bữa tối à?"),
+  mc("Choose the correct question.",["Is she sing a song?","Is she singing a song?","Does she singing a song?"],1,"Is + she + verb-ing: Is she singing?","cont-q","Cô ấy đang hát à?"),
+  od(["football?","they","Are","playing"],"Are they playing football?","Order: Are + they + playing + football?","cont-q","Họ đang chơi bóng đá à?"),
+  od(["isn't","sleeping","He"],"He isn't sleeping","Order: He + isn't + sleeping.","cont-neg","Cậu ấy không đang ngủ."),
+  mc("Look! The cat ___ on the sofa.",["sleeps","is sleeping","sleep"],1,"\"Look!\" shows it is happening now. Use is sleeping.","signal-now","Nhìn kìa! Con mèo đang ngủ trên ghế."),
+  od(["studying","at","I","moment","am","the"],["I am studying at the moment","At the moment I am studying"],"Order: I + am + studying + at the moment.","be","Lúc này tôi đang học bài.")
+ ],
+ test:[
+  mc("My mom ___ cooking now.",["am","is","are"],1,"My mom = she. Use is.","be","Mẹ tôi đang nấu ăn."),
+  mc("The children ___ playing outside.",["is","are","am"],1,"The children = they. Use are.","be","Bọn trẻ đang chơi bên ngoài."),
+  fl("He is ___ (sit) on the chair.","sitting","sit: double the t: sitting.","ing","Cậu ấy đang ngồi trên ghế."),
+  fl("I am ___ (have) breakfast.","having","have ends in -e. Drop e: having.","ing","Tôi đang ăn sáng."),
+  mc("She ___ listening to music.",["isn't","don't","aren't"],0,"After she, use isn't.","cont-neg","Cô ấy không đang nghe nhạc."),
+  mc("Choose the correct sentence.",["They are runing to school.","They are running to school.","They running to school."],1,"run → running (double the n).","ing","Họ đang chạy đến trường."),
+  mc("___ your sister watching TV?",["Are","Is","Does"],1,"Your sister = she. Use Is.","cont-q","Chị bạn đang xem TV à?"),
+  mc("Choose the correct question.",["Are you reading a book?","Do you reading a book?","Is you reading a book?"],0,"Are + you + verb-ing.","cont-q","Bạn đang đọc sách à?"),
+  od(["What","you","doing?","are"],"What are you doing?","Order: What + are + you + doing?","cont-q","Bạn đang làm gì vậy?"),
+  fl("Listen! The birds ___ (sing).",["are singing"],"\"Listen!\" shows now. Use are + singing.","signal-now","Nghe kìa! Những chú chim đang hót.")
+ ]},
+{id:'g3',e:'⚖️',title:'Present simple vs continuous',sub:'Phân biệt hai thì',
+ lesson:[
+  {rule:'Present simple = habits and facts. Present continuous = happening now.',ex:[["I play football every Saturday.",1],["I am playing football now.",1]],vi:'Hiện tại đơn: thói quen, sự thật. Hiện tại tiếp diễn: đang xảy ra lúc nói.'},
+  {rule:'Signal words for present simple: every day, always, usually, often, sometimes, never.',ex:[["She usually walks to school.",1],["He never eats fish.",1]],vi:'Từ báo hiệu hiện tại đơn: every day, always, usually, often, sometimes, never.'},
+  {rule:'Signal words for present continuous: now, right now, at the moment, Look!, Listen!',ex:[["Look! It is raining.",1],["She is talking on the phone right now.",1]],vi:'Từ báo hiệu hiện tại tiếp diễn: now, right now, at the moment, Look!, Listen!'},
+  {rule:'Some verbs are not used with -ing: like, love, want, know, need.',ex:[["I like pizza.",1],["I want a new bike.",1],["I am liking pizza.",0]],vi:'Một số động từ chỉ trạng thái (like, love, want, know, need) không dùng với -ing.'},
+  {rule:'Compare the two tenses.',ex:[["She goes to school every day.",1],["She is going to school now.",1]],vi:'So sánh: mỗi ngày (đơn) và bây giờ (tiếp diễn).'}
+ ],
+ practice:[
+  mc("He ___ to school every day.",["goes","is going","go"],0,"\"Every day\" = habit. Use present simple: goes.","choose","Cậu ấy đi học mỗi ngày."),
+  mc("He ___ to school now.",["goes","is going","go"],1,"\"Now\" = happening now. Use is going.","choose","Bây giờ cậu ấy đang đi học."),
+  mc("I usually ___ breakfast at seven.",["have","am having","has"],0,"\"Usually\" = habit. Use have.","choose","Tôi thường ăn sáng lúc 7 giờ."),
+  mc("Look! It ___.",["rains","is raining","rain"],1,"\"Look!\" = now. Use is raining.","signal-now","Nhìn kìa! Trời đang mưa."),
+  mc("They ___ football on Sundays.",["play","are playing","plays"],0,"\"On Sundays\" = habit. Use play.","choose","Họ chơi bóng đá vào các ngày Chủ nhật."),
+  mc("Be quiet! The baby ___.",["sleeps","is sleeping","sleep"],1,"The baby is sleeping right now.","choose","Im lặng nào! Em bé đang ngủ."),
+  mc("My mom always ___ breakfast.",["cooks","is cooking","cook"],0,"\"Always\" = habit. After she, add -s: cooks.","choose","Mẹ tôi luôn nấu bữa sáng."),
+  mc("What are you doing now? — I ___ my homework.",["do","am doing","does"],1,"\"Now\" = happening now. Use am doing.","choose","Bạn đang làm gì? — Tôi đang làm bài tập."),
+  mc("She ___ pizza.",["is liking","likes","like"],1,"\"Like\" is not used with -ing. Use likes.","stative","Cô ấy thích pizza."),
+  mc("I ___ a new bike.",["am wanting","want","wants"],1,"\"Want\" is not used with -ing. After I, use want.","stative","Tôi muốn một chiếc xe đạp mới."),
+  fl("Every morning, I ___ (brush) my teeth.","brush","\"Every morning\" = habit. After I, use brush.","choose","Mỗi sáng tôi đánh răng."),
+  fl("Right now, she ___ (talk) on the phone.","is talking","\"Right now\" = now. Use is + talking.","choose","Ngay lúc này cô ấy đang nói chuyện điện thoại."),
+  fl("We ___ (watch) TV at the moment.","are watching","\"At the moment\" = now. Use are + watching.","choose","Lúc này chúng tôi đang xem TV."),
+  fl("My brother ___ (play) games every evening.","plays","\"Every evening\" = habit. After he, add -s: plays.","choose","Em trai tôi chơi game mỗi tối."),
+  fl("Listen! Someone ___ (knock) at the door.","is knocking","\"Listen!\" = now. Use is + knocking.","signal-now","Nghe kìa! Có người đang gõ cửa."),
+  fl("He never ___ (eat) meat.","eats","\"Never\" = habit. After he, add -s: eats.","choose","Cậu ấy không bao giờ ăn thịt."),
+  mc("Choose the correct sentence.",["I am knowing the answer.","I know the answer.","I knowing the answer."],1,"\"Know\" is not used with -ing.","stative","Tôi biết đáp án."),
+  mc("Choose the correct sentence.",["Do you playing now?","Are you playing now?","Does you play now?"],1,"\"Now\" + you: Are you playing?","choose","Bây giờ bạn đang chơi à?"),
+  od(["usually","He","late","gets","up"],["He usually gets up late","Usually he gets up late"],"Order: He + usually + gets up + late.","choose","Cậu ấy thường dậy muộn."),
+  od(["is","She","right","reading","now"],["She is reading right now","Right now she is reading"],"Order: She + is + reading + right now.","choose","Ngay bây giờ cô ấy đang đọc sách.")
+ ],
+ test:[
+  mc("I ___ my teeth every night.",["brush","am brushing","brushes"],0,"\"Every night\" = habit. After I, use brush.","choose","Tôi đánh răng mỗi tối."),
+  mc("Mom ___ dinner at the moment.",["cooks","is cooking","cook"],1,"\"At the moment\" = now. Use is cooking.","choose","Lúc này mẹ đang nấu bữa tối."),
+  mc("Tom ___ to school by bike every day.",["goes","is going","go"],0,"\"Every day\" = habit. After he, use goes.","choose","Tom đi học bằng xe đạp mỗi ngày."),
+  mc("Look! The children ___ in the garden.",["play","plays","are playing"],2,"\"Look!\" = now. Use are playing.","signal-now","Nhìn kìa! Bọn trẻ đang chơi trong vườn."),
+  fl("She often ___ (read) before bed.","reads","\"Often\" = habit. After she, add -s: reads.","choose","Cô ấy hay đọc sách trước khi ngủ."),
+  fl("They ___ (swim) in the pool now.","are swimming","\"Now\" = now. Use are + swimming.","choose","Bây giờ họ đang bơi trong hồ."),
+  mc("I ___ ice cream.",["am loving","love","loves"],1,"\"Love\" is not used with -ing. After I, use love.","stative","Tôi yêu kem."),
+  mc("Choose the correct sentence.",["He is watching TV every day.","He watches TV every day.","He watching TV every day."],1,"\"Every day\" = habit. Use watches.","choose","Cậu ấy xem TV mỗi ngày."),
+  mc("Choose the correct sentence.",["She plays the piano now.","She is playing the piano now.","She playing the piano now."],1,"\"Now\" = happening now. Use is playing.","choose","Bây giờ cô ấy đang chơi piano."),
+  od(["is","Where","he","going","now?"],"Where is he going now?","Order: Where + is + he + going + now?","choose","Bây giờ cậu ấy đang đi đâu vậy?")
+ ]},
+{id:'g4',e:'⏪',title:'Past simple: was / were',sub:'Quá khứ của to be',
+ lesson:[
+  {rule:'was / were is the past of am / is / are. I, he, she, it → was. You, we, they → were.',ex:[["I was at home yesterday.",1],["They were happy.",1],["You was late.",0]],vi:'was/were là quá khứ của am/is/are. I, he, she, it dùng was. You, we, they dùng were.'},
+  {rule:'Past words: yesterday, last night, last week, two days ago, in 2020.',ex:[["She was at school yesterday.",1],["We were in Hue last week.",1]],vi:'Từ chỉ quá khứ: yesterday, last night, last week, two days ago, in 2020.'},
+  {rule:"Negative: wasn't / weren't.",ex:[["She wasn't at school.",1],["They weren't hungry.",1],["I wasn't tired.",1]],vi:"Phủ định: wasn't / weren't."},
+  {rule:'Questions: Was / Were + subject? Do not use did with was / were.',ex:[["Were you at the park?",1],["Was he sick?",1],["Did you were at the park?",0],["Yes, I was. No, I wasn't.",1]],vi:'Câu hỏi: Was/Were + chủ ngữ. Không dùng did với was/were.'},
+  {rule:'There was + one thing. There were + many things.',ex:[["There was a cat in the garden.",1],["There were two dogs.",1]],vi:'There was + số ít. There were + số nhiều.'}
+ ],
+ practice:[
+  mc("I ___ at home yesterday.",["was","were","am"],0,"After I, use was.","was-were","Hôm qua tôi ở nhà."),
+  mc("She ___ happy last night.",["was","were","is"],0,"After she, use was.","was-were","Tối qua cô ấy vui."),
+  mc("They ___ at school yesterday.",["was","were","are"],1,"After they, use were.","was-were","Hôm qua họ ở trường."),
+  mc("We ___ tired after the trip.",["was","were","are"],1,"After we, use were.","was-were","Chúng tôi mệt sau chuyến đi."),
+  mc("The cat ___ on the sofa two hours ago.",["were","was","is"],1,"The cat = it. Use was.","was-were","Hai giờ trước con mèo ở trên ghế."),
+  mc("You ___ late for class yesterday.",["was","were","are"],1,"After you, use were.","was-were","Hôm qua bạn đến lớp muộn."),
+  mc("It ___ sunny last Sunday.",["was","were","is"],0,"After it, use was.","was-were","Chủ nhật tuần trước trời nắng."),
+  fl("My parents ___ (be) in Da Nang last week.","were","My parents = they. Use were.","was-were","Tuần trước bố mẹ tôi ở Đà Nẵng."),
+  fl("He ___ (be) a baby in 2015.","was","After he, use was.","was-were","Năm 2015 cậu ấy còn là em bé."),
+  fl("I ___ (be) at the park yesterday.","was","After I, use was.","was-were","Hôm qua tôi ở công viên."),
+  mc("She ___ at school yesterday. She was sick.",["wasn't","weren't","isn't"],0,"After she, use wasn't.","was-were","Hôm qua cô ấy không ở trường. Cô ấy bị ốm."),
+  mc("They ___ hungry last night.",["wasn't","weren't","aren't"],1,"After they, use weren't.","was-were","Tối qua họ không đói."),
+  mc("I ___ at home last night.",["wasn't","weren't","am not"],0,"After I, use wasn't.","was-were","Tối qua tôi không ở nhà."),
+  fl("We ___ at the zoo yesterday. (not be)",["weren't","were not"],"After we, use weren't.","was-were","Hôm qua chúng tôi không ở sở thú."),
+  mc("___ you at school yesterday?",["Was","Were","Did"],1,"After you, use Were.","was-were","Hôm qua bạn có ở trường không?"),
+  mc("___ he sick last week?",["Was","Were","Is"],0,"After he, use Was.","was-were","Tuần trước cậu ấy có bị ốm không?"),
+  mc("Choose the correct question.",["Was they at home?","Were they at home?","Did they were at home?"],1,"After they, use Were. Do not use did.","was-were","Họ có ở nhà không?"),
+  mc("Choose the correct sentence.",["There was two dogs in the garden.","There were two dogs in the garden.","There was dogs in the garden."],1,"Two dogs = many. Use were.","was-were","Có hai con chó trong vườn."),
+  od(["was","I","yesterday","tired"],["I was tired yesterday","Yesterday I was tired"],"Order: I + was + tired + yesterday.","was-were","Hôm qua tôi mệt."),
+  od(["were","Where","you","last","night?"],"Where were you last night?","Order: Where + were + you + last night?","was-were","Tối qua bạn ở đâu?")
+ ],
+ test:[
+  mc("He ___ at the library yesterday.",["was","were","is"],0,"After he, use was.","was-were","Hôm qua cậu ấy ở thư viện."),
+  mc("We ___ very happy last Sunday.",["was","were","are"],1,"After we, use were.","was-were","Chủ nhật tuần trước chúng tôi rất vui."),
+  mc("The books ___ on the table two days ago.",["was","were","are"],1,"The books = they. Use were.","was-were","Hai ngày trước những quyển sách ở trên bàn."),
+  fl("I ___ (be) sick last week.","was","After I, use was.","was-were","Tuần trước tôi bị ốm."),
+  mc("She ___ at home last night. She was at school.",["wasn't","weren't","isn't"],0,"After she, use wasn't.","was-were","Tối qua cô ấy không ở nhà. Cô ấy ở trường."),
+  mc("They ___ in London last year. They were in Paris.",["weren't","wasn't","aren't"],0,"After they, use weren't.","was-were","Năm ngoái họ không ở London. Họ ở Paris."),
+  mc("___ your dad at work yesterday?",["Was","Were","Is"],0,"Your dad = he. Use Was.","was-were","Hôm qua bố bạn có đi làm không?"),
+  mc("Choose the correct question.",["Were you happy yesterday?","Was you happy yesterday?","Did you were happy yesterday?"],0,"After you, use Were.","was-were","Hôm qua bạn có vui không?"),
+  fl("There ___ (be) a big tree here in 2010.","was","A big tree = one thing. Use was.","was-were","Năm 2010 có một cái cây lớn ở đây."),
+  od(["last","Was","she","night?","at","home"],"Was she at home last night?","Order: Was + she + at home + last night?","was-were","Tối qua cô ấy có ở nhà không?")
+ ]},
+{id:'g5',e:'📅',title:'Past simple: regular verbs',sub:'Động từ có quy tắc (-ed)',
+ lesson:[
+  {rule:'We use past simple for finished actions in the past. Regular verbs: add -ed.',ex:[["I played football yesterday.",1],["She watched TV last night.",1]],vi:'Thì quá khứ đơn dùng cho hành động đã xong. Động từ có quy tắc thêm -ed.'},
+  {rule:'Spelling: verb ends in -e: add -d. Consonant + y: change y to -ied. One vowel + one consonant: double it. Vowel + y: add -ed.',ex:[["like → liked, dance → danced",1],["study → studied, cry → cried",1],["stop → stopped, plan → planned",1],["play → played",1]],vi:'Tận cùng e thì thêm d. Phụ âm + y thì đổi y thành ied. Một nguyên âm + một phụ âm thì gấp đôi. Nguyên âm + y thì thêm ed.'},
+  {rule:'The verb has the same form for all subjects.',ex:[["He played.",1],["They played.",1],["He playeds.",0]],vi:'Mọi chủ ngữ dùng cùng một dạng động từ quá khứ.'},
+  {rule:'Say -ed in three ways: /t/ walked, watched. /d/ played, cleaned. /id/ wanted, needed.',ex:[["walked, watched, helped = /t/",1],["played, cleaned, called = /d/",1],["wanted, needed, visited = /id/",1]],vi:'Cách đọc -ed: /t/, /d/ hoặc /id/ (sau âm t, d).'},
+  {rule:'Past words: yesterday, last night, last week, two days ago, in 2020.',ex:[["We visited Hue last week.",1],["I called Mai yesterday.",1]],vi:'Từ chỉ quá khứ: yesterday, last night, last week, two days ago, in 2020.'}
+ ],
+ practice:[
+  mc("I ___ football yesterday.",["play","played","plays"],1,"\"Yesterday\" = past. Add -ed: played.","ed","Hôm qua tôi chơi bóng đá."),
+  mc("She ___ TV last night.",["watched","watches","watchd"],0,"watch + ed = watched.","ed","Tối qua cô ấy xem TV."),
+  mc("We ___ our room last Saturday.",["cleaned","clean","cleaning"],0,"clean + ed = cleaned.","ed","Thứ Bảy tuần trước chúng tôi dọn phòng."),
+  fl("He ___ (visit) his grandma last week.","visited","visit + ed = visited.","ed","Tuần trước cậu ấy thăm bà."),
+  fl("They ___ (walk) to school yesterday.","walked","walk + ed = walked.","ed","Hôm qua họ đi bộ đến trường."),
+  fl("I ___ (like) the movie last night.","liked","like ends in -e. Add -d: liked.","ed","Tối qua tôi thích bộ phim đó."),
+  fl("She ___ (dance) at the party last Friday.","danced","dance ends in -e. Add -d: danced.","ed","Thứ Sáu tuần trước cô ấy nhảy ở bữa tiệc."),
+  fl("My sister ___ (study) English last night.","studied","study → studied (consonant + y → -ied).","ed","Tối qua chị tôi học tiếng Anh."),
+  fl("The baby ___ (cry) all night.","cried","cry → cried (consonant + y → -ied).","ed","Em bé khóc cả đêm."),
+  fl("The car ___ (stop) at the light a minute ago.","stopped","stop: one vowel + one consonant. Double the p: stopped.","ed","Một phút trước chiếc xe dừng ở đèn đỏ."),
+  fl("We ___ (plan) a trip last month.","planned","plan: double the n: planned.","ed","Tháng trước chúng tôi lên kế hoạch cho một chuyến đi."),
+  fl("He ___ (play) chess yesterday.","played","vowel + y: just add -ed: played.","ed","Hôm qua cậu ấy chơi cờ."),
+  mc("Choose the correct sentence.",["She studyed English yesterday.","She studied English yesterday.","She studies English yesterday."],1,"study → studied.","ed","Hôm qua cô ấy học tiếng Anh."),
+  mc("Choose the correct sentence.",["He stoped the car.","He stopped the car.","He stoping the car."],1,"stop → stopped (double the p).","ed","Cậu ấy đã dừng xe."),
+  mc("Choose the correct sentence.",["They playeds games yesterday.","They played games yesterday.","They plays games yesterday."],1,"The verb does not change for they: played.","ed","Hôm qua họ chơi game."),
+  mc("Which word ends with the /id/ sound?",["walked","wanted","played"],1,"After t or d, we say /id/: wanted.","ed-sound","Từ nào kết thúc bằng âm /id/?"),
+  mc("Which word ends with the /t/ sound?",["watched","needed","cleaned"],0,"watched ends with /t/.","ed-sound","Từ nào kết thúc bằng âm /t/?"),
+  mc("I ___ my homework two hours ago.",["finish","finished","finishing"],1,"\"Ago\" = past. Use finished.","ed","Hai giờ trước tôi đã làm xong bài tập."),
+  od(["yesterday","I","helped","mom"],["I helped mom yesterday","Yesterday I helped mom"],"Order: I + helped + mom + yesterday.","ed","Hôm qua tôi giúp mẹ."),
+  od(["We","last","visited","week","Hue"],["We visited Hue last week","Last week we visited Hue"],"Order: We + visited + Hue + last week.","ed","Tuần trước chúng tôi thăm Huế.")
+ ],
+ test:[
+  mc("She ___ the piano last night.",["played","plays","playd"],0,"play + ed = played.","ed","Tối qua cô ấy chơi piano."),
+  mc("He ___ his bike yesterday.",["washed","washs","washing"],0,"wash + ed = washed.","ed","Hôm qua cậu ấy rửa xe đạp."),
+  fl("I ___ (cook) dinner last night.","cooked","cook + ed = cooked.","ed","Tối qua tôi nấu bữa tối."),
+  fl("They ___ (dance) at the party last Saturday.","danced","dance ends in -e. Add -d: danced.","ed","Thứ Bảy tuần trước họ nhảy ở bữa tiệc."),
+  fl("She ___ (study) hard last month.","studied","study → studied.","ed","Tháng trước cô ấy học rất chăm."),
+  fl("The bus ___ (stop) here ten minutes ago.","stopped","stop → stopped (double the p).","ed","Mười phút trước xe buýt dừng ở đây."),
+  mc("Choose the correct sentence.",["We visited our friends yesterday.","We visiteded our friends yesterday.","We visit our friends yesterday."],0,"visit + ed = visited.","ed","Hôm qua chúng tôi thăm bạn bè."),
+  mc("Choose the correct sentence.",["He cryed last night.","He cried last night.","He cry last night."],1,"cry → cried.","ed","Tối qua cậu ấy khóc."),
+  mc("Which word ends with the /d/ sound?",["watched","cleaned","wanted"],1,"cleaned ends with /d/.","ed-sound","Từ nào kết thúc bằng âm /d/?"),
+  od(["called","I","Mai","yesterday"],["I called Mai yesterday","Yesterday I called Mai"],"Order: I + called + Mai + yesterday.","ed","Hôm qua tôi gọi cho Mai.")
+ ]},
+{id:'g6',e:'🔀',title:'Past simple: irregular verbs',sub:'Động từ bất quy tắc',
+ lesson:[
+  {rule:'Irregular verbs do not add -ed. They have special past forms. Learn them!',ex:[["I went to school.",1],["I goed to school.",0]],vi:'Động từ bất quy tắc không thêm -ed mà có dạng quá khứ riêng. Cần học thuộc.'},
+  {rule:'Group 1: go → went, have → had, see → saw, eat → ate, drink → drank.',ex:[["She went home.",1],["We had pizza.",1],["I saw a bird.",1],["He ate rice.",1],["They drank milk.",1]],vi:'Nhóm 1: go-went, have-had, see-saw, eat-ate, drink-drank.'},
+  {rule:'Group 2: buy → bought, make → made, take → took, come → came, get → got, catch → caught.',ex:[["I bought a book.",1],["Mom made a cake.",1],["He took a photo.",1],["She came late.",1],["We caught a fish.",1]],vi:'Nhóm 2: buy-bought, make-made, take-took, come-came, get-got, catch-caught.'},
+  {rule:'Group 3: do → did, give → gave, write → wrote, run → ran, swim → swam, sit → sat, sleep → slept, meet → met.',ex:[["I did my homework.",1],["He gave me a gift.",1],["She wrote a letter.",1],["The dog ran fast.",1],["We met our teacher.",1]],vi:'Nhóm 3: do-did, give-gave, write-wrote, run-ran, swim-swam, sit-sat, sleep-slept, meet-met.'},
+  {rule:'The past form is the same for all subjects.',ex:[["He ate. They ate. I ate.",1],["He eated.",0]],vi:'Mọi chủ ngữ dùng cùng dạng quá khứ.'}
+ ],
+ practice:[
+  mc("I ___ to the zoo yesterday.",["go","went","goed"],1,"go → went.","irreg","Hôm qua tôi đi sở thú."),
+  mc("She ___ a new bike last week.",["buyed","bought","buys"],1,"buy → bought.","irreg","Tuần trước cô ấy mua một chiếc xe đạp mới."),
+  mc("We ___ pizza for dinner last night.",["eated","ate","eat"],1,"eat → ate.","irreg","Tối qua chúng tôi ăn pizza."),
+  mc("He ___ milk yesterday morning.",["drinked","drank","drinks"],1,"drink → drank.","irreg","Sáng hôm qua cậu ấy uống sữa."),
+  mc("They ___ a movie last Sunday.",["seed","saw","see"],1,"see → saw.","irreg","Chủ nhật tuần trước họ xem phim."),
+  mc("My mom ___ a cake yesterday.",["maked","made","makes"],1,"make → made.","irreg","Hôm qua mẹ tôi làm bánh."),
+  mc("I ___ a lot of homework last night.",["haved","had","has"],1,"have → had.","irreg","Tối qua tôi có nhiều bài tập."),
+  mc("She ___ the bus to school yesterday.",["took","taked","takes"],0,"take → took.","irreg","Hôm qua cô ấy đi xe buýt đến trường."),
+  fl("I ___ (get) up at six yesterday.","got","get → got.","irreg","Hôm qua tôi dậy lúc 6 giờ."),
+  fl("He ___ (come) home late last night.","came","come → came.","irreg","Tối qua cậu ấy về nhà muộn."),
+  fl("We ___ (do) our homework yesterday.","did","do → did.","irreg","Hôm qua chúng tôi làm bài tập."),
+  fl("She ___ (write) a letter last week.","wrote","write → wrote.","irreg","Tuần trước cô ấy viết một lá thư."),
+  fl("The dog ___ (run) fast yesterday.","ran","run → ran.","irreg","Hôm qua con chó chạy rất nhanh."),
+  fl("I ___ (sleep) well last night.","slept","sleep → slept.","irreg","Tối qua tôi ngủ ngon."),
+  fl("They ___ (meet) their teacher yesterday.","met","meet → met.","irreg","Hôm qua họ gặp thầy cô."),
+  fl("He ___ (give) me a gift last Friday.","gave","give → gave.","irreg","Thứ Sáu tuần trước cậu ấy tặng tôi một món quà."),
+  mc("Choose the correct sentence.",["She goed home.","She went home.","She wented home."],1,"go → went.","irreg","Cô ấy đã về nhà."),
+  mc("Choose the correct sentence.",["I buyed a book yesterday.","I bought a book yesterday.","I boughted a book yesterday."],1,"buy → bought.","irreg","Hôm qua tôi mua một quyển sách."),
+  mc("Choose the correct past form of swim.",["swimmed","swam","swum"],1,"swim → swam.","irreg","Dạng quá khứ của swim là gì?"),
+  mc("Choose the correct past form of sit.",["sat","sitted","set"],0,"sit → sat.","irreg","Dạng quá khứ của sit là gì?"),
+  od(["saw","I","yesterday","a","rainbow"],["I saw a rainbow yesterday","Yesterday I saw a rainbow"],"Order: I + saw + a rainbow + yesterday.","irreg","Hôm qua tôi thấy cầu vồng."),
+  od(["ate","She","an","apple","yesterday"],["She ate an apple yesterday","Yesterday she ate an apple"],"Order: She + ate + an apple + yesterday.","irreg","Hôm qua cô ấy ăn một quả táo.")
+ ],
+ test:[
+  mc("I ___ to Hanoi last month.",["went","goed","go"],0,"go → went.","irreg","Tháng trước tôi đi Hà Nội."),
+  mc("He ___ a nice shirt yesterday.",["buyed","bought","buy"],1,"buy → bought.","irreg","Hôm qua cậu ấy mua một chiếc áo đẹp."),
+  mc("We ___ a big fish last Sunday.",["catched","caught","catch"],1,"catch → caught.","irreg","Chủ nhật tuần trước chúng tôi bắt được một con cá lớn."),
+  fl("She ___ (eat) noodles for lunch yesterday.","ate","eat → ate.","irreg","Hôm qua cô ấy ăn mì vào bữa trưa."),
+  fl("They ___ (see) a lion at the zoo last week.","saw","see → saw.","irreg","Tuần trước họ thấy một con sư tử ở sở thú."),
+  fl("I ___ (take) a photo yesterday.","took","take → took.","irreg","Hôm qua tôi chụp một bức ảnh."),
+  fl("He ___ (make) a paper plane last night.","made","make → made.","irreg","Tối qua cậu ấy làm một chiếc máy bay giấy."),
+  mc("Choose the correct sentence.",["She comed home at five.","She came home at five.","She cames home at five."],1,"come → came.","irreg","Cô ấy về nhà lúc 5 giờ."),
+  mc("Choose the correct past form of have.",["haved","had","has"],1,"have → had.","irreg","Dạng quá khứ của have là gì?"),
+  od(["wrote","He","yesterday","a","letter"],["He wrote a letter yesterday","Yesterday he wrote a letter"],"Order: He + wrote + a letter + yesterday.","irreg","Hôm qua cậu ấy viết một lá thư.")
+ ]},
+{id:'g7',e:'❓',title:'Past simple: negative & questions',sub:"didn't / Did ...?",
+ lesson:[
+  {rule:"Negative: didn't + base verb. The verb does not change.",ex:[["I didn't go to school.",1],["She didn't play tennis.",1],["I didn't went to school.",0]],vi:"Phủ định: didn't + động từ nguyên mẫu (không chia quá khứ)."},
+  {rule:'It is the same for regular and irregular verbs.',ex:[["He didn't watch TV.",1],["He didn't eat lunch.",1],["He didn't ate lunch.",0]],vi:'Cả động từ có quy tắc và bất quy tắc đều dùng didn\'t + nguyên mẫu.'},
+  {rule:'Questions: Did + subject + base verb?',ex:[["Did you watch TV?",1],["Did she go home?",1],["Did you watched TV?",0]],vi:'Câu hỏi: Did + chủ ngữ + động từ nguyên mẫu?'},
+  {rule:"Short answers: Yes, I did. No, I didn't.",ex:[["Did you eat lunch? Yes, I did.",1],["Did he call you? No, he didn't.",1]],vi:'Trả lời ngắn: Yes, I did. / No, I didn\'t.'},
+  {rule:'Question words: What did you do? Where did she go?',ex:[["What did you do yesterday?",1],["Where did she go last weekend?",1]],vi:'Từ để hỏi + did + chủ ngữ + động từ nguyên mẫu.'},
+  {rule:'With was / were, do not use did.',ex:[["Were you happy?",1],["Was she at home?",1],["Did you were happy?",0]],vi:'Với was/were không dùng did.'}
+ ],
+ practice:[
+  mc("I ___ go to school yesterday.",["didn't","don't","wasn't"],0,"\"Yesterday\" = past. Use didn't.","did-neg","Hôm qua tôi không đi học."),
+  mc("She didn't ___ TV last night.",["watched","watch","watches"],1,"After didn't, use the base verb: watch.","did-neg","Tối qua cô ấy không xem TV."),
+  mc("They didn't ___ pizza last night.",["ate","eat","eaten"],1,"After didn't, use the base verb: eat.","did-neg","Tối qua họ không ăn pizza."),
+  mc("He ___ do his homework yesterday.",["doesn't","didn't","wasn't"],1,"\"Yesterday\" = past. Use didn't.","did-neg","Hôm qua cậu ấy không làm bài tập."),
+  fl("We ___ (not / play) football yesterday.",["didn't play","did not play"],"Past negative: didn't + base verb.","did-neg","Hôm qua chúng tôi không chơi bóng đá."),
+  fl("She ___ (not / buy) a bag last week.",["didn't buy","did not buy"],"didn't + base verb: didn't buy.","did-neg","Tuần trước cô ấy không mua túi."),
+  fl("I ___ (not / see) him yesterday.",["didn't see","did not see"],"didn't + base verb: didn't see.","did-neg","Hôm qua tôi không thấy anh ấy."),
+  fl("They ___ (not / go) to the park last Sunday.",["didn't go","did not go"],"didn't + base verb: didn't go.","did-neg","Chủ nhật tuần trước họ không đi công viên."),
+  mc("Choose the correct sentence.",["He didn't went to school.","He didn't go to school.","He doesn't went to school."],1,"After didn't, use the base verb: go.","did-neg","Cậu ấy không đi học."),
+  mc("Choose the correct sentence.",["She didn't visited her aunt.","She didn't visit her aunt.","She not visit her aunt."],1,"After didn't, use the base verb: visit.","did-neg","Cô ấy không thăm dì."),
+  mc("___ you watch TV last night?",["Did","Do","Were"],0,"Past question: Did + subject + base verb.","did-q","Tối qua bạn có xem TV không?"),
+  mc("___ she go to school yesterday?",["Did","Does","Was"],0,"Past question: Did + she + go.","did-q","Hôm qua cô ấy có đi học không?"),
+  mc("Did he ___ his homework?",["do","did","does"],0,"After Did, use the base verb: do.","did-q","Cậu ấy có làm bài tập không?"),
+  mc("Choose the correct question.",["Did you played football yesterday?","Did you play football yesterday?","Do you played football yesterday?"],1,"After Did, use the base verb: play.","did-q","Hôm qua bạn có chơi bóng đá không?"),
+  mc("Choose the correct question.",["Did she saw the movie?","Did she see the movie?","Does she saw the movie?"],1,"After Did, use the base verb: see.","did-q","Cô ấy có xem phim đó không?"),
+  mc("Did they eat lunch? — Yes, ___.",["they did","they do","they were"],0,"Short answer: Yes, they did.","did-q","Họ đã ăn trưa chưa? — Rồi."),
+  mc("Did you finish your homework? — No, I ___.",["didn't","don't","wasn't"],0,"Short answer: No, I didn't.","did-q","Bạn làm xong bài tập chưa? — Chưa."),
+  mc("___ you happy yesterday?",["Did","Were","Do"],1,"With be, use Were (not Did).","was-were","Hôm qua bạn có vui không?"),
+  od(["Did","you","last","sleep","well","night?"],"Did you sleep well last night?","Order: Did + you + sleep + well + last night?","did-q","Tối qua bạn ngủ ngon không?"),
+  od(["What","you","did","do","yesterday?"],"What did you do yesterday?","Order: What + did + you + do + yesterday?","did-q","Hôm qua bạn đã làm gì?"),
+  od(["Where","did","she","go","last","weekend?"],"Where did she go last weekend?","Order: Where + did + she + go + last weekend?","did-q","Cuối tuần trước cô ấy đã đi đâu?"),
+  od(["didn't","He","eat","breakfast","yesterday"],["He didn't eat breakfast yesterday","Yesterday he didn't eat breakfast"],"Order: He + didn't + eat + breakfast + yesterday.","did-neg","Hôm qua cậu ấy không ăn sáng.")
+ ],
+ test:[
+  mc("She ___ come to school yesterday.",["didn't","doesn't","don't"],0,"\"Yesterday\" = past. Use didn't.","did-neg","Hôm qua cô ấy không đến trường."),
+  mc("We didn't ___ a movie last night.",["watched","watch","watches"],1,"After didn't, use the base verb: watch.","did-neg","Tối qua chúng tôi không xem phim."),
+  mc("I ___ see my friends last Sunday.",["didn't","wasn't","don't"],0,"Past time + see: didn't see.","did-neg","Chủ nhật tuần trước tôi không gặp bạn."),
+  fl("He ___ (not / eat) fish yesterday.",["didn't eat","did not eat"],"didn't + base verb: didn't eat.","did-neg","Hôm qua cậu ấy không ăn cá."),
+  fl("They ___ (not / visit) us last week.",["didn't visit","did not visit"],"didn't + base verb: didn't visit.","did-neg","Tuần trước họ không đến thăm chúng tôi."),
+  mc("Choose the correct question.",["Did you went to the park?","Did you go to the park?","Do you went to the park?"],1,"After Did, use the base verb: go.","did-q","Bạn có đi công viên không?"),
+  mc("___ your brother play games yesterday?",["Did","Does","Was"],0,"Past question: Did + subject + base verb.","did-q","Hôm qua anh bạn có chơi game không?"),
+  mc("Choose the correct sentence.",["She didn't bought a gift.","She didn't buy a gift.","She not bought a gift."],1,"After didn't, use the base verb: buy.","did-neg","Cô ấy không mua quà."),
+  mc("Did she call you? — No, she ___.",["didn't","wasn't","doesn't"],0,"Short answer: No, she didn't.","did-q","Cô ấy có gọi bạn không? — Không."),
+  od(["What","did","you","eat","for","lunch?"],"What did you eat for lunch?","Order: What + did + you + eat + for lunch?","did-q","Bạn đã ăn gì vào bữa trưa?")
+ ]},
+{id:'g8',e:'🔄',title:'Present vs Past',sub:'Ôn tổng hợp',
+ lesson:[
+  {rule:'Present simple = habits now. Past simple = finished actions in the past.',ex:[["I play football every day.",1],["I played football yesterday.",1]],vi:'Hiện tại đơn: thói quen. Quá khứ đơn: hành động đã xong.'},
+  {rule:'Present words: every day, usually, always, often. Past words: yesterday, last night, last week, two days ago, in 2020.',ex:[["She walks to school every day.",1],["She walked to school yesterday.",1]],vi:'Từ hiện tại: every day, usually, always, often. Từ quá khứ: yesterday, last night, last week, ... ago, in 2020.'},
+  {rule:'Compare the verb forms.',ex:[["play → played",1],["go → went",1],["is / are → was / were",1],["have → had",1]],vi:'So sánh dạng động từ hiện tại và quá khứ.'},
+  {rule:"Negatives and questions: don't / doesn't and Do / Does for now. didn't and Did for the past.",ex:[["She doesn't like fish.",1],["She didn't like fish.",1],["Do you play? Did you play?",1]],vi:"Hiện tại: don't/doesn't, Do/Does. Quá khứ: didn't, Did."},
+  {rule:'After do, does, did, didn\'t: always use the base verb.',ex:[["Did he go?",1],["Does he go?",1],["Did he went?",0]],vi:'Sau do/does/did/didn\'t luôn dùng động từ nguyên mẫu.'}
+ ],
+ practice:[
+  mc("I ___ to school every day.",["go","went","goes"],0,"\"Every day\" = present. After I, use go.","tense","Tôi đi học mỗi ngày."),
+  mc("I ___ to the zoo yesterday.",["go","went","goes"],1,"\"Yesterday\" = past. go → went.","tense","Hôm qua tôi đi sở thú."),
+  mc("She ___ TV last night.",["watches","watched","watch"],1,"\"Last night\" = past. Use watched.","tense","Tối qua cô ấy xem TV."),
+  mc("She ___ TV every evening.",["watches","watched","watch"],0,"\"Every evening\" = present. After she, use watches.","tense","Cô ấy xem TV mỗi tối."),
+  mc("We ___ in Hanoi two years ago.",["live","lived","lives"],1,"\"Two years ago\" = past. Use lived.","tense","Hai năm trước chúng tôi sống ở Hà Nội."),
+  mc("My dad ___ coffee every morning.",["drinks","drank","drink"],0,"\"Every morning\" = present. After he, use drinks.","tense","Bố tôi uống cà phê mỗi sáng."),
+  mc("He ___ a cold last week.",["has","had","have"],1,"\"Last week\" = past. have → had.","tense","Tuần trước cậu ấy bị cảm."),
+  mc("They ___ at home now.",["are","were","was"],0,"\"Now\" = present. After they, use are.","tense","Bây giờ họ đang ở nhà."),
+  mc("They ___ at home yesterday.",["are","were","is"],1,"\"Yesterday\" = past. After they, use were.","tense","Hôm qua họ ở nhà."),
+  fl("Yesterday, I ___ (eat) a big burger.","ate","\"Yesterday\" = past. eat → ate.","tense","Hôm qua tôi ăn một cái bánh burger lớn."),
+  fl("Every day, he ___ (eat) rice.","eats","\"Every day\" = present. After he, add -s: eats.","tense","Mỗi ngày cậu ấy ăn cơm."),
+  fl("Last year, we ___ (visit) Phu Quoc.","visited","\"Last year\" = past. visit + ed = visited.","tense","Năm ngoái chúng tôi thăm Phú Quốc."),
+  fl("She usually ___ (get) up at six.","gets","\"Usually\" = present. After she, add -s: gets.","tense","Cô ấy thường dậy lúc 6 giờ."),
+  fl("She ___ (get) up at seven yesterday.","got","\"Yesterday\" = past. get → got.","tense","Hôm qua cô ấy dậy lúc 7 giờ."),
+  mc("Choose the correct sentence.",["I didn't went home yesterday.","I didn't go home yesterday.","I don't went home yesterday."],1,"After didn't, use the base verb: go.","did-neg","Hôm qua tôi không về nhà."),
+  mc("Choose the correct sentence.",["She doesn't likes fish.","She doesn't like fish.","She didn't likes fish."],1,"After doesn't, use the base verb: like.","neg","Cô ấy không thích cá."),
+  mc("Choose the correct question.",["Does he played football yesterday?","Did he play football yesterday?","Did he played football yesterday?"],1,"\"Yesterday\" = past. Did + he + play.","did-q","Hôm qua cậu ấy có chơi bóng đá không?"),
+  mc("Choose the correct question.",["Do you like pizza?","Did you likes pizza?","Does you like pizza?"],0,"Do + you + like.","ques","Bạn có thích pizza không?"),
+  od(["went","We","to","Hue","last","year"],["We went to Hue last year","Last year we went to Hue"],"Order: We + went + to Hue + last year.","tense","Năm ngoái chúng tôi đi Huế."),
+  od(["She","every","plays","day","tennis"],["She plays tennis every day","Every day she plays tennis"],"Order: She + plays + tennis + every day.","tense","Cô ấy chơi quần vợt mỗi ngày."),
+  mc("Last night, I ___ my homework and then I went to bed.",["did","do","does"],0,"\"Last night\" = past. do → did.","tense","Tối qua tôi làm bài tập rồi đi ngủ."),
+  fl("Mai ___ (be) sick yesterday, but she is fine now.","was","\"Yesterday\" = past. After Mai (she), use was.","tense","Hôm qua Mai bị ốm nhưng bây giờ cô ấy khỏe rồi.")
+ ],
+ test:[
+  mc("He plays football ___.",["yesterday","every day","last week"],1,"\"Plays\" is present. Use every day.","tense","Cậu ấy chơi bóng đá ___."),
+  mc("We visited our grandma ___.",["every day","usually","last Sunday"],2,"\"Visited\" is past. Use last Sunday.","tense","Chúng tôi đã thăm bà ___."),
+  mc("She ___ her homework yesterday.",["does","did","do"],1,"\"Yesterday\" = past. do → did.","tense","Hôm qua cô ấy làm bài tập."),
+  mc("I ___ breakfast at seven every day.",["have","had","has"],0,"\"Every day\" = present. After I, use have.","tense","Mỗi ngày tôi ăn sáng lúc 7 giờ."),
+  fl("My sister ___ (go) to bed late last night.","went","\"Last night\" = past. go → went.","tense","Tối qua chị tôi đi ngủ muộn."),
+  fl("They ___ (play) badminton every Sunday.","play","\"Every Sunday\" = present. After they, use play.","tense","Họ chơi cầu lông mỗi Chủ nhật."),
+  mc("Choose the correct sentence.",["He didn't ate lunch.","He didn't eat lunch.","He doesn't ate lunch."],1,"After didn't, use the base verb: eat.","did-neg","Cậu ấy không ăn trưa."),
+  mc("Choose the correct question.",["Did you see that movie last week?","Do you saw that movie last week?","Did you saw that movie last week?"],0,"Did + you + see.","did-q","Tuần trước bạn có xem phim đó không?"),
+  fl("There ___ (be) a party at my house yesterday.","was","\"Yesterday\" = past. A party = one thing. Use was.","tense","Hôm qua có một bữa tiệc ở nhà tôi."),
+  od(["usually","She","up","gets","early"],["She usually gets up early","Usually she gets up early"],"Order: She + usually + gets up + early.","tense","Cô ấy thường dậy sớm.")
+ ]},
+{id:'g9',e:'🚀',title:'Future: will / be going to',sub:'Kế hoạch & dự đoán',
+ lesson:[
+  {rule:'be going to + verb: plans we decided before.',ex:[["I am going to visit my grandma tomorrow.",1],["She is going to buy a new bag.",1]],vi:'be going to + động từ: kế hoạch đã quyết định từ trước.'},
+  {rule:'will + verb: quick decisions, promises and predictions.',ex:[["Your bag is heavy. I will help you.",1],["I think it will rain.",1],["I will call you tomorrow.",1]],vi:'will + động từ: quyết định tức thì, lời hứa, dự đoán.'},
+  {rule:'will is the same for all subjects. Use the base verb after will.',ex:[["He will come.",1],["He wills come.",0],["He will comes.",0]],vi:'will dùng cho mọi chủ ngữ, sau will là động từ nguyên mẫu.'},
+  {rule:"Negative: will not (won't). am / is / are not going to.",ex:[["I won't be late.",1],["They aren't going to play.",1]],vi:"Phủ định: will not (won't); am/is/are not going to."},
+  {rule:'Questions: Will you ...? Are you going to ...?',ex:[["Will you help me?",1],["Are you going to study tonight?",1],["Yes, I will. No, I won't.",1]],vi:'Câu hỏi: Will you ...? Are you going to ...?'},
+  {rule:'Future words: tomorrow, tonight, next week, next year, soon, in 2030.',ex:[["We are going to travel next month.",1],["She will be ten next year.",1]],vi:'Từ chỉ tương lai: tomorrow, tonight, next week, next year, soon, in 2030.'}
+ ],
+ practice:[
+  mc("I ___ going to visit my grandma tomorrow.",["am","is","are"],0,"After I, use am.","going-to","Ngày mai tôi sẽ thăm bà."),
+  mc("She ___ going to buy a new bag.",["am","is","are"],1,"After she, use is.","going-to","Cô ấy sẽ mua một cái túi mới."),
+  mc("They ___ going to play football next week.",["am","is","are"],2,"After they, use are.","going-to","Tuần sau họ sẽ chơi bóng đá."),
+  mc("We ___ going to have a party.",["is","am","are"],2,"After we, use are.","going-to","Chúng tôi sẽ tổ chức một bữa tiệc."),
+  mc("He ___ going to watch a movie tonight.",["are","is","am"],1,"After he, use is.","going-to","Tối nay cậu ấy sẽ xem phim."),
+  mc("Oh, your bag is heavy! I ___ help you.",["will","am going","am"],0,"A quick decision at the moment: use will.","will","Ồ, túi của bạn nặng quá! Để tôi giúp."),
+  mc("It is very cloudy. I think it ___ rain.",["will","wills","is"],0,"A prediction: will + base verb.","will","Trời nhiều mây. Tôi nghĩ trời sẽ mưa."),
+  mc("I promise I ___ be late again.",["won't","don't","am not"],0,"A promise: won't + base verb.","future-neg","Tôi hứa sẽ không đến muộn nữa."),
+  mc("I ___ call you tomorrow.",["will","wills","am will"],0,"will + base verb.","will","Ngày mai tôi sẽ gọi cho bạn."),
+  fl("She will ___ (come) to my party.","come","After will, use the base verb: come.","will","Cô ấy sẽ đến bữa tiệc của tôi."),
+  fl("He will ___ (be) ten next year.","be","After will, use the base verb: be.","will","Năm sau cậu ấy sẽ mười tuổi."),
+  fl("We are going to ___ (visit) Hue next month.","visit","After going to, use the base verb: visit.","going-to","Tháng sau chúng tôi sẽ thăm Huế."),
+  fl("They are going to ___ (have) a picnic.","have","After going to, use the base verb: have.","going-to","Họ sẽ đi dã ngoại."),
+  fl("I ___ (not / be) late. I promise.",["won't be","will not be"],"won't + base verb: won't be.","future-neg","Tôi sẽ không đến muộn. Tôi hứa."),
+  fl("She ___ (not / go) to the party tomorrow.",["is not going to go","isn't going to go","will not go","won't go"],"Future negative: isn't going to go, or won't go.","future-neg","Ngày mai cô ấy sẽ không đi dự tiệc."),
+  mc("Choose the correct sentence.",["He will comes tomorrow.","He will come tomorrow.","He wills come tomorrow."],1,"will + base verb: will come.","will","Ngày mai cậu ấy sẽ đến."),
+  mc("Choose the correct sentence.",["I going to buy a book.","I am going to buy a book.","I am go to buy a book."],1,"am + going to + base verb.","going-to","Tôi sẽ mua một quyển sách."),
+  mc("___ you help me tomorrow?",["Will","Are","Do"],0,"Question with will: Will + subject + base verb.","will","Ngày mai bạn sẽ giúp tôi chứ?"),
+  mc("___ she going to cook dinner tonight?",["Is","Does","Will"],0,"After she, use Is + going to.","going-to","Tối nay cô ấy sẽ nấu bữa tối à?"),
+  mc("Choose the correct question.",["Will you to go to school tomorrow?","Will you go to school tomorrow?","Do you will go to school tomorrow?"],1,"Will + you + base verb.","will","Ngày mai bạn sẽ đi học chứ?"),
+  od(["am","I","to","going","swim","tomorrow"],["I am going to swim tomorrow","Tomorrow I am going to swim"],"Order: I + am going to + swim + tomorrow.","going-to","Ngày mai tôi sẽ đi bơi."),
+  od(["will","It","rain","tomorrow"],["It will rain tomorrow","Tomorrow it will rain"],"Order: It + will + rain + tomorrow.","will","Ngày mai trời sẽ mưa.")
+ ],
+ test:[
+  mc("She ___ going to visit Hue next week.",["am","is","are"],1,"After she, use is.","going-to","Tuần sau cô ấy sẽ thăm Huế."),
+  mc("We ___ going to watch a movie tonight.",["is","am","are"],2,"After we, use are.","going-to","Tối nay chúng tôi sẽ xem phim."),
+  mc("Wait! I ___ open the door for you.",["will","am going","going to"],0,"A quick decision: use will.","will","Đợi nhé! Tôi sẽ mở cửa cho bạn."),
+  mc("I think you ___ pass the test.",["will","wills","are"],0,"A prediction: will + base verb.","will","Tôi nghĩ bạn sẽ đỗ bài kiểm tra."),
+  fl("He will ___ (play) football tomorrow.","play","After will, use the base verb: play.","will","Ngày mai cậu ấy sẽ chơi bóng đá."),
+  fl("They are going to ___ (buy) a new car.","buy","After going to, use the base verb: buy.","going-to","Họ sẽ mua một chiếc ô tô mới."),
+  mc("Choose the correct sentence.",["She will goes home.","She will go home.","She goes will home."],1,"will + base verb: will go.","will","Cô ấy sẽ về nhà."),
+  mc("Choose the correct question.",["Are you going to study tonight?","Do you going to study tonight?","Will you going to study tonight?"],0,"Are + you + going to + base verb.","going-to","Tối nay bạn sẽ học bài chứ?"),
+  fl("I ___ (not / forget) your birthday. I promise.",["won't forget","will not forget"],"won't + base verb: won't forget.","future-neg","Tôi sẽ không quên sinh nhật bạn. Tôi hứa."),
+  od(["Where","are","you","going","to","go?"],"Where are you going to go?","Order: Where + are + you + going to + go?","going-to","Bạn định đi đâu?")
+ ]}
+];
+
+const PR={view:'home',stage:null,mode:'practice',q:[],i:0,first:0,total:0,built:[],answered:false};
+
+function P(){if(!global.practice)global.practice={passed:{},best:{},mistakes:{}};if(!global.practice.cardsDone)global.practice.cardsDone={};if(!global.practice.freeDone)global.practice.freeDone={};return global.practice;}
+function prEl(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
+function prShuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function prNorm(s){return s.toLowerCase().replace(/[‘’]/g,"'").replace(/\s+/g,' ').trim();}
+function prSpeak(text){
+  stopAllAudio();
+  if(!('speechSynthesis' in window))return;
+  const clean=cleanForSpeech(text);if(!clean)return;
+  const u=new SpeechSynthesisUtterance(clean);
+  u.lang='en-US';u.rate=0.85;
+  const vv=window.speechSynthesis.getVoices();
+  const v=vv.find(x=>x.name==='Google US English')||vv.find(x=>x.lang==='en-US')||vv.find(x=>x.lang.startsWith('en'));
+  if(v)u.voice=v;
+  window.speechSynthesis.speak(u);
+}
+function prSpkBtn(text){const b=prEl('button','spk-btn','🔊');b.onclick=()=>prSpeak(text);return b;}
+function prFull(q){
+  if(q.t==='order')return q.a[0];
+  if(q.t==='fill')return q.q.replace(/\s*\([^)]*\)/g,'').replace('___',q.a[0]);
+  const right=q.o[q.a];
+  return q.q.indexOf('___')>=0?q.q.replace('___',right):right;
+}
+function prViBtn(text){
+  const wrap=prEl('div');
+  if(!text)return wrap;
+  const btn=prEl('button','pr-link','🇻🇳 Xem nghĩa');
+  const box=prEl('div','pr-vi',text);
+  btn.onclick=()=>{box.classList.toggle('show');};
+  wrap.appendChild(btn);wrap.appendChild(box);return wrap;
+}
+
+function openPractice(){stopAllAudio();PR.view='home';document.getElementById('practicePanel').classList.add('show');prRender();}
+function closePractice(){stopAllAudio();hidePanel('practicePanel');renderEarnedBadgesRow();}
+function prBack(){
+  stopAllAudio();
+  if(PR.view==='home'){closePractice();return;}
+  if((PR.view==='quiz'||PR.view==='cards')&&!confirm('Thoát bài này? Kết quả sẽ không được lưu.'))return;
+  PR.view=(PR.view==='stage'||PR.view==='unit')?'home':(PR.unit?'unit':'stage');
+  prRender();
+}
+function prRender(){
+  const body=document.getElementById('prBody');body.innerHTML='';
+  document.getElementById('practicePanel').scrollTop=0;
+  const title=document.getElementById('prTitle');
+  if(PR.view==='home'){title.textContent='📝 Luyện tập';prHome(body);}
+  else if(PR.view==='stage'){title.textContent=PR.stage.e+' '+PR.stage.title;prStage(body);}
+  else if(PR.view==='unit'){title.textContent=PR.unit.e+' '+PR.unit.title;prUnit(body);}
+  else if(PR.view==='cards'){title.textContent='🃏 Flashcard';prCards(body);}
+  else if(PR.view==='quiz'){title.textContent=(PR.mode==='test'||PR.mode==='quiz')?'🏁 Kiểm tra':'✏️ Luyện tập';prQuestion(body);}
+  else{title.textContent='Kết quả';prResult(body);}
+}
+
+function prUnlocked(idx){return idx===0||!!P().unlockAll||!!P().passed[PR_STAGES[idx-1].id];}
+
+function prHome(body){
+  body.appendChild(prEl('div','pr-sec','🧠 Phòng Ngữ pháp - Các thì'));
+  PR_STAGES.forEach((s,idx)=>{
+    const open=!s.soon&&prUnlocked(idx);
+    const done=!!P().passed[s.id];
+    const card=prEl('div','pr-card'+(done?' done':s.soon?' soon':!open?' locked':''));
+    card.appendChild(prEl('div','pr-ico',s.soon?s.e:!open?'🔒':s.e));
+    const info=prEl('div');
+    info.appendChild(prEl('div','pr-ti','Chặng '+(idx+1)+': '+s.title));
+    info.appendChild(prEl('div','pr-su',s.sub));
+    card.appendChild(info);
+    card.appendChild(prEl('div','pr-tag',done?'✅ '+(P().best[s.id]||'')+'/10':s.soon?'Sắp ra mắt':!open?'Qua chặng trước':'Bắt đầu ➜'));
+    if(open)card.onclick=()=>{PR.stage=s;PR.unit=null;PR.view='stage';prRender();};
+    body.appendChild(card);
+  });
+  body.appendChild(prEl('div','pr-sec','📖 Look 4 - Từ vựng theo unit'));
+  PR_UNITS.forEach((u,idx)=>{
+    const done=!!P().passed[u.id];
+    const card=prEl('div','pr-card'+(done?' done':''));
+    card.appendChild(prEl('div','pr-ico',u.e));
+    const info=prEl('div');
+    info.appendChild(prEl('div','pr-ti','Unit '+(idx+1)+': '+u.title));
+    info.appendChild(prEl('div','pr-su',u.words.length+' từ · flashcard · quiz'));
+    card.appendChild(info);
+    card.appendChild(prEl('div','pr-tag',done?'✅ '+(P().best[u.id]||'')+'/10':'Bắt đầu ➜'));
+    card.onclick=()=>{PR.unit=u;PR.stage=null;PR.view='unit';prRender();};
+    body.appendChild(card);
+  });
+  const mist=Object.entries(P().mistakes).filter(e=>e[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  if(mist.length){
+    body.appendChild(prEl('div','pr-sec','🔎 Điểm hay sai - nên ôn lại'));
+    const box=prEl('div','pr-box');
+    mist.forEach(([tag,n])=>box.appendChild(prEl('div','pr-ex','• '+(PR_TAGS[tag]||tag)+' (sai '+n+' lần)')));
+    body.appendChild(box);
+  }
+  if(!P().unlockAll){
+    const un=prEl('button','pr-link','🔓 Mở tất cả các chặng (dành cho phụ huynh)');
+    un.onclick=()=>{if(confirm('Mở khóa tất cả các chặng? Bé sẽ có thể học bất kỳ chặng nào.')){P().unlockAll=true;save();prRender();}};
+    body.appendChild(un);
+  }
+  body.appendChild(prEl('div','pr-sec','🌍 Bài tập tự do - không theo sách'));
+  PR_FREE.forEach(t=>{
+    const done=!!P().freeDone[t.id];
+    const card=prEl('div','pr-card'+(done?' done':''));
+    card.appendChild(prEl('div','pr-ico',t.e));
+    const info=prEl('div');
+    info.appendChild(prEl('div','pr-ti',t.title));
+    info.appendChild(prEl('div','pr-su',t.sub+' · '+t.practice.length+' câu'));
+    card.appendChild(info);
+    card.appendChild(prEl('div','pr-tag',done?'✅ Đã xong':'Bắt đầu ➜'));
+    card.onclick=()=>{PR.stage=t;PR.unit=null;PR.view='stage';prRender();};
+    body.appendChild(card);
+  });
+}
+
+function prStage(body){
+  const s=PR.stage;
+  body.appendChild(prEl('div','pr-sec','📘 Lesson'));
+  s.lesson.forEach(p=>{
+    const box=prEl('div','pr-box');
+    box.appendChild(prEl('div','pr-rule',p.rule));
+    p.ex.forEach(x=>{
+      const line=prEl('div','pr-ex '+(x[1]?'ok':'no'));
+      line.appendChild(prEl('span','',(x[1]?'✅ ':'❌ ')+x[0]));
+      if(x[1])line.appendChild(prSpkBtn(x[0]));
+      box.appendChild(line);
+    });
+    box.appendChild(prViBtn(p.vi));
+    body.appendChild(box);
+  });
+  const b1=prEl('button','pr-btn','✏️ Luyện tập ('+s.practice.length+' câu)');
+  b1.onclick=()=>prStart('practice');
+  body.appendChild(b1);
+  if(s.test){
+    const b2=prEl('button','pr-btn sec','🏁 Kiểm tra chặng ('+s.test.length+' câu, cần 8/10)');
+    b2.onclick=()=>prStart('test');
+    body.appendChild(b2);
+  }
+}
+
+function prStart(mode){prRun(mode,PR.stage[mode==='test'?'test':'practice'],()=>prStart(mode));}
+// Chạy một lượt câu hỏi. mode: practice | test (chặng ngữ pháp), vocab | quiz (unit từ vựng). again = hàm tạo lượt mới
+function prRun(mode,qs,again){
+  PR.mode=mode;PR.again=again;
+  PR.q=prShuffle(qs).map(q=>({q,retry:false}));
+  PR.total=PR.q.length;PR.i=0;PR.first=0;PR.view='quiz';PR.answered=false;PR.built=[];
+  prRender();
+}
+
+function prQuestion(body){
+  const item=PR.q[PR.i],q=item.q;
+  const bar=prEl('div','pr-bar');const fill=prEl('div');fill.style.width=(PR.i/PR.q.length*100)+'%';bar.appendChild(fill);body.appendChild(bar);
+  body.appendChild(prEl('div','pr-su','Câu '+(PR.i+1)+' / '+PR.q.length+(item.retry?' · làm lại câu đã sai':'')));
+  const fb=prEl('div');
+  const nextBtn=prEl('button','pr-btn',PR.i+1<PR.q.length?'Next ➜':'Xem kết quả');
+  nextBtn.style.display='none';
+  nextBtn.onclick=()=>{PR.i++;PR.answered=false;PR.built=[];if(PR.i>=PR.q.length){PR.view='result';prFinish();}prRender();};
+  const done=ok=>{
+    if(PR.answered)return;PR.answered=true;
+    if(ok){if(!item.retry)PR.first++;}
+    else{
+      const m=P().mistakes;m[q.tag]=(m[q.tag]||0)+1;
+      if((PR.mode==='practice'||PR.mode==='vocab')&&!item.retry)PR.q.push({q,retry:true});
+    }
+    nextBtn.textContent=PR.i+1<PR.q.length?'Next ➜':'Xem kết quả';
+    fb.className='pr-fb '+(ok?'ok':'bad');
+    fb.textContent=ok?'✅ Great job!':'❌ Almost! Correct: '+prFull(q)+'  '+q.why;
+    fb.appendChild(prSpkBtn(prFull(q)));
+    nextBtn.style.display='block';
+    save();
+  };
+  if(q.t==='order'){
+    body.appendChild(prEl('div','pr-q','Put the words in order.'));
+    const ans=prEl('div','pr-words pr-ans'),pool=prEl('div','pr-words');
+    let words=prShuffle(q.w);
+    while(words.join(' ')===q.a[0]&&words.length>1)words=prShuffle(q.w);
+    const btns=[];
+    const check=prEl('button','pr-btn','Check');check.disabled=true;
+    const redraw=()=>{
+      ans.innerHTML='';
+      PR.built.forEach(k=>{const b=prEl('button','pr-w',words[k]);b.onclick=()=>{if(PR.answered)return;PR.built=PR.built.filter(x=>x!==k);redraw();};ans.appendChild(b);});
+      btns.forEach((b,k)=>{b.disabled=PR.built.includes(k);});
+      check.disabled=PR.built.length!==words.length;
+    };
+    words.forEach((w,k)=>{const b=prEl('button','pr-w',w);b.onclick=()=>{if(PR.answered)return;PR.built.push(k);redraw();};btns.push(b);pool.appendChild(b);});
+    check.onclick=()=>{if(PR.answered)return;const s=prNorm(PR.built.map(k=>words[k]).join(' '));check.style.display='none';done(q.a.some(a=>prNorm(a)===s));};
+    body.appendChild(ans);body.appendChild(pool);body.appendChild(check);
+  }else{
+    body.appendChild(prEl('div','pr-q',q.q));
+    if(q.say){ // câu nghe: phát từ ngay khi hiện câu hỏi (đang trong thao tác bấm của bé nên điện thoại cho phép phát)
+      const lb=prEl('button','pr-btn sec','🔊 Nghe lại');lb.onclick=()=>prSpeak(q.say);body.appendChild(lb);
+      prSpeak(q.say);
+    }
+    if(q.t==='mc'){
+      const opts=[];
+      const order=prShuffle(q.o.map((_,k)=>k)); // xáo thứ tự để vị trí đáp án đúng không đoán được
+      order.forEach(k=>{
+        const b=prEl('button','pr-opt',q.o[k]);
+        b.onclick=()=>{
+          if(PR.answered)return;
+          opts.forEach((o,j)=>{o.disabled=true;if(order[j]===q.a)o.classList.add('ok');});
+          if(k!==q.a)b.classList.add('bad');
+          done(k===q.a);
+        };
+        opts.push(b);body.appendChild(b);
+      });
+    }else{
+      const inp=prEl('input','pr-in');inp.type='text';inp.placeholder='Type your answer...';
+      inp.setAttribute('autocomplete','off');inp.setAttribute('autocapitalize','off');inp.setAttribute('autocorrect','off');
+      const check=prEl('button','pr-btn','Check');
+      const go=()=>{if(PR.answered||!inp.value.trim())return;inp.disabled=true;check.style.display='none';done(q.a.some(a=>prNorm(a)===prNorm(inp.value)));};
+      check.onclick=go;inp.onkeydown=e=>{if(e.key==='Enter')go();};
+      body.appendChild(inp);body.appendChild(check);
+      setTimeout(()=>inp.focus(),50);
+    }
+  }
+  body.appendChild(fb);
+  body.appendChild(nextBtn);
+  body.appendChild(prViBtn(q.vi));
+}
+
+function prFinish(){
+  const p=P(),s=PR.unit||PR.stage,score=PR.first,graded=PR.mode==='test'||PR.mode==='quiz';
+  PR.res={score,total:PR.total,pass:false,newBadges:[]};
+  global.totalStars+=score;sess.stars+=score;
+  document.getElementById('sStars').textContent=sess.stars;
+  if(graded){
+    p.best[s.id]=Math.max(p.best[s.id]||0,score);
+    if(score>=8){p.passed[s.id]=true;PR.res.pass=true;}
+  }
+  if(s.free&&score>=Math.ceil(PR.total*0.8))p.freeDone[s.id]=true; // bài tập tự do: đạt từ 80% là hoàn thành chủ đề
+  const before=global.earnedBadges.slice();
+  checkBadges();
+  PR.res.newBadges=global.earnedBadges.filter(id=>!before.includes(id)).map(id=>BADGES.find(b=>b.id===id)).filter(Boolean);
+  const now=new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  global.history.unshift({date:now,topic:(PR.unit?'Look 4: ':'')+s.title,said:(graded?'Kiểm tra ':PR.mode==='cards'?'Flashcard ':'Luyện tập ')+score+'/'+PR.total,good:graded?PR.res.pass:PR.mode==='cards'||score>=PR.total*0.8,tab:'practice'});
+  if(global.history.length>30)global.history=global.history.slice(0,30);
+  save();renderEarnedBadgesRow();
+}
+
+function prResult(body){
+  const r=PR.res,test=PR.mode==='test'||PR.mode==='quiz',cards=PR.mode==='cards';
+  const good=cards||(test?r.pass:r.score>=r.total*0.8);
+  body.appendChild(prEl('div','pr-big',good?'🎉':'💪'));
+  body.appendChild(prEl('div','pr-score',r.score+' / '+r.total));
+  body.appendChild(prEl('div','pr-fb '+(good?'ok':'bad'),
+    cards?'Great! You reviewed all the words. Now try the quiz!'
+    :test?(r.pass?'Excellent! You passed!':'Good try! You need 8/10 to pass. Review and try again.')
+        :(good?((PR.stage&&PR.stage.test)||PR.unit?'Great work! Try the test now.':'Great work! Keep it up!'):'Good effort! Practice again to get better.')));
+  body.appendChild(prEl('div','pr-su','+'+r.score+' ⭐ ('+(cards?'từ nhớ ngay lần đầu':'chỉ tính câu đúng ngay lần đầu')+')'));
+  r.newBadges.forEach(b=>body.appendChild(prEl('div','pr-fb ok','🏆 Huy hiệu mới: '+b.ico+' '+b.name+' - '+b.desc)));
+  const again=prEl('button','pr-btn',cards?'🃏 Học lại flashcard':test?'🏁 Làm lại bài kiểm tra':'✏️ Luyện tập lại');
+  again.onclick=()=>PR.again();
+  const back=prEl('button','pr-btn sec',PR.unit?'📖 Về unit':'📘 Về bài học');
+  back.onclick=()=>{PR.view=PR.unit?'unit':'stage';prRender();};
+  const home=prEl('button','pr-btn sec','🏠 Về danh sách chặng');
+  home.onclick=()=>{PR.view='home';prRender();};
+  body.appendChild(again);body.appendChild(back);body.appendChild(home);
+}
+
+// ---- Từ vựng Look 4 (nội dung gốc, theo chủ đề của 7 unit) ----
+// Mỗi từ: W(từ, emoji, định nghĩa tiếng Anh đơn giản, câu ví dụ có chứa đúng từ đó, nghĩa tiếng Việt)
+// Câu hỏi (chọn nghĩa / nghe-chọn từ / điền từ) được tự sinh từ danh sách từ, nên thêm từ mới chỉ cần thêm một dòng W(...).
+const W=(w,e,def,ex,vi)=>({w,e,def,ex,vi});
+const PR_UNITS=[
+{id:'u1',e:'💼',title:'All kinds of jobs',words:[
+ W('architect','🏗️','A person who designs buildings.','An architect drew the plan for our new school.','kiến trúc sư'),
+ W('chef','👨‍🍳','A person who cooks food in a restaurant.','The chef made a big bowl of noodle soup.','đầu bếp'),
+ W('nurse','👩‍⚕️','A person who looks after sick people in a hospital.','The nurse gave me some medicine.','y tá'),
+ W('programmer','💻','A person who writes computer programs.','My uncle is a programmer and he makes apps.','lập trình viên'),
+ W('firefighter','🧑‍🚒','A person who puts out fires.','The firefighter climbed up the tall ladder.','lính cứu hỏa'),
+ W('pilot','✈️','A person who flies a plane.','The pilot said hello to all the passengers.','phi công'),
+ W('farmer','🧑‍🌾','A person who grows food and keeps animals on a farm.','The farmer gets up at five every morning.','nông dân'),
+ W('mechanic','🔧','A person who fixes cars and machines.','The mechanic fixed our car in one hour.','thợ máy'),
+ W('journalist','📰','A person who writes the news for newspapers or TV.','The journalist asked the mayor three questions.','nhà báo'),
+ W('vet','🐶','A doctor for animals.','We took our sick dog to the vet.','bác sĩ thú y'),
+ W('engineer','⚙️','A person who designs and builds machines, roads or bridges.','The engineer built a bridge over the river.','kỹ sư'),
+ W('dentist','🦷','A doctor who looks after your teeth.','I visit the dentist twice a year.','nha sĩ')
+ ],grammar:[
+  mc("My mom is ___ architect.",["a","an","the"],1,"architect starts with a vowel sound. Use an.","unit-grammar","Mẹ tôi là một kiến trúc sư."),
+  mc("What ___ your father do?",["do","does","is"],1,"After your father (he), use does.","unit-grammar","Bố bạn làm nghề gì?"),
+  fl("He ___ (fly) planes. He is a pilot.","flies","After he, add -s. fly → flies.","unit-grammar","Ông ấy lái máy bay. Ông ấy là phi công."),
+  mc("I want ___ a programmer.",["to be","being","be"],0,"want + to + base verb: want to be.","unit-grammar","Tôi muốn trở thành lập trình viên.")
+ ]},
+{id:'u2',e:'🎵',title:'Music & Dance',words:[
+ W('guitar','🎸','A musical instrument with strings. You play it with your fingers.','My brother plays the guitar in a band.','đàn ghi-ta'),
+ W('drums','🥁','Instruments you hit with sticks.','The drums were very loud at the concert.','trống'),
+ W('violin','🎻','A small instrument with strings. You play it with a bow.','She plays the violin beautifully.','đàn vi-ô-lông'),
+ W('piano','🎹','A big instrument with black and white keys.','We have an old piano in our living room.','đàn piano'),
+ W('singer','🎤','A person who sings songs.','The singer has a lovely voice.','ca sĩ'),
+ W('dancer','💃','A person who dances.','The dancer jumped high in the air.','vũ công'),
+ W('concert','🎶','A show where people play or sing music for an audience.','We went to a concert last Saturday.','buổi hòa nhạc'),
+ W('band','🎵','A group of people who play music together.','Her band plays rock music.','ban nhạc'),
+ W('rhythm','👏','The beat of a song.','I clap my hands to the rhythm.','nhịp điệu'),
+ W('lyrics','📝','The words of a song.','I know all the lyrics of this song.','lời bài hát'),
+ W('perform','🎭','To sing, dance or play music for people.','They will perform on stage tonight.','biểu diễn'),
+ W('stage','🎪','The raised place where performers stand.','The singer walked onto the stage.','sân khấu')
+ ],grammar:[
+  mc("She ___ the guitar every day.",["plays","play","playing"],0,"After she, add -s: plays.","unit-grammar","Cô ấy chơi ghi-ta mỗi ngày."),
+  mc("I enjoy ___ to music.",["listen","listening","listens"],1,"enjoy + verb-ing: listening.","unit-grammar","Tôi thích nghe nhạc."),
+  mc("He can ___ the drums well.",["play","plays","playing"],0,"After can, use the base verb: play.","unit-grammar","Cậu ấy chơi trống giỏi."),
+  mc("We ___ to a concert last night.",["went","go","goes"],0,"\"Last night\" = past. go → went.","unit-grammar","Tối qua chúng tôi đi xem hòa nhạc.")
+ ]},
+{id:'u3',e:'🎉',title:'Celebrations',words:[
+ W('festival','🎊','A special time when people celebrate something together.','Tet is the biggest festival in Viet Nam.','lễ hội'),
+ W('parade','🎉','A line of people walking along the street to celebrate.','We watched the parade from the balcony.','cuộc diễu hành'),
+ W('fireworks','🎆','Bright lights that explode in the night sky.','The fireworks lit up the sky at midnight.','pháo hoa'),
+ W('costume','🎭','Special clothes you wear to look like someone else.','She wore a tiger costume to the party.','trang phục hóa trang'),
+ W('lantern','🏮','A paper or glass light you can carry.','Mai carries a lantern at the Mid-Autumn Festival.','đèn lồng'),
+ W('decorate','🎀','To make a place look nice with pretty things.','We decorate our house before Tet.','trang trí'),
+ W('gift','🎁','Something you give to a person on a special day.','I gave my mom a gift for her birthday.','món quà'),
+ W('invite','💌','To ask someone to come to your party.','I want to invite all my friends to my birthday.','mời'),
+ W('candle','🕯️','A stick of wax with a small flame on top.','She lit a candle on the cake.','cây nến'),
+ W('wish','⭐','To hope that something good will happen.','Make a wish and blow out the candles.','điều ước'),
+ W('celebrate','🥳','To do something fun on a special day.','How do you celebrate your birthday?','ăn mừng'),
+ W('traditional','🥮','Done in the same way for many years.','We eat traditional food at Tet.','truyền thống')
+ ],grammar:[
+  mc("My birthday is ___ May.",["on","in","at"],1,"Use in with months: in May.","unit-grammar","Sinh nhật tôi vào tháng Năm."),
+  mc("The party is ___ Saturday.",["in","on","at"],1,"Use on with days: on Saturday.","unit-grammar","Bữa tiệc vào thứ Bảy."),
+  mc("We have a party ___ eight o'clock.",["at","on","in"],0,"Use at with clock times: at eight o'clock.","unit-grammar","Chúng tôi có tiệc lúc tám giờ."),
+  fl("She is ___ (make) a birthday cake now.","making","\"Now\" = present continuous. make → making.","unit-grammar","Bây giờ cô ấy đang làm bánh sinh nhật.")
+ ]},
+{id:'u4',e:'⚽',title:'Sport for all',words:[
+ W('athlete','🏃','A person who is good at sports.','The athlete runs ten kilometers every day.','vận động viên'),
+ W('team','👥','A group of people who play a sport together.','Our team won the game.','đội'),
+ W('coach','🧑‍🏫','A person who teaches and helps a sports team.','The coach told us to run faster.','huấn luyện viên'),
+ W('match','⚽','A game between two teams or players.','We watched a football match on TV.','trận đấu'),
+ W('wheelchair','♿','A chair with wheels for people who cannot walk well.','She plays basketball in a wheelchair.','xe lăn'),
+ W('champion','🏆','The person or team that wins a competition.','He became the swimming champion.','nhà vô địch'),
+ W('medal','🥇','A small metal prize for the winner.','She won a gold medal.','huy chương'),
+ W('referee','🟨','A person who makes sure players follow the rules.','The referee blew his whistle.','trọng tài'),
+ W('goal','🥅','A point you get when the ball goes into the net.','He scored a goal in the last minute.','bàn thắng'),
+ W('compete','🏅','To try to win against other people.','Athletes from many countries compete in the Olympics.','thi đấu'),
+ W('train','💪','To practice a sport to get better.','They train every day after school.','luyện tập'),
+ W('stadium','🏟️','A big building where people watch sports.','Thousands of fans filled the stadium.','sân vận động')
+ ],grammar:[
+  mc("Wheelchair athletes ___ run very fast.",["can","cans","are"],0,"can + base verb. We do not add -s to can.","unit-grammar","Vận động viên xe lăn có thể chạy rất nhanh."),
+  mc("He ___ swim, but he can run.",["can't","doesn't can","isn't"],0,"The negative of can is can't.","unit-grammar","Cậu ấy không biết bơi nhưng biết chạy."),
+  mc("Our team is ___ than yours.",["fast","faster","fastest"],1,"Use -er + than to compare two things: faster.","unit-grammar","Đội chúng tôi nhanh hơn đội bạn."),
+  mc("She is the ___ player in our team.",["tall","taller","tallest"],2,"Use the + -est for the number one: tallest.","unit-grammar","Cô ấy là cầu thủ cao nhất đội.")
+ ]},
+{id:'u5',e:'🏔️',title:'Incredible places',words:[
+ W('mountain','⛰️','A very high hill.','We climbed a mountain in Sa Pa.','ngọn núi'),
+ W('waterfall','🌊','Water that falls down from a high place.','The waterfall was loud and beautiful.','thác nước'),
+ W('cave','🕳️','A big hole in a hill or under the ground.','Bats live in the dark cave.','hang động'),
+ W('desert','🏜️','A very dry place with lots of sand.','It is very hot and dry in the desert.','sa mạc'),
+ W('island','🏝️','Land with water all around it.','We took a boat to a small island.','hòn đảo'),
+ W('volcano','🌋','A mountain that can throw out hot rock and smoke.','The volcano exploded many years ago.','núi lửa'),
+ W('rainforest','🌴','A thick forest in a hot, wet place.','Many colorful birds live in the rainforest.','rừng mưa nhiệt đới'),
+ W('ocean','🐋','A very large area of salt water.','Whales swim in the ocean.','đại dương'),
+ W('ancient','🏛️','Very, very old.','We visited an ancient temple in Hue.','cổ xưa'),
+ W('tourist','📸','A person who travels to see interesting places.','A tourist took a photo of the bay.','khách du lịch'),
+ W('explore','🧭','To go to a new place to find out about it.','I want to explore the jungle one day.','khám phá'),
+ W('view','🌄','What you can see from a place.','The view from the top was amazing.','khung cảnh')
+ ],grammar:[
+  mc("Mount Everest is the ___ mountain in the world.",["high","higher","highest"],2,"Use the + -est for the number one: highest.","unit-grammar","Everest là ngọn núi cao nhất thế giới."),
+  mc("A mountain is ___ than a hill.",["high","higher","highest"],1,"Use -er + than to compare two things: higher.","unit-grammar","Núi cao hơn đồi."),
+  mc("There ___ a big waterfall near my village.",["is","are","am"],0,"A waterfall = one thing. Use is.","unit-grammar","Gần làng tôi có một thác nước lớn."),
+  mc("There ___ many islands in Ha Long Bay.",["is","are","am"],1,"Many islands = more than one. Use are.","unit-grammar","Có nhiều hòn đảo ở vịnh Hạ Long.")
+ ]},
+{id:'u6',e:'👗',title:'Fashion',words:[
+ W('uniform','👔','Clothes that everyone at a school or job wears.','We wear a blue uniform to school.','đồng phục'),
+ W('fashion','👗','The popular style of clothes at a certain time.','She loves fashion and draws new clothes.','thời trang'),
+ W('style','😎','The way you dress or do things.','I like her style. She always looks cool.','phong cách'),
+ W('jeans','👖','Strong blue trousers.','I wear jeans on weekends.','quần jeans'),
+ W('jacket','🧥','A short coat.','Put on your jacket. It is cold outside.','áo khoác'),
+ W('scarf','🧣','A long piece of cloth you wear around your neck.','She wore a red scarf in winter.','khăn quàng'),
+ W('sneakers','👟','Soft shoes for sport.','I run in my new sneakers.','giày thể thao'),
+ W('silk','🧵','A very soft and shiny cloth.','My mom\'s ao dai is made of silk.','lụa'),
+ W('designer','✏️','A person who makes new designs for clothes.','The designer made a beautiful dress.','nhà thiết kế'),
+ W('trendy','✨','Very popular and modern.','Those glasses look very trendy.','hợp thời trang'),
+ W('comfortable','🛋️','Nice and soft to wear. You feel good in it.','This T-shirt is soft and comfortable.','thoải mái'),
+ W('ao dai','🇻🇳','A long traditional dress from Viet Nam.','She wore a beautiful ao dai on Tet.','áo dài')
+ ],grammar:[
+  mc("She is ___ a red dress today.",["wear","wears","wearing"],2,"\"Today\" here = now. Use is + wearing.","unit-grammar","Hôm nay cô ấy đang mặc váy đỏ."),
+  mc("I ___ jeans on weekends.",["wear","wears","wearing"],0,"\"On weekends\" = habit. After I, use wear.","unit-grammar","Tôi mặc quần jeans vào cuối tuần."),
+  mc("This jacket is ___ big for me.",["too","very much","enough"],0,"too + adjective means more than you want: too big.","unit-grammar","Cái áo khoác này quá to với tôi."),
+  mc("He ___ a uniform every day.",["wears","wear","wearing"],0,"After he, add -s: wears.","unit-grammar","Cậu ấy mặc đồng phục mỗi ngày.")
+ ]},
+{id:'u7',e:'📜',title:'Life in the past',words:[
+ W('past','⏳','The time before now.','In the past, people had no phones.','quá khứ'),
+ W('history','📜','The story of things that happened long ago.','I love learning about the history of Viet Nam.','lịch sử'),
+ W('grandparents','👵','Your mother\'s and father\'s parents.','My grandparents live in a small village.','ông bà'),
+ W('village','🏘️','A very small town in the countryside.','Life in the village was quiet.','ngôi làng'),
+ W('letter','✉️','A written message you send by post.','He wrote a letter to his friend.','lá thư'),
+ W('typewriter','⌨️','An old machine for writing with keys and paper.','My grandpa still has an old typewriter.','máy đánh chữ'),
+ W('radio','📻','A machine you use to listen to music and news.','They listened to the radio every evening.','đài radio'),
+ W('invent','💡','To make something completely new for the first time.','Someone had to invent the light bulb.','phát minh'),
+ W('modern','🤖','New and using the latest ideas.','Our school has modern computers.','hiện đại'),
+ W('change','🔄','To become different.','Cities change a lot over time.','thay đổi'),
+ W('memory','💭','Something you remember from the past.','My best memory is our trip to the sea.','kỷ niệm'),
+ W('century','📅','A period of one hundred years.','That bridge was built in the last century.','thế kỷ')
+ ],grammar:[
+  mc("In the past, people ___ phones.",["didn't have","don't have","doesn't has"],0,"\"In the past\" = past. Use didn't + base verb.","unit-grammar","Ngày xưa người ta không có điện thoại."),
+  mc("My grandpa ___ in a village when he was young.",["lived","lives","live"],0,"\"When he was young\" = past. live + ed = lived.","unit-grammar","Ông tôi sống ở một ngôi làng khi còn trẻ."),
+  mc("___ your grandma write letters?",["Did","Do","Does"],0,"Past question: Did + subject + base verb.","unit-grammar","Bà bạn có viết thư không?"),
+  fl("Long ago, people ___ (not / have) computers.",["didn't have","did not have"],"didn't + base verb: didn't have.","unit-grammar","Ngày xưa người ta không có máy tính.")
+ ]}
+];
+
+// ---- Bài tập tự do (không theo sách; không khóa, học chủ đề nào cũng được) ----
+const PR_FREE=[
+{id:'f1',e:'🕐',title:'in / on / at (time)',sub:'Giới từ chỉ thời gian',free:true,
+ lesson:[
+  {rule:'Use at for clock times and some fixed times.',ex:[["at 7 o'clock",1],["at night",1],["at noon",1],["in 7 o'clock",0]],vi:'Dùng at với giờ và một số mốc cố định (at night, at noon).'},
+  {rule:'Use on for days and dates.',ex:[["on Monday",1],["on 5 September",1],["on my birthday",1],["at Monday",0]],vi:'Dùng on với thứ và ngày tháng.'},
+  {rule:'Use in for months, years, seasons and parts of the day.',ex:[["in May",1],["in 2024",1],["in summer",1],["in the morning",1],["on May",0]],vi:'Dùng in với tháng, năm, mùa và buổi trong ngày.'}
+ ],
+ practice:[
+  mc("The class starts ___ 8 o'clock.",["at","on","in"],0,"Use at with clock times.","prep-time","Lớp học bắt đầu lúc 8 giờ."),
+  mc("My birthday is ___ June.",["in","on","at"],0,"Use in with months.","prep-time","Sinh nhật tôi vào tháng Sáu."),
+  mc("We have English ___ Monday.",["in","on","at"],1,"Use on with days.","prep-time","Chúng tôi có tiết Anh vào thứ Hai."),
+  mc("It is cold ___ winter.",["on","at","in"],2,"Use in with seasons.","prep-time","Mùa đông trời lạnh."),
+  mc("I go to bed ___ night.",["at","in","on"],0,"We say at night.","prep-time","Tôi đi ngủ vào ban đêm."),
+  mc("She was born ___ 2015.",["on","in","at"],1,"Use in with years.","prep-time","Cô ấy sinh năm 2015."),
+  mc("We play football ___ the afternoon.",["at","on","in"],2,"Use in with parts of the day: in the afternoon.","prep-time","Chúng tôi chơi bóng đá vào buổi chiều."),
+  mc("The party is ___ 5 May.",["on","in","at"],0,"Use on with dates.","prep-time","Bữa tiệc vào ngày 5 tháng Năm."),
+  fl("I get up ___ six o'clock. (in / on / at)","at","Use at with clock times.","prep-time","Tôi dậy lúc sáu giờ."),
+  fl("We have a long holiday ___ summer. (in / on / at)","in","Use in with seasons.","prep-time","Chúng tôi có kỳ nghỉ dài vào mùa hè."),
+  mc("Choose the correct sentence.",["I wake up in 6 o'clock.","I wake up at 6 o'clock.","I wake up on 6 o'clock."],1,"Use at with clock times.","prep-time","Tôi thức dậy lúc 6 giờ."),
+  mc("Choose the correct sentence.",["My exam is in Friday.","My exam is on Friday.","My exam is at Friday."],1,"Use on with days.","prep-time","Bài thi của tôi vào thứ Sáu."),
+  mc("Choose the correct sentence.",["We visit grandma at Sunday morning.","We visit grandma on Sunday morning.","We visit grandma in Sunday morning."],1,"With a day + part of the day, use on: on Sunday morning.","prep-time","Sáng Chủ nhật chúng tôi thăm bà."),
+  od(["on","The","test","Tuesday","is"],"The test is on Tuesday","Order: The test + is + on Tuesday.","prep-time","Bài kiểm tra vào thứ Ba."),
+  od(["starts","My","September","in","school"],["My school starts in September","In September my school starts"],"Order: My school + starts + in September.","prep-time","Trường tôi khai giảng vào tháng Chín.")
+ ]},
+{id:'f2',e:'📍',title:'in / on / under / next to...',sub:'Giới từ chỉ nơi chốn',free:true,
+ lesson:[
+  {rule:'in = inside. on = on the top or on a surface. under = below.',ex:[["The milk is in the fridge.",1],["The book is on the table.",1],["The ball is under the chair.",1]],vi:'in: bên trong. on: ở trên bề mặt. under: bên dưới.'},
+  {rule:'next to = beside. between = in the middle of two things.',ex:[["I sit next to my friend.",1],["The bank is between the school and the park.",1]],vi:'next to: bên cạnh. between: ở giữa hai thứ.'},
+  {rule:'in front of = at the front. behind = at the back.',ex:[["The teacher stands in front of the class.",1],["The garden is behind the house.",1]],vi:'in front of: phía trước. behind: phía sau.'}
+ ],
+ practice:[
+  mc("The milk is ___ the fridge.",["in","on","under"],0,"Inside the fridge: in.","prep-place","Sữa ở trong tủ lạnh."),
+  mc("The book is ___ the desk.",["in","on","between"],1,"On the surface of the desk: on.","prep-place","Quyển sách ở trên bàn."),
+  mc("The dog is hiding ___ the table. We can only see its tail.",["under","on","between"],0,"Below the table: under.","prep-place","Con chó trốn dưới bàn. Ta chỉ thấy đuôi nó."),
+  mc("The school is ___ the bank and the post office.",["between","on","in"],0,"In the middle of two things: between.","prep-place","Trường học nằm giữa ngân hàng và bưu điện."),
+  mc("Our house is ___ the park. We can walk there in one minute.",["next to","under","in"],0,"Beside the park: next to.","prep-place","Nhà chúng tôi ở cạnh công viên."),
+  mc("I sit ___ my best friend in class.",["next to","in","on"],0,"Beside my friend: next to.","prep-place","Tôi ngồi cạnh bạn thân trong lớp."),
+  mc("The teacher stands ___ the class. All students can see her.",["in front of","behind","under"],0,"At the front: in front of.","prep-place","Cô giáo đứng trước lớp. Ai cũng thấy cô."),
+  mc("The garden is ___ the house. We go out through the back door.",["behind","between","on"],0,"At the back: behind.","prep-place","Khu vườn ở sau nhà."),
+  mc("I keep my pencils ___ my pencil case.",["in","between","behind"],0,"Inside the case: in.","prep-place","Tôi để bút chì trong hộp bút."),
+  fl("The picture is ___ the wall. (on / in / under)","on","A picture on a wall: on.","prep-place","Bức tranh treo trên tường."),
+  fl("The ball is ___ the box. It is inside. (in / on / under)","in","Inside = in.","prep-place","Quả bóng ở trong hộp."),
+  mc("Choose the correct sentence.",["The cat is in the roof.","The cat is on the roof.","The cat is between the roof."],1,"On top of the roof: on.","prep-place","Con mèo ở trên mái nhà."),
+  mc("Choose the correct sentence.",["She lives in Ha Noi.","She lives on Ha Noi.","She lives between Ha Noi."],0,"We say in + a city: in Ha Noi.","prep-place","Cô ấy sống ở Hà Nội."),
+  od(["is","The","under","chair","cat","the"],"The cat is under the chair","Order: The cat + is + under the chair.","prep-place","Con mèo ở dưới ghế."),
+  od(["next","school","to","The","is","the","park"],"The school is next to the park","Order: The school + is + next to + the park.","prep-place","Trường học ở cạnh công viên.")
+ ]},
+{id:'f3',e:'🅰️',title:'a / an / the',sub:'Mạo từ',free:true,
+ lesson:[
+  {rule:'Use a before a consonant sound. Use an before a vowel sound.',ex:[["a dog, a book, a teacher",1],["an apple, an egg, an umbrella",1]],vi:'a đứng trước âm phụ âm; an đứng trước âm nguyên âm.'},
+  {rule:'Listen to the sound, not the letter.',ex:[["an hour (the h is silent)",1],["an honest girl",1],["a university (it starts with /yu/)",1]],vi:'Dựa vào âm đọc chứ không phải chữ cái: an hour, an honest, a university.'},
+  {rule:'Use the for a thing we both know, or only one thing.',ex:[["The sun is hot.",1],["I saw a dog. The dog was big.",1],["Close the door, please.",1]],vi:'Dùng the khi người nghe biết đó là cái nào, hoặc chỉ có một.'}
+ ],
+ practice:[
+  mc("I have ___ dog.",["a","an"],0,"dog starts with a consonant sound: a.","article","Tôi có một con chó."),
+  mc("She eats ___ apple every day.",["a","an"],1,"apple starts with a vowel sound: an.","article","Cô ấy ăn một quả táo mỗi ngày."),
+  mc("He is ___ engineer.",["a","an"],1,"engineer starts with a vowel sound: an.","article","Ông ấy là kỹ sư."),
+  mc("It takes ___ hour to get there.",["a","an"],1,"hour starts with a vowel sound (silent h): an.","article","Đến đó mất một giờ."),
+  mc("My uncle is ___ teacher.",["a","an"],0,"teacher starts with a consonant sound: a.","article","Chú tôi là giáo viên."),
+  mc("___ sun is very hot today.",["The","A","An"],0,"There is only one sun: the.","article","Hôm nay mặt trời rất nóng."),
+  mc("I saw an elephant. ___ elephant was big.",["The","A","An"],0,"We already talked about it: the.","article","Tôi thấy một con voi. Con voi đó rất to."),
+  mc("Can you close ___ door, please?",["a","the","an"],1,"We both know which door: the.","article","Bạn đóng cửa giúp tôi nhé?"),
+  mc("Mai has ___ umbrella.",["a","an"],1,"umbrella starts with a vowel sound: an.","article","Mai có một cái ô."),
+  mc("She goes to ___ university in Ha Noi.",["a","an"],0,"university starts with the sound /yu/: a.","article","Cô ấy học một trường đại học ở Hà Nội."),
+  fl("He has ___ orange. (a / an)","an","orange starts with a vowel sound: an.","article","Cậu ấy có một quả cam."),
+  fl("I want ___ new bike. (a / an)","a","new starts with a consonant sound: a.","article","Tôi muốn một chiếc xe đạp mới."),
+  mc("Choose the correct sentence.",["She is a honest girl.","She is an honest girl.","She is honest an girl."],1,"honest starts with a vowel sound (silent h): an.","article","Cô ấy là cô gái trung thực."),
+  mc("Choose the correct sentence.",["I have a egg.","I have an egg.","I have the egg a."],1,"egg starts with a vowel sound: an.","article","Tôi có một quả trứng."),
+  od(["an","She","has","orange"],"She has an orange","Order: She + has + an orange.","article","Cô ấy có một quả cam.")
+ ]},
+{id:'f4',e:'📏',title:'Comparing things',sub:'So sánh hơn và so sánh nhất',free:true,
+ lesson:[
+  {rule:'Short adjectives: add -er + than to compare two things. Add the + -est for the number one.',ex:[["tall → taller → the tallest",1],["Lan is taller than Minh.",1]],vi:'Tính từ ngắn: -er + than (hơn), the + -est (nhất).'},
+  {rule:'Spelling: nice → nicer → nicest. happy → happier → happiest. big → bigger → biggest.',ex:[["hot → hotter → the hottest",1],["heavy → heavier → the heaviest",1]],vi:'Đuôi e chỉ thêm r/st. Phụ âm + y đổi thành ier/iest. Một nguyên âm + một phụ âm thì gấp đôi.'},
+  {rule:'Long adjectives: more ... than, the most ...',ex:[["This book is more interesting than that book.",1],["She is the most beautiful girl.",1],["more fast",0]],vi:'Tính từ dài: more ... than, the most ...'},
+  {rule:'Irregular: good → better → the best. bad → worse → the worst.',ex:[["My English is better than before.",1],["This is the best pizza.",1]],vi:'Bất quy tắc: good-better-best, bad-worse-worst.'}
+ ],
+ practice:[
+  mc("An elephant is ___ than a horse.",["big","bigger","biggest"],1,"Comparing two things: bigger.","compare","Con voi to hơn con ngựa."),
+  mc("Mount Fansipan is the ___ mountain in Viet Nam.",["high","higher","highest"],2,"The number one: the highest.","compare","Fansipan là ngọn núi cao nhất Việt Nam."),
+  mc("My bag is ___ than your bag.",["heavy","heavier","heaviest"],1,"heavy → heavier (y → ier).","compare","Cặp của tôi nặng hơn cặp của bạn."),
+  mc("This is the ___ day of the year.",["hot","hotter","hottest"],2,"The number one: hottest (double the t).","compare","Đây là ngày nóng nhất năm."),
+  mc("A car is ___ than a bike.",["more fast","faster","fastest"],1,"Short adjective: faster.","compare","Ô tô nhanh hơn xe đạp."),
+  mc("This book is ___ than that book.",["interesting","more interesting","interestinger"],1,"Long adjective: more interesting.","compare","Quyển này thú vị hơn quyển kia."),
+  mc("She is the ___ girl in my class.",["most beautiful","beautifulest","more beautiful"],0,"Long adjective + the: the most beautiful.","compare","Cô ấy là bạn nữ xinh nhất lớp."),
+  mc("My English is ___ than before.",["good","better","best"],1,"good → better.","compare","Tiếng Anh của tôi giỏi hơn trước."),
+  mc("This is the ___ pizza I have ever eaten.",["good","better","best"],2,"good → the best.","compare","Đây là cái pizza ngon nhất tôi từng ăn."),
+  fl("Today is ___ than yesterday. (cold)","colder","cold + er = colder.","compare","Hôm nay lạnh hơn hôm qua."),
+  fl("He is the ___ boy in our team. (tall)","tallest","the + tall + est = tallest.","compare","Cậu ấy là bạn nam cao nhất đội."),
+  fl("My sister is ___ than me. (happy)","happier","happy → happier.","compare","Chị tôi vui hơn tôi."),
+  fl("Gold is ___ than silver. (expensive)","more expensive","Long adjective: more expensive.","compare","Vàng đắt hơn bạc."),
+  mc("Choose the correct sentence.",["She is more tall than me.","She is taller than me.","She is tallest than me."],1,"Short adjective: taller than.","compare","Cô ấy cao hơn tôi."),
+  mc("Choose the correct sentence.",["He is the most fast runner.","He is the fastest runner.","He is the faster runner."],1,"Short adjective + the: the fastest.","compare","Cậu ấy là người chạy nhanh nhất."),
+  od(["than","Lan","is","taller","Minh"],"Lan is taller than Minh","Order: Lan + is + taller + than Minh.","compare","Lan cao hơn Minh.")
+ ]},
+{id:'f5',e:'❓',title:'Question words',sub:'What, where, when, who, why, how',free:true,
+ lesson:[
+  {rule:'What = thing. Where = place. When = time. Who = person.',ex:[["What is your name?",1],["Where do you live?",1],["When is your birthday?",1],["Who is your best friend?",1]],vi:'What hỏi sự vật, where hỏi nơi chốn, when hỏi thời gian, who hỏi người.'},
+  {rule:'Why = reason (answer with because). Which = choice. Whose = owner.',ex:[["Why are you late?",1],["Which colour do you like?",1],["Whose bag is this?",1]],vi:'Why hỏi lý do, which hỏi sự lựa chọn, whose hỏi của ai.'},
+  {rule:'How = way. How old / How many / How much...',ex:[["How do you go to school?",1],["How old are you?",1],["How many books do you have?",1]],vi:'How hỏi cách thức; how old (bao nhiêu tuổi), how many (bao nhiêu - đếm được), how much (bao nhiêu - không đếm được).'}
+ ],
+ practice:[
+  mc("___ is your name?",["What","Where","Who"],0,"Asking about a thing: What.","wh","Tên bạn là gì?"),
+  mc("___ do you live? — In Hue.",["When","Where","Why"],1,"Asking about a place: Where.","wh","Bạn sống ở đâu? — Ở Huế."),
+  mc("___ is your birthday? — On 5 May.",["When","Where","Who"],0,"Asking about time: When.","wh","Sinh nhật bạn khi nào? — Ngày 5 tháng 5."),
+  mc("___ is your best friend? — Lan.",["What","Who","How"],1,"Asking about a person: Who.","wh","Bạn thân của bạn là ai? — Lan."),
+  mc("___ are you late? — Because the bus was slow.",["Why","When","Who"],0,"Asking about a reason: Why.","wh","Sao bạn đến muộn? — Vì xe buýt chậm."),
+  mc("___ old are you?",["How","What","Which"],0,"We say How old.","wh","Bạn bao nhiêu tuổi?"),
+  mc("___ colour do you like, red or blue?",["Who","Which","Where"],1,"A choice between two: Which.","wh","Bạn thích màu nào, đỏ hay xanh?"),
+  mc("___ do you go to school? — By bike.",["How","Why","Whose"],0,"Asking about the way: How.","wh","Bạn đến trường bằng gì? — Bằng xe đạp."),
+  mc("___ books do you have? — Ten.",["How many","How much","How long"],0,"Books can be counted: How many.","wh","Bạn có bao nhiêu quyển sách? — Mười."),
+  mc("___ bag is this? — It is mine.",["Who","Whose","Which"],1,"Asking about the owner: Whose.","wh","Cái cặp này của ai? — Của tôi."),
+  fl("___ time does the film start? (What / Where / Who)","What","We say What time.","wh","Mấy giờ phim bắt đầu?"),
+  mc("Choose the correct question.",["Where you live?","Where do you live?","Where does you live?"],1,"Where + do + you + live.","wh","Bạn sống ở đâu?"),
+  mc("Choose the correct question.",["What she is doing?","What is she doing?","What does she doing?"],1,"What + is + she + doing.","wh","Cô ấy đang làm gì?"),
+  od(["do","When","get","up?","you"],"When do you get up?","Order: When + do + you + get up?","wh","Bạn dậy lúc nào?"),
+  od(["is","Who","your","teacher?"],"Who is your teacher?","Order: Who + is + your teacher?","wh","Giáo viên của bạn là ai?")
+ ]},
+{id:'f6',e:'🥛',title:'much / many / some / any',sub:'Từ chỉ số lượng',free:true,
+ lesson:[
+  {rule:'many + countable things (many books). much + uncountable things (much water).',ex:[["How many students are there?",1],["How much rice do you eat?",1]],vi:'many đi với danh từ đếm được; much đi với danh từ không đếm được.'},
+  {rule:'some in positive sentences. any in negatives and questions.',ex:[["I have some apples.",1],["I don't have any apples.",1],["Do you have any apples?",1]],vi:'some dùng trong câu khẳng định; any dùng trong câu phủ định và nghi vấn.'},
+  {rule:'a lot of works with both. Use it in positive sentences.',ex:[["I have a lot of friends.",1],["She drinks a lot of water.",1],["I have much homework.",0]],vi:'a lot of dùng cho cả hai loại, hợp nhất trong câu khẳng định.'}
+ ],
+ practice:[
+  mc("I have ___ friends.",["many","much","any"],0,"Friends can be counted: many.","quant","Tôi có nhiều bạn."),
+  mc("There isn't ___ water in the bottle.",["much","many","some"],0,"Water cannot be counted: much.","quant","Trong chai không còn nhiều nước."),
+  mc("I want ___ milk, please.",["some","any","many"],0,"A request: some.","quant","Cho tôi xin ít sữa."),
+  mc("Do you have ___ brothers?",["any","much","a"],0,"A question: any.","quant","Bạn có anh em trai nào không?"),
+  mc("How ___ students are in your class?",["many","much","some"],0,"Students can be counted: How many.","quant","Lớp bạn có bao nhiêu học sinh?"),
+  mc("How ___ rice do you eat?",["many","much","any"],1,"Rice cannot be counted: How much.","quant","Bạn ăn bao nhiêu cơm?"),
+  mc("We don't have ___ eggs.",["some","any","much"],1,"A negative sentence: any.","quant","Chúng tôi không còn quả trứng nào."),
+  mc("She drinks ___ of water every day.",["a lot","many","much"],0,"We say a lot of.","quant","Cô ấy uống rất nhiều nước mỗi ngày."),
+  mc("There are ___ apples on the table.",["some","any","much"],0,"A positive sentence: some.","quant","Có vài quả táo trên bàn."),
+  fl("I don't have ___ money. (much / many)","much","Money cannot be counted: much.","quant","Tôi không có nhiều tiền."),
+  fl("There are too ___ cars on the road. (much / many)","many","Cars can be counted: many.","quant","Có quá nhiều ô tô trên đường."),
+  mc("Choose the correct sentence.",["I have much homework.","I have a lot of homework.","I have many homework."],1,"In a positive sentence, use a lot of.","quant","Tôi có rất nhiều bài tập."),
+  mc("Choose the correct sentence.",["Is there some milk?","Is there any milk?","Are there any milk?"],1,"A question + milk (uncountable): Is there any milk?","quant","Còn sữa không?"),
+  od(["are","How","many","there?","people"],"How many people are there?","Order: How many + people + are there?","quant","Có bao nhiêu người?")
+ ]},
+{id:'f7',e:'🔀',title:'Confusing words',sub:'Từ dễ nhầm',free:true,
+ lesson:[
+  {rule:'there = a place. their = belongs to them. they\'re = they are.',ex:[["There is a cat here.",1],["That is their house.",1],["They're playing outside.",1]],vi:'there: ở đó; their: của họ; they\'re = they are.'},
+  {rule:'to = direction. too = also / very. two = 2.',ex:[["I go to school.",1],["I want to go too.",1],["I have two sisters.",1]],vi:'to: đến; too: cũng / quá; two: số 2.'},
+  {rule:"its = belongs to it. it's = it is. your = belongs to you. you're = you are.",ex:[["The dog wags its tail.",1],["It's raining.",1],["Is this your pen?",1],["You're my friend.",1]],vi:"its: của nó; it's = it is; your: của bạn; you're = you are."},
+  {rule:'watch = look at something moving. look at = turn your eyes. say / tell. do / make.',ex:[["I watch TV.",1],["Look at the board.",1],["She says hello. She tells me a story.",1],["I do my homework. I make a cake.",1]],vi:'watch xem; look at nhìn; say nói; tell kể / bảo; do làm (việc); make làm ra (vật).'}
+ ],
+ practice:[
+  mc("___ is a cat on the sofa.",["There","Their","They're"],0,"A place or \"there is\": There.","confuse","Có một con mèo trên ghế sofa."),
+  mc("The children love ___ new teacher.",["there","their","they're"],1,"Belongs to the children: their.","confuse","Bọn trẻ yêu quý giáo viên mới của chúng."),
+  mc("___ playing in the garden.",["Their","There","They're"],2,"They are = they're.","confuse","Chúng đang chơi trong vườn."),
+  mc("I want to go ___.",["to","too","two"],1,"Also = too.","confuse","Tôi cũng muốn đi."),
+  mc("She has ___ sisters.",["to","too","two"],2,"The number 2 = two.","confuse","Cô ấy có hai chị gái."),
+  mc("I am going ___ school.",["to","too","two"],0,"Direction: to.","confuse","Tôi đang đi đến trường."),
+  mc("The dog is wagging ___ tail.",["its","it's"],0,"Belongs to the dog: its.","confuse","Con chó đang vẫy đuôi."),
+  mc("___ raining today.",["Its","It's"],1,"It is = it's.","confuse","Hôm nay trời đang mưa."),
+  mc("___ a good friend.",["Your","You're"],1,"You are = you're.","confuse","Bạn là một người bạn tốt."),
+  mc("Is this ___ pencil?",["your","you're"],0,"Belongs to you: your.","confuse","Đây có phải bút chì của bạn không?"),
+  mc("I like to ___ TV after dinner.",["see","watch","look at"],1,"We watch TV.","confuse","Tôi thích xem TV sau bữa tối."),
+  mc("Please ___ at the board.",["see","watch","look"],2,"We say look at.","confuse","Hãy nhìn lên bảng."),
+  mc("He didn't ___ me the answer.",["say","tell","speak"],1,"We say tell someone something.","confuse","Cậu ấy không nói cho tôi đáp án."),
+  mc("I ___ my homework every day.",["do","make","take"],0,"We say do homework.","confuse","Tôi làm bài tập mỗi ngày."),
+  mc("Mom will ___ a cake for my birthday.",["do","make","take"],1,"We say make a cake.","confuse","Mẹ sẽ làm bánh cho sinh nhật tôi."),
+  mc("Choose the correct sentence.",["Their going to the park.","They're going to the park.","There going to the park."],1,"They are going: They're.","confuse","Họ đang đi đến công viên."),
+  mc("Choose the correct sentence.",["The cat licked it's paw.","The cat licked its paw.","The cat licked its' paw."],1,"Belongs to the cat: its.","confuse","Con mèo liếm chân của nó.")
+ ]},
+{id:'f8',e:'💪',title:'can / should / must',sub:'Động từ khuyết thiếu',free:true,
+ lesson:[
+  {rule:'can = ability or permission. can\'t = not able.',ex:[["She can swim very well.",1],["Can I open the window?",1],["He can't play the piano.",1]],vi:'can: có thể / được phép. can\'t: không thể.'},
+  {rule:'should = advice. shouldn\'t = it is not a good idea.',ex:[["You should drink more water.",1],["You shouldn't eat too much candy.",1]],vi:'should: nên. shouldn\'t: không nên.'},
+  {rule:"must = a strong rule. mustn't = it is not allowed. have to = it is necessary.",ex:[["We must wear a helmet.",1],["You mustn't run in the library.",1],["I have to get up early.",1]],vi:'must: phải. mustn\'t: cấm. have to: phải (cần thiết).'},
+  {rule:'After can, should, must: use the base verb. No -s. No to.',ex:[["She can sing.",1],["She can sings.",0],["He should to study.",0]],vi:'Sau can/should/must dùng động từ nguyên mẫu, không thêm -s, không có to.'}
+ ],
+ practice:[
+  mc("She ___ swim very well.",["can","cans","must to"],0,"can + base verb.","modal","Cô ấy bơi rất giỏi."),
+  mc("You ___ drink more water. It is good for you.",["should","shouldn't","mustn't"],0,"Good advice: should.","modal","Bạn nên uống nhiều nước hơn."),
+  mc("You ___ run in the library. It is a rule.",["must","mustn't","can"],1,"It is not allowed: mustn't.","modal","Bạn không được chạy trong thư viện."),
+  mc("We ___ wear a helmet when we ride a motorbike. It is the law.",["must","mustn't","don't"],0,"A strong rule: must.","modal","Chúng ta phải đội mũ bảo hiểm khi đi xe máy."),
+  mc("He ___ play the piano. He never learned.",["can","can't","cans"],1,"Not able: can't.","modal","Cậu ấy không biết chơi piano."),
+  mc("___ I open the window?",["Can","Do","Am"],0,"Asking permission: Can I ...?","modal","Tôi mở cửa sổ được không?"),
+  mc("You ___ eat too much candy. It is bad for your teeth.",["shouldn't","should","can"],0,"Advice not to do it: shouldn't.","modal","Bạn không nên ăn quá nhiều kẹo."),
+  mc("I ___ to get up early on school days.",["have","has","must"],0,"After I, use have to.","modal","Những ngày đi học tôi phải dậy sớm."),
+  mc("She ___ to wake up early. School starts at six.",["have","has","must"],1,"After she, use has to.","modal","Cô ấy phải dậy sớm. Trường học bắt đầu lúc sáu giờ."),
+  fl("You ___ go to bed late. It is bad for you. (should / shouldn't)","shouldn't","Bad for you: shouldn't.","modal","Bạn không nên đi ngủ muộn."),
+  fl("Birds ___ fly. (can / can't)","can","Birds are able to fly: can.","modal","Chim biết bay."),
+  mc("Choose the correct sentence.",["She can sings well.","She can sing well.","She can to sing well."],1,"After can, use the base verb: sing.","modal","Cô ấy hát hay."),
+  mc("Choose the correct sentence.",["He should to study more.","He should studies more.","He should study more."],2,"After should, use the base verb: study.","modal","Cậu ấy nên học nhiều hơn."),
+  mc("Choose the correct sentence.",["You must not to shout.","You must not shout.","You not must shout."],1,"must not + base verb.","modal","Bạn không được la hét."),
+  od(["can't","I","today","come"],["I can't come today","Today I can't come"],"Order: I + can't + come + today.","modal","Hôm nay tôi không đến được."),
+  od(["should","You","your","brush","teeth"],"You should brush your teeth","Order: You + should + brush + your teeth.","modal","Bạn nên đánh răng.")
+ ]}
+];
+
+// Tự sinh câu hỏi từ danh sách từ: (1) chọn từ theo định nghĩa, (2) nghe rồi chọn từ, (3) điền từ vào câu
+function prVocabPool(u){
+  const qs=[];
+  u.words.forEach(x=>{
+    const opts=prShuffle([x.w].concat(prShuffle(u.words.filter(y=>y!==x)).slice(0,3).map(y=>y.w)));
+    const why=x.w+' = '+x.def.replace(/\.$/,'').toLowerCase()+'.';
+    qs.push(mc('Which word means: "'+x.def.replace(/\.$/,'')+'"?',opts,opts.indexOf(x.w),why,'vocab',null));
+    qs.push(Object.assign(mc('Listen and choose the word.',opts,opts.indexOf(x.w),why,'vocab',null),{say:x.w}));
+    qs.push(fl(x.ex.replace(new RegExp('\\b'+x.w+'\\b','i'),'___'),x.w,why,'vocab','Từ cần điền nghĩa là: '+x.vi));
+  });
+  return qs;
+}
+function prVocabSet(u){return prShuffle(prVocabPool(u)).slice(0,12);}
+function prUnitQuizSet(u){return prShuffle(prVocabPool(u)).slice(0,6).concat(u.grammar);}
+
+function prUnit(body){
+  const u=PR.unit;
+  const info=prEl('div','pr-box');
+  info.appendChild(prEl('div','pr-rule','Topic words: '+u.words.map(x=>x.w).join(', ')));
+  info.appendChild(prViBtn('Học theo thứ tự: Flashcard → Luyện từ vựng → Quiz cuối unit (cần 8/10).'));
+  body.appendChild(info);
+  const b0=prEl('button','pr-btn','🃏 Flashcard ('+u.words.length+' từ)'+(P().cardsDone[u.id]?' ✅':''));
+  b0.onclick=prStartCards;
+  const b1=prEl('button','pr-btn sec','🔤 Luyện từ vựng (12 câu)');
+  const startVocab=()=>prRun('vocab',prVocabSet(u),startVocab);
+  b1.onclick=startVocab;
+  const b2=prEl('button','pr-btn sec','🏁 Quiz cuối unit (10 câu, cần 8/10)');
+  const startQuiz=()=>prRun('quiz',prUnitQuizSet(u),startQuiz);
+  b2.onclick=startQuiz;
+  body.appendChild(b0);body.appendChild(b1);body.appendChild(b2);
+}
+
+function prStartCards(){
+  const u=PR.unit;
+  PR.cards={q:prShuffle(u.words.map((_,k)=>k)),i:0,flipped:false,first:0,total:u.words.length,retried:{}};
+  PR.mode='cards';PR.again=prStartCards;PR.view='cards';
+  prRender();
+}
+function prCards(body){
+  const u=PR.unit,c=PR.cards,idx=c.q[c.i],x=u.words[idx];
+  const bar=prEl('div','pr-bar');const fill=prEl('div');fill.style.width=(c.i/c.q.length*100)+'%';bar.appendChild(fill);body.appendChild(bar);
+  body.appendChild(prEl('div','pr-su','Thẻ '+(c.i+1)+' / '+c.q.length));
+  const card=prEl('div','pr-box');
+  card.style.cssText='text-align:center;min-height:230px;display:flex;flex-direction:column;justify-content:center;gap:10px;cursor:pointer';
+  if(!c.flipped){
+    card.appendChild(prEl('div','pr-big',x.e));
+    card.appendChild(prEl('div','pr-score',x.w));
+    const row=prEl('div');row.appendChild(prSpkBtn(x.w));card.appendChild(row);
+    card.appendChild(prEl('div','pr-su','Chạm vào thẻ để xem nghĩa'));
+    card.onclick=e=>{if(e.target.closest('button'))return;c.flipped=true;prRender();};
+    prSpeak(x.w);
+  }else{
+    card.style.cursor='default';
+    const head=prEl('div','pr-score',x.e+' '+x.w);card.appendChild(head);
+    card.appendChild(prEl('div','pr-rule',x.def));
+    const ex=prEl('div','pr-ex');ex.style.justifyContent='center';ex.appendChild(prEl('span','','"'+x.ex+'"'));ex.appendChild(prSpkBtn(x.ex));card.appendChild(ex);
+    card.appendChild(prViBtn(x.vi));
+  }
+  body.appendChild(card);
+  if(c.flipped){
+    const step=known=>{
+      if(known){if(!c.retried[idx])c.first++;}
+      else{c.retried[idx]=true;c.q.push(idx);}
+      c.i++;c.flipped=false;
+      if(c.i>=c.q.length)prFinishCards();else prRender();
+    };
+    const no=prEl('button','pr-btn sec','🔁 Chưa thuộc');no.onclick=()=>step(false);
+    const yes=prEl('button','pr-btn','✅ Đã thuộc');yes.onclick=()=>step(true);
+    body.appendChild(yes);body.appendChild(no);
+  }
+}
+function prFinishCards(){
+  const p=P(),c=PR.cards;
+  p.cardsDone[PR.unit.id]=true;
+  PR.q=[];PR.total=c.total;PR.first=c.first;PR.mode='cards';
+  PR.view='result';
+  prFinish();
+  prRender();
+}
 
 // init
 load();
