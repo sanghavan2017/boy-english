@@ -1529,6 +1529,318 @@ const PR_STAGES=[
   mc("Choose the correct question.",["Are you going to study tonight?","Do you going to study tonight?","Will you going to study tonight?"],0,"Are + you + going to + base verb.","going-to","Tối nay bạn sẽ học bài chứ?"),
   fl("I ___ (not / forget) your birthday. I promise.",["won't forget","will not forget"],"won't + base verb: won't forget.","future-neg","Tôi sẽ không quên sinh nhật bạn. Tôi hứa."),
   od(["Where","are","you","going","to","go?"],"Where are you going to go?","Order: Where + are + you + going to + go?","going-to","Bạn định đi đâu?")
+ ]},
+{id:'g10',e:'📦',title:'There is / There are',sub:'Có gì đó ở đâu',
+ lesson:[
+  {rule:'There is + danh từ số ít hoặc không đếm được. There are + danh từ số nhiều.',ex:[['There is a cat in the garden.',1],['There are two cats in the garden.',1]],vi:'There is dùng với danh từ số ít/không đếm được, there are dùng với danh từ số nhiều.'},
+  {rule:"Phủ định: there isn't (số ít) / there aren't (số nhiều).",ex:[["There isn't a pool here.",1],["There aren't any eggs.",1]],vi:"Phủ định: there isn't / there aren't."},
+  {rule:'Câu hỏi: Is there...? / Are there...? Trả lời ngắn: Yes, there is. / No, there aren\'t.',ex:[['Is there a dog in the yard?',1],["Are there any books? No, there aren't.",1]],vi:'Câu hỏi: Is there...? / Are there...?'},
+  {rule:"There's là viết tắt của there is.",ex:[["There's a dog in the yard.",1]],vi:"There's = There is."}
+ ],
+ practice:[
+  mc('___ a cat in the garden.',['There is','There are'],0,'Danh từ số ít "a cat": dùng There is.','is-are','Có một con mèo trong vườn.'),
+  mc('___ two cats in the garden.',['There is','There are'],1,'Danh từ số nhiều "two cats": dùng There are.','is-are','Có hai con mèo trong vườn.'),
+  mc('___ some apples in the basket.',['There is','There are'],1,"'apples' là số nhiều.",'is-are','Có vài quả táo trong giỏ.'),
+  mc('___ a lot of water in the bottle.',['There is','There are'],0,"'water' không đếm được, dùng There is.",'is-are','Có nhiều nước trong bình.'),
+  mc("___ a pool in my house.",["There isn't","There aren't"],0,'Phủ định số ít.','neg','Nhà tôi không có bể bơi.'),
+  mc("___ any eggs in the fridge.",["There isn't","There aren't"],1,'Phủ định số nhiều.','neg','Trong tủ lạnh không có trứng nào.'),
+  fl('___ (be) a park near my house.','There is','Số ít: There is.','is-are','Gần nhà tôi có một công viên.'),
+  fl('___ (be) many students in this class.','There are','Số nhiều: There are.','is-are','Có nhiều học sinh trong lớp này.'),
+  mc('___ there a dog in the yard?',['Is','Are'],0,"Danh từ số ít 'a dog'.",'ques','Có con chó nào trong sân không?'),
+  mc('___ there any books on the desk?',['Is','Are'],1,"Danh từ số nhiều 'books'.",'ques','Có quyển sách nào trên bàn không?'),
+  mc('Is there a pen on the table? — Yes, ___.',['there is','it is'],0,'Trả lời ngắn: Yes, there is.','ques','Có cái bút nào trên bàn không? — Có.'),
+  mc("Are there any pencils in the box? — No, ___.",["there isn't","there aren't"],1,"Trả lời ngắn: No, there aren't.",'ques','Có cái bút chì nào trong hộp không? — Không.'),
+  fl('___ (not/be) any flowers in the garden.',"There aren't",'Phủ định số nhiều.','neg','Trong vườn không có hoa nào.'),
+  od(['There','is','a','dog','in','the','garden'],'There is a dog in the garden','Thứ tự: There + is + a + dog + in the garden.','is-are','Có một con chó trong vườn.')
+ ],
+ test:[
+  mc('___ a mango tree in my garden.',['There is','There are'],0,'Số ít.','is-are','Trong vườn tôi có một cây xoài.'),
+  mc('___ five pens in my bag.',['There is','There are'],1,'Số nhiều.','is-are','Trong túi tôi có năm cái bút.'),
+  mc("___ any juice in the fridge.",["There isn't","There aren't"],0,"'juice' không đếm được.",'neg','Trong tủ lạnh không có nước ép.'),
+  mc("___ any chairs in the room.",["There isn't","There aren't"],1,'Phủ định số nhiều.','neg','Trong phòng không có cái ghế nào.'),
+  mc('___ there a market near here?',['Is','Are'],0,"Số ít 'a market'.",'ques','Gần đây có cái chợ nào không?'),
+  mc('___ there any tigers in the zoo?',['Is','Are'],1,"Số nhiều 'tigers'.",'ques','Trong sở thú có con hổ nào không?'),
+  fl('___ (be) a river near the village.','There is','Số ít.','is-are','Gần làng có một con sông.'),
+  fl('___ (be) three dogs in the yard.','There are','Số nhiều.','is-are','Trong sân có ba con chó.'),
+  mc("Is there a lamp in your room? — No, ___.",["there isn't","there aren't"],0,"Trả lời ngắn: No, there isn't.",'ques','Phòng bạn có cái đèn nào không? — Không.'),
+  od(['There','are','many','students','in','the','hall'],'There are many students in the hall','Thứ tự: There + are + many + students...','is-are','Có nhiều học sinh trong hội trường.')
+ ]},
+{id:'g11',e:'🎒',title:'have got / has got',sub:'Có gì đó (have got)',
+ lesson:[
+  {rule:'have got / has got = have (sở hữu). I/you/we/they + have got. He/she/it + has got.',ex:[['I have got a new bike.',1],['She has got a little brother.',1]],vi:'have got dùng cho I/you/we/they, has got dùng cho he/she/it.'},
+  {rule:"Dạng viết tắt: I've got, you've got, he's got, she's got, we've got, they've got.",ex:[["I've got a cat.",1]],vi:"I've got = I have got."},
+  {rule:"Phủ định: haven't got / hasn't got.",ex:[["We haven't got any homework.",1],["She hasn't got a pencil case.",1]],vi:"Phủ định: haven't got / hasn't got."},
+  {rule:"Câu hỏi: Have you got...? Has he got...? Trả lời: Yes, I have. / No, he hasn't.",ex:[['Have you got a sister?',1],["Has she got a brother? No, she hasn't.",1]],vi:'Câu hỏi: Have...got / Has...got?'}
+ ],
+ practice:[
+  mc('I ___ got a new bike.',['have','has'],0,'Sau I dùng have.','have-has','Tôi có một chiếc xe đạp mới.'),
+  mc('She ___ got a little brother.',['have','has'],1,'Sau she dùng has.','have-has','Cô ấy có một em trai nhỏ.'),
+  mc('They ___ got two dogs.',['have','has'],0,'Sau they dùng have.','have-has','Họ có hai con chó.'),
+  mc('He ___ got a lot of toys.',['have','has'],1,'Sau he dùng has.','have-has','Cậu ấy có nhiều đồ chơi.'),
+  fl("I've got a cat. 'I've' is short for ___.",'I have',"I've = I have.",'short',"I've là viết tắt của I have."),
+  mc("We ___ got any homework today.",["haven't","hasn't"],0,"Sau we dùng haven't.",'neg','Hôm nay chúng tôi không có bài tập.'),
+  mc("She ___ got a pencil case.",["haven't","hasn't"],1,"Sau she dùng hasn't.",'neg','Cô ấy không có hộp bút.'),
+  fl('He ___ (not/have got) a pet.',"hasn't got","Sau he dùng hasn't got.",'neg','Cậu ấy không có vật nuôi nào.'),
+  mc('___ you got a sister?',['Have','Has'],0,'Sau you dùng Have.','ques','Bạn có em gái không?'),
+  mc('___ he got a bicycle?',['Have','Has'],1,'Sau he dùng Has.','ques','Cậu ấy có xe đạp không?'),
+  mc('Have you got a dog? — Yes, ___.',['I have','I do'],0,'Trả lời ngắn: Yes, I have.','ques','Bạn có con chó không? — Có.'),
+  mc("Has she got a brother? — No, ___.",["she hasn't","she doesn't"],0,"Trả lời ngắn: No, she hasn't.",'ques','Cô ấy có anh trai không? — Không.'),
+  od(['Has','he','got','a','car?'],'Has he got a car?','Thứ tự câu hỏi: Has + he + got + a + car?','ques','Cậu ấy có ô tô không?'),
+  od(["I've",'got','a','new','phone'],"I've got a new phone",'Thứ tự: I\'ve + got + a + new + phone.','have-has','Tôi có một cái điện thoại mới.')
+ ],
+ test:[
+  mc('My mom ___ got a new car.',['have','has'],1,'Sau mom (she) dùng has.','have-has','Mẹ tôi có một chiếc ô tô mới.'),
+  mc('My friends ___ got a football.',['have','has'],0,'Sau friends (they) dùng have.','have-has','Các bạn tôi có một quả bóng đá.'),
+  mc("She ___ got any brothers.",["haven't","hasn't"],1,"Sau she dùng hasn't.",'neg','Cô ấy không có anh/em trai nào.'),
+  mc("I ___ got any money today.",["haven't","hasn't"],0,"Sau I dùng haven't.",'neg','Hôm nay tôi không có tiền.'),
+  mc('___ they got a dog?',['Have','Has'],0,'Sau they dùng Have.','ques','Họ có con chó không?'),
+  mc('___ your dad got a bike?',['Have','Has'],1,'Sau dad (he) dùng Has.','ques','Bố bạn có xe đạp không?'),
+  fl('He ___ (have got) a big house.','has got','Sau he dùng has got.','have-has','Cậu ấy có một căn nhà to.'),
+  fl("We ___ (not/have got) a garden.","haven't got","Sau we dùng haven't got.",'neg','Chúng tôi không có vườn.'),
+  mc('Has your sister got a cat? — Yes, ___.',['she has','she does'],0,'Trả lời ngắn: Yes, she has.','ques','Chị bạn có con mèo không? — Có.'),
+  od(['She','has','got','a','beautiful','voice'],'She has got a beautiful voice','Thứ tự: She + has got + a + beautiful + voice.','have-has','Cô ấy có một giọng hát hay.')
+ ]},
+{id:'g12',e:'👉',title:'this / that / these / those',sub:'Chỉ định gần xa, số nhiều',
+ lesson:[
+  {rule:'this (gần, số ít), that (xa, số ít), these (gần, số nhiều), those (xa, số nhiều).',ex:[['This is my pen.',1],['That is your book.',1],['These are my shoes.',1],['Those are her friends.',1]],vi:'this/that dùng cho số ít; these/those dùng cho số nhiều.'},
+  {rule:'Danh từ số nhiều thường thêm -s/-es: book→books, box→boxes, city→cities.',ex:[['two boxes',1],['three cities',1]],vi:'Quy tắc thêm -s/-es cho danh từ số nhiều.'},
+  {rule:'Một số danh từ số nhiều bất quy tắc: child→children, man→men, woman→women, foot→feet.',ex:[['two children',1],['three men',1]],vi:'Một số danh từ số nhiều không theo quy tắc.'},
+  {rule:'this/that đi với is; these/those đi với are.',ex:[['This is a cat.',1],['These are cats.',1]],vi:'this/that + is; these/those + are.'}
+ ],
+ practice:[
+  mc('___ is my pen. (gần)',['This','That'],0,'Gần, số ít: This.','this-that','Đây là cái bút của tôi.'),
+  mc('___ is your book, over there. (xa)',['This','That'],1,'Xa, số ít: That.','this-that','Đó là quyển sách của bạn.'),
+  mc('___ are my shoes. (gần, nhiều)',['This','These'],1,'Gần, số nhiều: These.','these-those','Đây là những chiếc giày của tôi.'),
+  mc('___ are her friends, over there. (xa, nhiều)',['Those','This'],0,'Xa, số nhiều: Those.','these-those','Đó là những người bạn của cô ấy.'),
+  fl('Look at that ___ (box) over there.','box',"Số ít sau 'that'.",'sing-pl','Nhìn cái hộp đó kìa.'),
+  fl('Look at those ___ (box) over there.','boxes','Số nhiều sau \'those\': box→boxes.','sing-pl','Nhìn những cái hộp đó kìa.'),
+  fl('There are two ___ (child) in the park.','children','child→children (bất quy tắc).','sing-pl','Có hai đứa trẻ trong công viên.'),
+  fl('I can see three ___ (man) near the gate.','men','man→men (bất quy tắc).','sing-pl','Tôi thấy ba người đàn ông gần cổng.'),
+  mc('___ is a nice cat. (gần, ít)',['This','These'],0,'Gần, số ít.','this-that','Đây là một con mèo dễ thương.'),
+  mc('___ are nice cats. (gần, nhiều)',['This','These'],1,'Gần, số nhiều.','these-those','Đây là những con mèo dễ thương.'),
+  mc('Whose bag is ___? (xa, ít)',['that','those'],0,'Xa, số ít.','this-that','Cái túi đó là của ai?'),
+  mc('Whose shoes are ___? (xa, nhiều)',['that','those'],1,'Xa, số nhiều.','these-those','Những chiếc giày đó là của ai?'),
+  od(['These','are','my','books'],'These are my books','Thứ tự: These + are + my + books.','these-those','Đây là những quyển sách của tôi.'),
+  od(['That','is','your','house'],'That is your house','Thứ tự: That + is + your + house.','this-that','Đó là nhà của bạn.')
+ ],
+ test:[
+  mc('___ is my dog. (gần, ít)',['This','These'],0,'Gần, số ít.','this-that','Đây là con chó của tôi.'),
+  mc('___ are my cats. (gần, nhiều)',['This','These'],1,'Gần, số nhiều.','these-those','Đây là những con mèo của tôi.'),
+  mc('___ is her car. (xa, ít)',['That','Those'],0,'Xa, số ít.','this-that','Đó là xe ô tô của cô ấy.'),
+  mc('___ are their bikes. (xa, nhiều)',['That','Those'],1,'Xa, số nhiều.','these-those','Đó là những chiếc xe đạp của họ.'),
+  fl('I have two ___ (foot).','feet','foot→feet (bất quy tắc).','sing-pl','Tôi có hai bàn chân.'),
+  fl('She has three ___ (city) to visit.','cities','city→cities (phụ âm+y → -ies).','sing-pl','Cô ấy có ba thành phố để ghé thăm.'),
+  mc('___ is a big box. (gần)',['This','These'],0,'Gần, số ít.','this-that','Đây là một cái hộp to.'),
+  mc('___ are big boxes. (gần)',['This','These'],1,'Gần, số nhiều.','these-those','Đây là những cái hộp to.'),
+  fl('There are five ___ (woman) in the room.','women','woman→women (bất quy tắc).','sing-pl','Có năm người phụ nữ trong phòng.'),
+  od(['This','is','my','school'],'This is my school','Thứ tự: This + is + my + school.','this-that','Đây là trường của tôi.')
+ ]},
+{id:'g13',e:'🏃',title:'Adjective & Adverb',sub:'Tính từ và trạng từ',
+ lesson:[
+  {rule:'Tính từ (adjective) bổ nghĩa cho danh từ: đứng trước danh từ, hoặc sau be/look/taste/smell.',ex:[['She is a careful girl.',1],['This food tastes good.',1]],vi:'Tính từ đứng trước danh từ hoặc sau be/look/taste/smell.'},
+  {rule:'Trạng từ (adverb) bổ nghĩa cho động từ, thường thêm -ly: careful→carefully, quick→quickly.',ex:[['She drives carefully.',1],['He runs quickly.',1]],vi:'Trạng từ bổ nghĩa cho động từ, thường thêm -ly.'},
+  {rule:'Một số trạng từ bất quy tắc: good→well. easy→easily (phụ âm+y→ily).',ex:[['He speaks English well.',1],['She did it easily.',1]],vi:'good→well; easy→easily.'},
+  {rule:'Trạng từ thường đứng sau động từ; tính từ đứng trước danh từ hoặc sau be/look/taste.',ex:[['He is a quick runner.',1],['He runs quickly.',1]],vi:'So sánh vị trí của tính từ và trạng từ trong câu.'}
+ ],
+ practice:[
+  mc('She is a ___ girl.',['careful','carefully'],0,'Tính từ + danh từ: careful girl.','adj-adv','Cô bé rất cẩn thận.'),
+  mc('She drives ___.',['careful','carefully'],1,'Trạng từ bổ nghĩa cho drives.','adj-adv','Cô ấy lái xe cẩn thận.'),
+  mc('He is a ___ runner.',['quick','quickly'],0,'Tính từ + danh từ.','adj-adv','Anh ấy là một người chạy nhanh.'),
+  mc('He runs ___.',['quick','quickly'],1,'Trạng từ bổ nghĩa cho runs.','adj-adv','Anh ấy chạy nhanh.'),
+  fl('She sings ___ (beautiful).','beautifully','beautiful→beautifully.','adj-adv','Cô ấy hát rất hay.'),
+  fl('He is a ___ (beautiful) singer.','beautiful','Tính từ trước danh từ: beautiful singer.','adj-adv','Cậu ấy là một ca sĩ tuyệt vời.'),
+  mc('This food tastes ___.',['good','well'],0,'Sau taste/look/feel dùng tính từ: good.','adj-adv','Món này ăn ngon.'),
+  mc('He speaks English ___.',['good','well'],1,'good→well (bất quy tắc).','adj-adv','Cậu ấy nói tiếng Anh giỏi.'),
+  fl('The exam was ___ (easy).','easy','Tính từ sau was.','adj-adv','Bài kiểm tra dễ.'),
+  fl('She finished the exam ___ (easy).','easily','easy→easily.','adj-adv','Cô ấy làm bài kiểm tra một cách dễ dàng.'),
+  mc('Please be ___!',['quiet','quietly'],0,'Sau be dùng tính từ: quiet.','adj-adv','Hãy im lặng!'),
+  mc('Please speak ___.',['quiet','quietly'],1,'Trạng từ bổ nghĩa cho speak.','adj-adv','Hãy nói nhỏ nhẹ.'),
+  od(['She','is','a','happy','girl'],'She is a happy girl','Thứ tự: She + is + a + happy + girl.','adj-adv','Cô ấy là một cô bé vui vẻ.'),
+  od(['She','smiled','happily'],'She smiled happily','Thứ tự: She + smiled + happily.','adj-adv','Cô ấy mỉm cười một cách vui vẻ.')
+ ],
+ test:[
+  mc('He is a ___ driver.',['careful','carefully'],0,'Tính từ + danh từ.','adj-adv','Anh ấy là một người lái xe cẩn thận.'),
+  mc('He drives ___.',['careful','carefully'],1,'Trạng từ bổ nghĩa cho drives.','adj-adv','Anh ấy lái xe cẩn thận.'),
+  mc('She is a ___ dancer.',['good','well'],0,'Tính từ trước danh từ.','adj-adv','Cô ấy là một vũ công giỏi.'),
+  mc('She dances ___.',['good','well'],1,'good→well.','adj-adv','Cô ấy nhảy rất giỏi.'),
+  fl('He answered the question ___ (quick).','quickly','quick→quickly.','adj-adv','Cậu ấy trả lời câu hỏi nhanh.'),
+  fl('That was a ___ (quick) answer.','quick','Tính từ trước danh từ.','adj-adv','Đó là một câu trả lời nhanh.'),
+  mc('The soup smells ___.',['nice','nicely'],0,'Sau smells dùng tính từ.','adj-adv','Món súp có mùi thơm.'),
+  mc('He cooked the soup ___.',['nice','nicely'],1,'Trạng từ bổ nghĩa cho cooked.','adj-adv','Cậu ấy nấu món súp rất ngon.'),
+  fl('They played the game ___ (easy).','easily','easy→easily.','adj-adv','Họ chơi trò chơi đó một cách dễ dàng.'),
+  od(['He','sang','softly'],'He sang softly','Thứ tự: He + sang + softly.','adj-adv','Cậu ấy hát nhẹ nhàng.')
+ ]},
+{id:'g14',e:'✅',title:'Present perfect',sub:'Đã từng làm gì (have done)',
+ lesson:[
+  {rule:'Present perfect: have/has + V3 (quá khứ phân từ). Dùng cho việc đã xảy ra, không cần nói rõ thời điểm.',ex:[['I have finished my homework.',1],['She has finished her homework.',1]],vi:'have/has + V3: việc đã xảy ra, không rõ thời điểm cụ thể.'},
+  {rule:'I/you/we/they + have + V3. He/she/it + has + V3.',ex:[['They have gone to the market.',1],['He has eaten breakfast.',1]],vi:'have dùng cho I/you/we/they; has dùng cho he/she/it.'},
+  {rule:"Phủ định: haven't/hasn't + V3. Câu hỏi: Have/Has + S + V3?",ex:[["I haven't seen that film yet.",1],['Have you ever been to Hue?',1]],vi:"Phủ định: haven't/hasn't + V3. Câu hỏi: Have/Has...?"},
+  {rule:'already dùng trong câu khẳng định, yet dùng trong câu phủ định/câu hỏi, never dùng trong câu khẳng định mang nghĩa phủ định.',ex:[['She has already finished.',1],["Has she finished yet?",1],['I have never been to Japan.',1]],vi:'already/yet/never: cách dùng trong câu.'},
+  {rule:'Một số V3 bất quy tắc: go→gone, see→seen, eat→eaten, do→done, write→written.',ex:[['She has written a letter.',1]],vi:'Một số động từ có dạng V3 bất quy tắc.'}
+ ],
+ practice:[
+  mc('I ___ finished my homework.',['have','has'],0,'Sau I dùng have.','have-has','Tôi đã làm xong bài tập.'),
+  mc('She ___ finished her homework.',['have','has'],1,'Sau she dùng has.','have-has','Cô ấy đã làm xong bài tập.'),
+  fl('I have already ___ (see) that movie.','seen','see→seen.','v3','Tôi đã xem bộ phim đó rồi.'),
+  fl('She has just ___ (eat) breakfast.','eaten','eat→eaten.','v3','Cô ấy vừa ăn sáng xong.'),
+  fl('They have ___ (go) to the market.','gone','go→gone.','v3','Họ đã đi đến chợ.'),
+  mc("He ___ done his homework yet.",["haven't","hasn't"],1,"Sau he dùng hasn't.",'neg','Cậu ấy vẫn chưa làm xong bài tập.'),
+  mc("We ___ finished the project yet.",["haven't","hasn't"],0,"Sau we dùng haven't.",'neg','Chúng tôi vẫn chưa hoàn thành dự án.'),
+  mc('___ you ever been to Da Lat?',['Have','Has'],0,'Sau you dùng Have.','ques','Bạn đã bao giờ đến Đà Lạt chưa?'),
+  mc('___ she ever eaten durian?',['Have','Has'],1,'Sau she dùng Has.','ques','Cô ấy đã bao giờ ăn sầu riêng chưa?'),
+  mc('I have ___ been to Japan.',['never','yet'],0,"'never' trong câu khẳng định = chưa bao giờ.",'adverbs','Tôi chưa bao giờ đến Nhật Bản.'),
+  mc('Has she finished her lunch ___?',['already','yet'],1,"'yet' dùng trong câu hỏi.",'adverbs','Cô ấy đã ăn xong bữa trưa chưa?'),
+  fl('I have already ___ (do) my homework.','done','do→done.','v3','Tôi đã làm xong bài tập rồi.'),
+  od(['She','has','written','a','letter'],'She has written a letter','Thứ tự: She + has + written + a + letter.','v3','Cô ấy đã viết một lá thư.'),
+  od(['Have','you','ever','seen','a','panda?'],'Have you ever seen a panda?','Thứ tự câu hỏi: Have + you + ever + seen + a + panda?','ques','Bạn đã bao giờ nhìn thấy gấu trúc chưa?')
+ ],
+ test:[
+  mc('He ___ cleaned his room.',['have','has'],1,'Sau he dùng has.','have-has','Cậu ấy đã dọn phòng xong.'),
+  mc('They ___ cleaned the yard.',['have','has'],0,'Sau they dùng have.','have-has','Họ đã dọn sân xong.'),
+  fl('She has ___ (write) a story.','written','write→written.','v3','Cô ấy đã viết một câu chuyện.'),
+  fl('We have ___ (go) to that zoo before.','gone','go→gone.','v3','Chúng tôi đã đến sở thú đó trước đây rồi.'),
+  mc("I ___ seen that film yet.",["haven't","hasn't"],0,"Sau I dùng haven't.",'neg','Tôi vẫn chưa xem bộ phim đó.'),
+  mc('___ he ever ridden a horse?',['Have','Has'],1,'Sau he dùng Has.','ques','Cậu ấy đã bao giờ cưỡi ngựa chưa?'),
+  mc('She has ___ finished her drawing.',['already','never'],0,"'already' trong câu khẳng định = đã xong.",'adverbs','Cô ấy đã vẽ xong bức tranh rồi.'),
+  fl('I have ___ (eat) pho before.','eaten','eat→eaten.','v3','Tôi đã ăn phở trước đây rồi.'),
+  mc('Have you ever visited Hoi An? — Yes, ___.',['I have','I did'],0,'Trả lời ngắn: Yes, I have.','ques','Bạn đã bao giờ đến Hội An chưa? — Có.'),
+  od(['He','has','never','flown','a','kite'],'He has never flown a kite','Thứ tự: He + has + never + flown + a + kite.','v3','Cậu ấy chưa bao giờ thả diều.')
+ ]},
+{id:'g15',e:'⏳',title:'used to',sub:'Thói quen trong quá khứ',
+ lesson:[
+  {rule:'used to + động từ nguyên mẫu: thói quen/sự thật trong quá khứ, bây giờ không còn nữa.',ex:[['I used to play with dolls.',1],['She used to live in Hue.',1]],vi:'used to + V: thói quen trong quá khứ, nay không còn.'},
+  {rule:'used to giống nhau với mọi chủ ngữ.',ex:[['He used to ride his bike.',1],['They used to have a cat.',1]],vi:'used to không đổi theo chủ ngữ.'},
+  {rule:'Phủ định: didn\'t use to + V. Câu hỏi: Did + S + use to + V?',ex:[["They didn't use to live here.",1],['Did you use to live in Hanoi?',1]],vi:"Phủ định: didn't use to. Câu hỏi: Did...use to?"}
+ ],
+ practice:[
+  mc('I ___ to play with dolls when I was small.',['used','use'],0,'used to + động từ nguyên mẫu.','used-to','Hồi nhỏ tôi từng chơi búp bê.'),
+  mc('She ___ to live in Hue.',['used','use'],0,'used to + động từ nguyên mẫu.','used-to','Trước đây cô ấy từng sống ở Huế.'),
+  fl('He used to ___ (ride) his bike to school.','ride','used to + base verb: ride.','used-to','Trước đây cậu ấy từng đi xe đạp đến trường.'),
+  fl('We used to ___ (have) a cat.','have','used to + base verb: have.','used-to','Trước đây gia đình tôi từng có một con mèo.'),
+  mc("They ___ use to live here.",["didn't","doesn't"],0,"Phủ định: didn't use to.",'neg','Trước đây họ không sống ở đây.'),
+  fl('She ___ (not/use to) like vegetables.',"didn't use to","Phủ định: didn't use to.",'neg','Trước đây cô ấy không thích rau.'),
+  mc('___ you use to live in Hanoi?',['Did','Were'],0,'Câu hỏi: Did + S + use to.','ques','Trước đây bạn từng sống ở Hà Nội à?'),
+  mc('Did he use to play football? — Yes, ___.',['he did','he used'],0,'Trả lời ngắn: Yes, he did.','ques','Trước đây cậu ấy có chơi bóng đá không? — Có.'),
+  mc('I ___ to be afraid of the dark.',['used','use'],0,'used to + động từ nguyên mẫu.','used-to','Trước đây tôi từng sợ bóng tối.'),
+  fl('My grandma used to ___ (tell) us stories.','tell','used to + base verb: tell.','used-to','Bà tôi trước đây thường kể chuyện cho chúng tôi.'),
+  mc('Choose the correct sentence.',['She use to dance.','She used to dance.','She useds to dance.'],1,'used to + base verb: used to dance.','used-to','Trước đây cô ấy từng nhảy múa.'),
+  mc('Choose the correct sentence.',["He didn't used to smoke.","He didn't use to smoke.","He doesn't used to smoke."],1,"Phủ định: didn't use to.",'neg','Trước đây cậu ấy không hút thuốc.'),
+  od(['I','used','to','swim','every','day'],'I used to swim every day','Thứ tự: I + used to + swim + every day.','used-to','Trước đây tôi từng bơi mỗi ngày.'),
+  od(['Did','you','use','to','live','here?'],'Did you use to live here?','Thứ tự câu hỏi: Did + you + use to + live + here?','ques','Trước đây bạn có sống ở đây không?')
+ ],
+ test:[
+  mc('She ___ to play the guitar.',['used','use'],0,'used to + động từ nguyên mẫu.','used-to','Trước đây cô ấy từng chơi đàn guitar.'),
+  fl('He used to ___ (walk) to school.','walk','used to + base verb: walk.','used-to','Trước đây cậu ấy từng đi bộ đến trường.'),
+  mc("They ___ use to eat meat.",["didn't","doesn't"],0,"Phủ định: didn't use to.",'neg','Trước đây họ không ăn thịt.'),
+  fl('I ___ (not/use to) like coffee.',"didn't use to","Phủ định: didn't use to.",'neg','Trước đây tôi không thích cà phê.'),
+  mc('___ she use to live in Da Nang?',['Did','Was'],0,'Câu hỏi: Did + S + use to.','ques','Trước đây cô ấy từng sống ở Đà Nẵng à?'),
+  mc('Choose the correct sentence.',['We use to play chess.','We used to play chess.','We useds to play chess.'],1,'used to + base verb.','used-to','Trước đây chúng tôi từng chơi cờ.'),
+  fl('My dad used to ___ (work) in a factory.','work','used to + base verb: work.','used-to','Trước đây bố tôi từng làm việc ở một nhà máy.'),
+  mc('Did they use to have a farm? — Yes, ___.',['they did','they had'],0,'Trả lời ngắn: Yes, they did.','ques','Trước đây họ có một trang trại không? — Có.'),
+  od(['She','used','to','sing','every','morning'],'She used to sing every morning','Thứ tự: She + used to + sing + every morning.','used-to','Trước đây cô ấy từng hát mỗi buổi sáng.'),
+  mc('He ___ to be very shy.',['used','use'],0,'used to + động từ nguyên mẫu.','used-to','Trước đây cậu ấy từng rất nhút nhát.')
+ ]},
+{id:'g16',e:'🎯',title:'to V vs V-ing',sub:'Động từ + to V hay V-ing',
+ lesson:[
+  {rule:'want, need, decide, plan, hope, would like + to V.',ex:[['I want to play outside.',1],['He needs to finish his homework.',1]],vi:'Các động từ này đi theo sau là to + động từ nguyên mẫu.'},
+  {rule:'enjoy, love, like, hate, start, stop, finish + V-ing.',ex:[['She enjoys reading comic books.',1],['He finished eating his lunch.',1]],vi:'Các động từ này đi theo sau là V-ing.'},
+  {rule:'Không dùng V-ing sau want/need/decide/plan; không dùng to V sau enjoy/finish/stop.',ex:[['I want to play.',1],['I want playing.',0],['She enjoys dancing.',1],['She enjoys to dance.',0]],vi:'Không trộn hai dạng với nhau.'}
+ ],
+ practice:[
+  mc('I want ___ (play) outside.',['to play','playing'],0,'want + to V.','to-v','Tôi muốn chơi ngoài trời.'),
+  mc('She enjoys ___ (read) comic books.',['to read','reading'],1,'enjoy + V-ing.','v-ing','Cô ấy thích đọc truyện tranh.'),
+  fl('He needs ___ (finish) his homework.','to finish','need + to V.','to-v','Cậu ấy cần hoàn thành bài tập.'),
+  fl('We love ___ (swim) in summer.','swimming','love + V-ing.','v-ing','Chúng tôi rất thích bơi vào mùa hè.'),
+  mc('They decided ___ (go) to the zoo.',['to go','going'],0,'decide + to V.','to-v','Họ đã quyết định đi sở thú.'),
+  mc('She stopped ___ (cry) when her mom came.',['to cry','crying'],1,'stop + V-ing.','v-ing','Cô bé ngừng khóc khi mẹ đến.'),
+  fl('I hope ___ (see) you soon.','to see','hope + to V.','to-v','Tôi hy vọng sẽ gặp bạn sớm.'),
+  fl('He finished ___ (eat) his lunch.','eating','finish + V-ing.','v-ing','Cậu ấy đã ăn xong bữa trưa.'),
+  mc('Would you like ___ (have) some tea?',['to have','having'],0,'would like + to V.','to-v','Bạn có muốn uống trà không?'),
+  mc('She hates ___ (wake) up early.',['to wake','waking'],1,'hate + V-ing.','v-ing','Cô ấy ghét phải dậy sớm.'),
+  mc('We plan ___ (visit) Hoi An next week.',['to visit','visiting'],0,'plan + to V.','to-v','Tuần sau chúng tôi định đi thăm Hội An.'),
+  fl('I like ___ (listen) to music.','listening','like + V-ing.','v-ing','Tôi thích nghe nhạc.'),
+  od(['He','wants','to','play','football'],'He wants to play football','Thứ tự: He + wants + to play + football.','to-v','Cậu ấy muốn chơi bóng đá.'),
+  od(['She','enjoys','dancing'],'She enjoys dancing','Thứ tự: She + enjoys + dancing.','v-ing','Cô ấy thích nhảy múa.')
+ ],
+ test:[
+  mc('I want ___ (buy) a new bag.',['to buy','buying'],0,'want + to V.','to-v','Tôi muốn mua một cái túi mới.'),
+  mc('He enjoys ___ (play) video games.',['to play','playing'],1,'enjoy + V-ing.','v-ing','Cậu ấy thích chơi game.'),
+  fl('She needs ___ (study) for the test.','to study','need + to V.','to-v','Cô ấy cần ôn bài cho kỳ kiểm tra.'),
+  fl('They love ___ (watch) cartoons.','watching','love + V-ing.','v-ing','Họ rất thích xem phim hoạt hình.'),
+  mc('We decided ___ (stay) at home.',['to stay','staying'],0,'decide + to V.','to-v','Chúng tôi quyết định ở nhà.'),
+  mc('He stopped ___ (talk) when the teacher came in.',['to talk','talking'],1,'stop + V-ing.','v-ing','Cậu ấy ngừng nói khi cô giáo vào.'),
+  fl('I hope ___ (win) the game.','to win','hope + to V.','to-v','Tôi hy vọng sẽ thắng trò chơi.'),
+  fl('She finished ___ (clean) her room.','cleaning','finish + V-ing.','v-ing','Cô ấy đã dọn xong phòng.'),
+  mc('Would you like ___ (join) us?',['to join','joining'],0,'would like + to V.','to-v','Bạn có muốn tham gia cùng chúng tôi không?'),
+  od(['He','hopes','to','pass','the','exam'],'He hopes to pass the exam','Thứ tự: He + hopes + to pass + the exam.','to-v','Cậu ấy hy vọng sẽ đỗ kỳ thi.')
+ ]},
+{id:'g17',e:'🌤️',title:'If + will',sub:'Câu điều kiện loại 1',
+ lesson:[
+  {rule:'Câu điều kiện loại 1: If + hiện tại đơn, ... will + V. Dùng cho việc có thể xảy ra ở tương lai.',ex:[['If it rains tomorrow, we will stay at home.',1]],vi:'If + hiện tại đơn, ... will + V: điều có thể xảy ra ở tương lai.'},
+  {rule:'Mệnh đề if dùng thì hiện tại đơn, không dùng will trong mệnh đề if.',ex:[['If it rains, I will take an umbrella.',1],['If it will rain, I take an umbrella.',0]],vi:'Mệnh đề if không dùng will.'},
+  {rule:'Có thể đảo vị trí 2 mệnh đề; nếu mệnh đề if đứng sau thì không cần dấu phẩy.',ex:[['We will stay home if it rains.',1]],vi:'Có thể đảo thứ tự hai mệnh đề.'}
+ ],
+ practice:[
+  mc('If it ___ tomorrow, we will stay at home.',['rain','rains'],1,'Mệnh đề if: hiện tại đơn, it rains.','if-clause','Nếu ngày mai trời mưa, chúng ta sẽ ở nhà.'),
+  mc('If it rains tomorrow, we ___ stay at home.',['will','are'],0,'Mệnh đề chính: will + động từ nguyên mẫu.','will-clause','Nếu ngày mai trời mưa, chúng ta sẽ ở nhà.'),
+  fl('If you ___ (study) hard, you will pass the exam.','study','Mệnh đề if: hiện tại đơn.','if-clause','Nếu bạn học hành chăm chỉ, bạn sẽ đỗ kỳ thi.'),
+  fl('If she studies hard, she ___ (pass) the exam.','will pass','Mệnh đề chính: will + động từ nguyên mẫu.','will-clause','Nếu cô ấy học hành chăm chỉ, cô ấy sẽ đỗ kỳ thi.'),
+  mc('If I have free time, I ___ visit you.',['will','would'],0,'will cho việc có thể xảy ra ở tương lai.','will-clause','Nếu tôi có thời gian, tôi sẽ đến thăm bạn.'),
+  mc("If he doesn't hurry, he ___ miss the bus.",['will','won\'t'],0,'Kết quả: he will miss the bus.','will-clause','Nếu cậu ấy không nhanh lên, cậu ấy sẽ lỡ xe buýt.'),
+  mc("If we don't water the plant, it ___ die.",['will','won\'t'],0,'Kết quả: it will die.','will-clause','Nếu chúng ta không tưới cây, cây sẽ chết.'),
+  fl("If you don't hurry, you ___ (be) late.",'will be','Mệnh đề chính: will + base verb.','will-clause','Nếu bạn không nhanh lên, bạn sẽ bị muộn.'),
+  mc('If it is sunny, we ___ go to the beach.',['will','won\'t'],0,'Kết quả: we will go.','will-clause','Nếu trời nắng, chúng ta sẽ đi biển.'),
+  mc('Choose the correct sentence.',['If it rains, I will take an umbrella.','If it will rain, I take an umbrella.','If it rains, I take will an umbrella.'],0,'If + hiện tại đơn, ... will + V.','if-clause','Nếu trời mưa, tôi sẽ mang ô.'),
+  fl("If you don't eat breakfast, you ___ (feel) hungry.",'will feel','Mệnh đề chính: will + base verb.','will-clause','Nếu bạn không ăn sáng, bạn sẽ bị đói.'),
+  mc('We will be happy if you ___ (come) to the party.',['come','will come'],0,'Mệnh đề if luôn dùng hiện tại đơn, dù đứng trước hay sau.','if-clause','Chúng tôi sẽ vui nếu bạn đến dự tiệc.'),
+  od(['If','it','rains,','we','will','stay','home'],'If it rains, we will stay home','Thứ tự: If + it + rains, + we + will + stay + home.','if-clause','Nếu trời mưa, chúng ta sẽ ở nhà.'),
+  od(['If','you','study','hard,','you','will','pass'],'If you study hard, you will pass','Thứ tự: If + you + study + hard, + you + will + pass.','if-clause','Nếu bạn học chăm, bạn sẽ đỗ.')
+ ],
+ test:[
+  mc('If she ___ early, she will catch the bus.',['get','gets'],1,'Mệnh đề if: hiện tại đơn, she gets.','if-clause','Nếu cô ấy dậy sớm, cô ấy sẽ bắt kịp xe buýt.'),
+  mc('If she gets up early, she ___ catch the bus.',['will','gets'],0,'Mệnh đề chính: will + base verb.','will-clause','Nếu cô ấy dậy sớm, cô ấy sẽ bắt kịp xe buýt.'),
+  fl('If it ___ (snow), we will build a snowman.','snows','Mệnh đề if: hiện tại đơn.','if-clause','Nếu trời có tuyết, chúng ta sẽ làm người tuyết.'),
+  fl('If it snows, we ___ (build) a snowman.','will build','Mệnh đề chính: will + base verb.','will-clause','Nếu trời có tuyết, chúng ta sẽ làm người tuyết.'),
+  mc("If you don't sleep early, you ___ be tired.",['will','won\'t'],0,'Kết quả: you will be tired.','will-clause','Nếu bạn không ngủ sớm, bạn sẽ mệt.'),
+  mc('If I see him, I ___ tell him.',['will','don\'t'],0,'will cho việc tương lai.','will-clause','Nếu tôi gặp cậu ấy, tôi sẽ nói với cậu ấy.'),
+  fl("If you don't practice, you ___ (not/improve).","won't improve",'Phủ định: won\'t + base verb.','will-clause','Nếu bạn không luyện tập, bạn sẽ không tiến bộ.'),
+  mc('Choose the correct sentence.',['If I finish my homework, I will play games.','If I will finish my homework, I play games.','If I finish will my homework, I play games.'],0,'If + hiện tại đơn, ... will + V.','if-clause','Nếu tôi làm xong bài tập, tôi sẽ chơi game.'),
+  fl('I will help you if you ___ (ask).','ask','Mệnh đề if luôn dùng hiện tại đơn.','if-clause','Tôi sẽ giúp bạn nếu bạn hỏi.'),
+  od(['If',"you","don't",'hurry,','you','will','miss','the','bus'],"If you don't hurry, you will miss the bus",'Thứ tự: If + you + don\'t + hurry, + you + will + miss + the bus.','will-clause','Nếu bạn không nhanh lên, bạn sẽ lỡ xe buýt.')
+ ]},
+{id:'g18',e:'🔗',title:'who / which / that',sub:'Mệnh đề quan hệ cơ bản',
+ lesson:[
+  {rule:'who dùng cho người, which dùng cho vật/động vật, that dùng được cho cả người và vật.',ex:[['The boy who is standing there is my brother.',1],['The book which is on the table is mine.',1]],vi:'who: người. which: vật/động vật. that: cả hai.'},
+  {rule:'Mệnh đề quan hệ bổ nghĩa cho danh từ đứng ngay trước nó.',ex:[['I have a friend who lives in Hue.',1]],vi:'Mệnh đề quan hệ đứng ngay sau danh từ nó bổ nghĩa.'},
+  {rule:'Khi who/which/that làm chủ ngữ, động từ theo sau chia theo danh từ đó (số ít/nhiều).',ex:[['The man who lives next door is a doctor.',1],['The man who live next door is a doctor.',0]],vi:'Động từ sau who/which/that chia theo danh từ đứng trước.'}
+ ],
+ practice:[
+  mc('The boy ___ is standing there is my brother.',['who','which'],0,'who dùng cho người.','who-which','Cậu bé đang đứng ở đó là anh tôi.'),
+  mc('The book ___ is on the table is mine.',['who','which'],1,'which dùng cho vật.','who-which','Quyển sách ở trên bàn là của tôi.'),
+  fl('I have a friend ___ (who/which) lives in Hue.','who','who dùng cho người.','who-which','Tôi có một người bạn sống ở Huế.'),
+  fl('This is the dog ___ (who/which) saved the child.','which','which dùng cho động vật.','who-which','Đây là con chó đã cứu em bé.'),
+  mc('She is the teacher ___ teaches us Math.',['who','which'],0,'who dùng cho người.','who-which','Cô ấy là giáo viên dạy chúng tôi môn Toán.'),
+  mc('That is the car ___ my dad bought.',['who','which'],1,'which dùng cho vật.','who-which','Đó là chiếc xe mà bố tôi đã mua.'),
+  mc('The girl ___ sings beautifully is my cousin.',['that','which'],0,'that có thể dùng cho người.','who-which','Cô bé hát rất hay là em họ tôi.'),
+  fl('I like the cake ___ (that/which) you made.','that','that có thể thay cho which.','who-which','Tôi thích cái bánh mà bạn đã làm.'),
+  mc('Choose the correct sentence.',['The man who live next door is a doctor.','The man who lives next door is a doctor.','The man which lives next door is a doctor.'],1,'who + lives (chia theo số ít, dùng cho người).','who-which','Người đàn ông sống cạnh nhà là một bác sĩ.'),
+  mc('Choose the correct sentence.',['The bike which is red is mine.','The bike who is red is mine.','The bike is which red mine.'],0,'which dùng cho vật.','who-which','Chiếc xe đạp màu đỏ là của tôi.'),
+  fl('The man ___ (who/which) helped us is a police officer.','who','who dùng cho người.','who-which','Người đàn ông đã giúp chúng tôi là một cảnh sát.'),
+  fl('The toy ___ (who/which) she loves is a teddy bear.','which','which dùng cho vật.','who-which','Món đồ chơi cô bé yêu thích là một con gấu bông.'),
+  od(['The','girl','who','is','singing','is','my','sister'],'The girl who is singing is my sister','Thứ tự: The girl + who is singing + is + my sister.','who-which','Cô gái đang hát là em gái tôi.'),
+  od(['The','dog','which','is','barking','is','not','mine'],'The dog which is barking is not mine','Thứ tự: The dog + which is barking + is not mine.','who-which','Con chó đang sủa không phải của tôi.')
+ ],
+ test:[
+  mc('The woman ___ is cooking is my mom.',['who','which'],0,'who dùng cho người.','who-which','Người phụ nữ đang nấu ăn là mẹ tôi.'),
+  mc('The flower ___ is red is beautiful.',['who','which'],1,'which dùng cho vật.','who-which','Bông hoa màu đỏ đó rất đẹp.'),
+  fl('I know a boy ___ (who/which) can swim very fast.','who','who dùng cho người.','who-which','Tôi biết một cậu bé bơi rất nhanh.'),
+  fl('This is the pen ___ (who/which) I lost yesterday.','which','which dùng cho vật.','who-which','Đây là cái bút mà tôi đã làm mất hôm qua.'),
+  mc('Choose the correct sentence.',['The students who study hard pass the test.','The students which study hard pass the test.','The students who studies hard pass the test.'],0,'who + study (chia theo số nhiều).','who-which','Những học sinh học chăm chỉ sẽ đỗ bài kiểm tra.'),
+  mc('Choose the correct sentence.',['The house that has a garden is nice.','The house who has a garden is nice.','The house has that a garden is nice.'],0,'that dùng cho vật.','who-which','Căn nhà có vườn đó rất đẹp.'),
+  fl('The teacher ___ (who/which) teaches us English is kind.','who','who dùng cho người.','who-which','Thầy/cô dạy chúng tôi tiếng Anh rất tốt bụng.'),
+  fl('The ball ___ (who/which) is under the table is mine.','which','which dùng cho vật.','who-which','Quả bóng ở dưới gầm bàn là của tôi.'),
+  mc('The cat ___ is sleeping is called Tom.',['who','which'],1,'which dùng cho động vật.','who-which','Con mèo đang ngủ tên là Tom.'),
+  od(['The','boy','who','is','crying','needs','help'],'The boy who is crying needs help','Thứ tự: The boy + who is crying + needs + help.','who-which','Cậu bé đang khóc cần được giúp đỡ.')
  ]}
 ];
 
@@ -1548,6 +1860,29 @@ function prSpeak(text){
   const v=vv.find(x=>x.name==='Google US English')||vv.find(x=>x.lang==='en-US')||vv.find(x=>x.lang.startsWith('en'));
   if(v)u.voice=v;
   window.speechSynthesis.speak(u);
+}
+// Âm báo đúng/sai: tiếng "ting" tạo bằng trình duyệt (không cần file âm thanh) + giọng nói câu khen / đáp án đúng
+let prAC=null;
+const PR_PRAISE=['Great job!','Excellent!','Well done!','Awesome!','Perfect!','Super!','Fantastic!'];
+function prTone(ok){
+  try{
+    prAC=prAC||new (window.AudioContext||window.webkitAudioContext)();
+    if(prAC.state==='suspended')prAC.resume();
+    const t0=prAC.currentTime;
+    (ok?[[523,0],[659,.11],[784,.22]]:[[220,0],[165,.17]]).forEach(([f,d])=>{
+      const o=prAC.createOscillator(),g=prAC.createGain();
+      o.type=ok?'sine':'triangle';o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t0+d);
+      g.gain.exponentialRampToValueAtTime(0.25,t0+d+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+d+(ok?0.25:0.32));
+      o.connect(g);g.connect(prAC.destination);o.start(t0+d);o.stop(t0+d+0.4);
+    });
+  }catch(e){}
+}
+function prFeedbackSound(ok,say){
+  if(P().sfx===false)return;
+  prTone(ok);
+  prSpeak(say);
 }
 function prSpkBtn(text){const b=prEl('button','spk-btn','🔊');b.onclick=()=>prSpeak(text);return b;}
 function prFull(q){
@@ -1684,6 +2019,11 @@ function prQuestion(body){
   // Âm thanh: nút 🔊 đọc câu hỏi (chỗ trống đọc là "blank") và các đáp án; công tắc "Tự đọc" lưu lại cho lần sau
   let qText='';
   const audioRow=prEl('div');audioRow.style.cssText='display:flex;gap:10px;align-items:center;flex-wrap:wrap';
+  const sfx=prEl('button','pr-link');
+  const showSfx=()=>{sfx.textContent='Âm báo đúng/sai: '+(P().sfx===false?'Tắt':'Bật ✅');};
+  showSfx();
+  sfx.onclick=()=>{P().sfx=P().sfx===false;save();showSfx();};
+  if(q.say){audioRow.appendChild(sfx);body.appendChild(audioRow);}
   if(!q.say){
     const sp=prEl('button','pr-btn sec','🔊 Nghe câu hỏi');
     sp.style.cssText='width:auto;padding:8px 14px;font-size:13px';
@@ -1692,7 +2032,7 @@ function prQuestion(body){
     const showAuto=()=>{auto.textContent='Tự đọc: '+(P().autoRead?'Bật ✅':'Tắt');};
     showAuto();
     auto.onclick=()=>{P().autoRead=!P().autoRead;save();showAuto();if(P().autoRead)prSpeak(qText);else stopAllAudio();};
-    audioRow.appendChild(sp);audioRow.appendChild(auto);
+    audioRow.appendChild(sp);audioRow.appendChild(auto);audioRow.appendChild(sfx);
     body.appendChild(audioRow);
   }
   const fb=prEl('div');
@@ -1708,8 +2048,10 @@ function prQuestion(body){
     }
     nextBtn.textContent=PR.i+1<PR.q.length?'Next ➜':'Xem kết quả';
     fb.className='pr-fb '+(ok?'ok':'bad');
-    fb.textContent=ok?'✅ Great job!':'❌ Almost! Correct: '+prFull(q)+'  '+q.why;
+    const praise=PR_PRAISE[Math.floor(Math.random()*PR_PRAISE.length)];
+    fb.textContent=ok?'✅ '+praise:'❌ Almost! Correct: '+prFull(q)+'  '+q.why;
     fb.appendChild(prSpkBtn(prFull(q)));
+    prFeedbackSound(ok,ok?praise:'Almost. The answer is: '+prFull(q));
     nextBtn.style.display='block';
     save();
   };
@@ -1751,7 +2093,7 @@ function prQuestion(body){
         opts.push(b);body.appendChild(b);
       });
     }else{
-      qText=q.q.replace(/_+/g,' blank ');
+      qText=q.q.replace(/_+/g,','); // đọc to: ngừng tự nhiên ở chỗ trống, không đọc chữ "blank"
       const inp=prEl('input','pr-in');inp.type='text';inp.placeholder='Type your answer...';
       inp.setAttribute('autocomplete','off');inp.setAttribute('autocapitalize','off');inp.setAttribute('autocorrect','off');
       const check=prEl('button','pr-btn','Check');
