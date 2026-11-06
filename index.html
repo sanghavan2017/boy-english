@@ -604,7 +604,7 @@ const BADGES=[
   {id:'vus1',ico:'📖',name:'VUS Explorer',desc:'Luyện 10 lượt VUS',check:s=>s.vusTurns>=10},
   {id:'gram1',ico:'🧠',name:'Grammar Hero',desc:'Đạt 9/10 bài kiểm tra ngữ pháp',check:s=>s.gramBest>=9},
   {id:'wordwiz',ico:'🪄',name:'Word Wizard',desc:'Học xong flashcard của 3 unit',check:s=>s.wordSets>=3},
-  {id:'unit7',ico:'🎓',name:'Unit Master',desc:'Đạt 8/10 quiz cuối của cả 7 unit',check:s=>s.unitsPassed>=7},
+  {id:'unit7',ico:'🎓',name:'Unit Master',desc:'Đạt 8/10 quiz cuối của cả 12 unit',check:s=>s.unitsPassed>=12},
   {id:'free5',ico:'🌍',name:'Free Explorer',desc:'Hoàn thành 5 chủ đề bài tập tự do',check:s=>s.freeDone>=5},
 ];
 
@@ -2181,143 +2181,263 @@ function prResult(body){
   body.appendChild(again);body.appendChild(back);body.appendChild(home);
 }
 
-// ---- Từ vựng Look 4 (nội dung gốc, theo chủ đề của 7 unit) ----
+// ---- Từ vựng Look 4 (danh sách từ theo bảng Scope and Sequence của sách Look 4, VUS; định nghĩa và câu ví dụ tự soạn) ----
 // Mỗi từ: W(từ, emoji, định nghĩa tiếng Anh đơn giản, câu ví dụ có chứa đúng từ đó, nghĩa tiếng Việt)
 // Câu hỏi (chọn nghĩa / nghe-chọn từ / điền từ) được tự sinh từ danh sách từ, nên thêm từ mới chỉ cần thêm một dòng W(...).
 const W=(w,e,def,ex,vi)=>({w,e,def,ex,vi});
 const PR_UNITS=[
 {id:'u1',e:'💼',title:'All kinds of jobs',words:[
- W('architect','🏗️','A person who designs buildings.','An architect drew the plan for our new school.','kiến trúc sư'),
- W('chef','👨‍🍳','A person who cooks food in a restaurant.','The chef made a big bowl of noodle soup.','đầu bếp'),
- W('nurse','👩‍⚕️','A person who looks after sick people in a hospital.','The nurse gave me some medicine.','y tá'),
- W('programmer','💻','A person who writes computer programs.','My uncle is a programmer and he makes apps.','lập trình viên'),
+ W('actor','🎭','A person who acts in movies, plays or TV shows.','My cousin is an actor in a TV show.','diễn viên'),
+ W('clown','🤡','A funny person who wears big shoes and makes people laugh at a circus.','The clown made all the children laugh.','chú hề'),
+ W('dentist','🦷','A doctor who looks after your teeth.','I visit the dentist twice a year.','nha sĩ'),
  W('firefighter','🧑‍🚒','A person who puts out fires.','The firefighter climbed up the tall ladder.','lính cứu hỏa'),
+ W('nurse','👩‍⚕️','A person who looks after sick people in a hospital.','The nurse gave me some medicine.','y tá'),
+ W('photographer','📷','A person who takes photos as a job.','The photographer took pictures at the wedding.','nhiếp ảnh gia'),
  W('pilot','✈️','A person who flies a plane.','The pilot said hello to all the passengers.','phi công'),
- W('farmer','🧑‍🌾','A person who grows food and keeps animals on a farm.','The farmer gets up at five every morning.','nông dân'),
- W('mechanic','🔧','A person who fixes cars and machines.','The mechanic fixed our car in one hour.','thợ máy'),
- W('journalist','📰','A person who writes the news for newspapers or TV.','The journalist asked the mayor three questions.','nhà báo'),
- W('vet','🐶','A doctor for animals.','We took our sick dog to the vet.','bác sĩ thú y'),
- W('engineer','⚙️','A person who designs and builds machines, roads or bridges.','The engineer built a bridge over the river.','kỹ sư'),
- W('dentist','🦷','A doctor who looks after your teeth.','I visit the dentist twice a year.','nha sĩ')
+ W('police officer','👮','A person who keeps people safe and catches thieves.','The police officer helped us cross the road.','cảnh sát'),
+ W('server','🍽️','A person who brings food to your table in a restaurant.','The server brought us two bowls of noodles.','nhân viên phục vụ'),
+ W('designer','✏️','A person who plans how things will look, such as clothes or buildings.','The designer drew a beautiful new dress.','nhà thiết kế'),
+ W('models','🧩','Small copies of real things, such as a plane or a building.','He makes models of old cars.','mô hình'),
+ W('movie director','🎬','The person who tells the actors what to do in a movie.','The movie director shouted, "Action!"','đạo diễn phim'),
+ W('animated movie','🎞️','A movie made from drawings or computer pictures, not real people.','We watched an animated movie about a talking fish.','phim hoạt hình')
  ],grammar:[
-  mc("My mom is ___ architect.",["a","an","the"],1,"architect starts with a vowel sound. Use an.","unit-grammar","Mẹ tôi là một kiến trúc sư."),
-  mc("What ___ your father do?",["do","does","is"],1,"After your father (he), use does.","unit-grammar","Bố bạn làm nghề gì?"),
-  fl("He ___ (fly) planes. He is a pilot.","flies","After he, add -s. fly → flies.","unit-grammar","Ông ấy lái máy bay. Ông ấy là phi công."),
-  mc("I want ___ a programmer.",["to be","being","be"],0,"want + to + base verb: want to be.","unit-grammar","Tôi muốn trở thành lập trình viên.")
+  mc("The firefighters ___ a fire right now.",["fight","are fighting","fights"],1,"\"Right now\" = present continuous: are fighting.","unit-grammar","Lúc này các lính cứu hỏa đang dập một đám cháy."),
+  mc("The designer often ___ two or three models.",["makes","is making","make"],0,"\"Often\" = a habit. After the designer (he/she), use makes.","unit-grammar","Nhà thiết kế thường làm hai hoặc ba mô hình."),
+  mc("Look! The pilot ___ the plane now.",["flies","is flying","fly"],1,"\"Look!\" and \"now\" = it is happening now: is flying.","unit-grammar","Nhìn kìa! Phi công đang lái máy bay."),
+  fl("A server ___ (work) in a restaurant every day.","works","\"Every day\" = a habit. After a server (he/she), add -s: works.","unit-grammar","Nhân viên phục vụ làm việc ở nhà hàng mỗi ngày.")
  ]},
-{id:'u2',e:'🎵',title:'Music & Dance',words:[
- W('guitar','🎸','A musical instrument with strings. You play it with your fingers.','My brother plays the guitar in a band.','đàn ghi-ta'),
- W('drums','🥁','Instruments you hit with sticks.','The drums were very loud at the concert.','trống'),
- W('violin','🎻','A small instrument with strings. You play it with a bow.','She plays the violin beautifully.','đàn vi-ô-lông'),
- W('piano','🎹','A big instrument with black and white keys.','We have an old piano in our living room.','đàn piano'),
- W('singer','🎤','A person who sings songs.','The singer has a lovely voice.','ca sĩ'),
+{id:'u2',e:'🎵',title:'Move to the music!',words:[
+ W('cello','🎻','A big instrument with strings. You sit down to play it.','The cello has a deep, warm sound.','đàn cello'),
+ W('classical music','🏛️','Old, serious music that is often played by an orchestra.','My grandma loves classical music.','nhạc cổ điển'),
+ W('concert','🎫','A show where people play or sing music for an audience.','We went to a concert last Saturday.','buổi hòa nhạc'),
  W('dancer','💃','A person who dances.','The dancer jumped high in the air.','vũ công'),
- W('concert','🎶','A show where people play or sing music for an audience.','We went to a concert last Saturday.','buổi hòa nhạc'),
- W('band','🎵','A group of people who play music together.','Her band plays rock music.','ban nhạc'),
- W('rhythm','👏','The beat of a song.','I clap my hands to the rhythm.','nhịp điệu'),
- W('lyrics','📝','The words of a song.','I know all the lyrics of this song.','lời bài hát'),
- W('perform','🎭','To sing, dance or play music for people.','They will perform on stage tonight.','biểu diễn'),
- W('stage','🎪','The raised place where performers stand.','The singer walked onto the stage.','sân khấu')
+ W('drums','🥁','Instruments you hit with sticks.','The drums were very loud on the stage.','trống'),
+ W('flute','🎶','A thin instrument that you blow across the top to play.','She plays the flute in the school band.','sáo'),
+ W('keyboard','🎹','A musical instrument with black and white keys that you press.','He plays the keyboard in a band.','đàn phím'),
+ W('pop music','🎧','Popular modern music that many young people like.','My sister listens to pop music all day.','nhạc pop'),
+ W('singer','🎤','A person who sings songs.','The singer has a lovely voice.','ca sĩ'),
+ W('violin','🎼','A small instrument with strings. You hold it under your chin.','She plays the violin beautifully.','đàn vi-ô-lông'),
+ W('bang','💥','To hit something so that it makes a loud noise.','Please do not bang the door.','đập mạnh, gõ ầm'),
+ W('carry','🎒','To take something from one place to another in your hands or on your back.','The dancers carry the drums to the stage.','mang, xách'),
+ W('climb','🧗','To go up something high, using your hands and feet.','The boys climb the tree after school.','trèo'),
+ W('shout','📢','To say something very loudly.','The fans shout the name of the singer.','hét, la lớn')
  ],grammar:[
-  mc("She ___ the guitar every day.",["plays","play","playing"],0,"After she, add -s: plays.","unit-grammar","Cô ấy chơi ghi-ta mỗi ngày."),
-  mc("I enjoy ___ to music.",["listen","listening","listens"],1,"enjoy + verb-ing: listening.","unit-grammar","Tôi thích nghe nhạc."),
-  mc("He can ___ the drums well.",["play","plays","playing"],0,"After can, use the base verb: play.","unit-grammar","Cậu ấy chơi trống giỏi."),
-  mc("We ___ to a concert last night.",["went","go","goes"],0,"\"Last night\" = past. go → went.","unit-grammar","Tối qua chúng tôi đi xem hòa nhạc.")
+  mc("___ the instruments expensive?",["Was","Were","Did"],1,"Instruments = more than one. Use Were: Were the instruments expensive?","unit-grammar","Những nhạc cụ đó có đắt không?"),
+  mc("Last night, it ___ their first concert.",["was","were","did"],0,"It + was (past of be): it was.","unit-grammar","Tối qua là buổi hòa nhạc đầu tiên của họ."),
+  mc("The children ___ play instruments then.",["didn't","weren't","don't"],0,"Past negative with a verb: didn't + base verb.","unit-grammar","Hồi đó bọn trẻ không chơi nhạc cụ."),
+  mc("They played ___ because the baby was sleeping.",["quiet","quietly","quieter"],1,"Describe how they played (a verb): use quietly (adverb).","unit-grammar","Họ chơi nhẹ nhàng vì em bé đang ngủ.")
  ]},
-{id:'u3',e:'🎉',title:'Celebrations',words:[
- W('festival','🎊','A special time when people celebrate something together.','Tet is the biggest festival in Viet Nam.','lễ hội'),
- W('parade','🎉','A line of people walking along the street to celebrate.','We watched the parade from the balcony.','cuộc diễu hành'),
- W('fireworks','🎆','Bright lights that explode in the night sky.','The fireworks lit up the sky at midnight.','pháo hoa'),
- W('costume','🎭','Special clothes you wear to look like someone else.','She wore a tiger costume to the party.','trang phục hóa trang'),
- W('lantern','🏮','A paper or glass light you can carry.','Mai carries a lantern at the Mid-Autumn Festival.','đèn lồng'),
- W('decorate','🎀','To make a place look nice with pretty things.','We decorate our house before Tet.','trang trí'),
- W('gift','🎁','Something you give to a person on a special day.','I gave my mom a gift for her birthday.','món quà'),
- W('invite','💌','To ask someone to come to your party.','I want to invite all my friends to my birthday.','mời'),
- W('candle','🕯️','A stick of wax with a small flame on top.','She lit a candle on the cake.','cây nến'),
- W('wish','⭐','To hope that something good will happen.','Make a wish and blow out the candles.','điều ước'),
- W('celebrate','🥳','To do something fun on a special day.','How do you celebrate your birthday?','ăn mừng'),
- W('traditional','🥮','Done in the same way for many years.','We eat traditional food at Tet.','truyền thống')
+{id:'u3',e:'🎉',title:"Let's celebrate!",words:[
+ W('eat traditional food','🥮','To have food from a country\'s past that people still cook today.','We eat traditional food at Tet.','ăn món ăn truyền thống'),
+ W('give presents','🎁','To hand gifts to people on a special day.','We give presents at birthday parties.','tặng quà'),
+ W('make special food','🍰','To cook food only for a party or a holiday.','Mom likes to make special food for the festival.','làm món ăn đặc biệt'),
+ W('play party games','🎲','To take part in fun games at a party.','We play party games at my birthday.','chơi trò chơi trong tiệc'),
+ W('put up decorations','🎀','To hang pretty things to make a place look nice.','We put up decorations before Tet.','treo đồ trang trí'),
+ W('throw streamers','🎊','To toss long, thin strips of colored paper into the air.','The children throw streamers at the end of the show.','tung dây ruy-băng giấy'),
+ W('watch a parade','🎉','To look at a line of people walking along the street to celebrate.','We watch a parade from the balcony.','xem diễu hành'),
+ W('wear traditional clothes','👘','To put on special clothes that people wore long ago.','She likes to wear traditional clothes to the festival.','mặc trang phục truyền thống'),
+ W('bought','🛍️','The past form of buy.','We bought a big cake for the party.','đã mua'),
+ W('chose','👆','The past form of choose.','She chose a red costume.','đã chọn'),
+ W('drank','🥤','The past form of drink.','He drank a glass of coconut water.','đã uống'),
+ W('took','📸','The past form of take.','We took many photos at the festival.','đã chụp, đã lấy')
  ],grammar:[
-  mc("My birthday is ___ May.",["on","in","at"],1,"Use in with months: in May.","unit-grammar","Sinh nhật tôi vào tháng Năm."),
-  mc("The party is ___ Saturday.",["in","on","at"],1,"Use on with days: on Saturday.","unit-grammar","Bữa tiệc vào thứ Bảy."),
-  mc("We have a party ___ eight o'clock.",["at","on","in"],0,"Use at with clock times: at eight o'clock.","unit-grammar","Chúng tôi có tiệc lúc tám giờ."),
-  fl("She is ___ (make) a birthday cake now.","making","\"Now\" = present continuous. make → making.","unit-grammar","Bây giờ cô ấy đang làm bánh sinh nhật.")
+  mc("They ___ eat pizza at the festival.",["didn't","don't","weren't"],0,"Past negative with a verb: didn't + base verb.","unit-grammar","Họ đã không ăn pizza ở lễ hội."),
+  mc("___ people wear traditional clothes?",["Did","Do","Were"],0,"Past question: Did + subject + base verb.","unit-grammar","Mọi người có mặc trang phục truyền thống không?"),
+  mc("Where ___ you go on holiday last year?",["did","do","are"],0,"Past question with where: Where did you go?","unit-grammar","Năm ngoái bạn đi đâu nghỉ lễ?"),
+  fl("Last weekend, my family ___ (make) special food for the festival.",["made"],"The past of make is made.","unit-grammar","Cuối tuần trước gia đình tôi đã làm món ăn đặc biệt cho lễ hội.")
  ]},
-{id:'u4',e:'⚽',title:'Sport for all',words:[
- W('athlete','🏃','A person who is good at sports.','The athlete runs ten kilometers every day.','vận động viên'),
- W('team','👥','A group of people who play a sport together.','Our team won the game.','đội'),
- W('coach','🧑‍🏫','A person who teaches and helps a sports team.','The coach told us to run faster.','huấn luyện viên'),
- W('match','⚽','A game between two teams or players.','We watched a football match on TV.','trận đấu'),
- W('wheelchair','♿','A chair with wheels for people who cannot walk well.','She plays basketball in a wheelchair.','xe lăn'),
- W('champion','🏆','The person or team that wins a competition.','He became the swimming champion.','nhà vô địch'),
- W('medal','🥇','A small metal prize for the winner.','She won a gold medal.','huy chương'),
- W('referee','🟨','A person who makes sure players follow the rules.','The referee blew his whistle.','trọng tài'),
- W('goal','🥅','A point you get when the ball goes into the net.','He scored a goal in the last minute.','bàn thắng'),
- W('compete','🏅','To try to win against other people.','Athletes from many countries compete in the Olympics.','thi đấu'),
- W('train','💪','To practice a sport to get better.','They train every day after school.','luyện tập'),
- W('stadium','🏟️','A big building where people watch sports.','Thousands of fans filled the stadium.','sân vận động')
+{id:'u4',e:'⚽',title:'Sports',words:[
+ W('cycling','🚴','Riding a bicycle as a sport.','Cycling is good for your legs.','đạp xe'),
+ W('diving','🤿','Jumping into water head first, or swimming deep under the water.','Diving looks easy, but it is hard.','lặn, nhảy cầu'),
+ W('golf','⛳','A sport where you hit a small ball into a hole with a long stick.','My grandpa plays golf on Sundays.','gôn'),
+ W('gymnastics','🤸','A sport with jumps, rolls and balance, often done on mats.','She does gymnastics after school.','thể dục dụng cụ'),
+ W('ice skating','⛸️','Sliding on ice with special shoes.','We went ice skating at the mall.','trượt băng'),
+ W('rowing','🚣','Moving a boat with long oars.','Rowing makes your arms strong.','chèo thuyền'),
+ W('sailing','⛵','Traveling on water in a boat with a sail.','Sailing is fun when there is wind.','đi thuyền buồm'),
+ W('snowboarding','🏂','Sliding down a snowy hill on a board.','Snowboarding is popular in the mountains.','trượt tuyết ván'),
+ W('track','🏃','The path where people run races.','He runs on the school track every morning.','đường chạy'),
+ W('volleyball','🏐','A sport where two teams hit a ball over a high net.','We play volleyball on the beach.','bóng chuyền'),
+ W('brave','🦁','Not afraid of danger.','The brave boy jumped into the water to help.','dũng cảm'),
+ W('nervous','😬','A little afraid or worried about something.','I felt nervous before the race.','lo lắng'),
+ W('surprised','😲','Feeling a little shocked because something unexpected happens.','She was surprised to see her friend at the stadium.','ngạc nhiên'),
+ W('tired','😴','Needing to rest or sleep.','He was tired after the long race.','mệt')
  ],grammar:[
-  mc("Wheelchair athletes ___ run very fast.",["can","cans","are"],0,"can + base verb. We do not add -s to can.","unit-grammar","Vận động viên xe lăn có thể chạy rất nhanh."),
-  mc("He ___ swim, but he can run.",["can't","doesn't can","isn't"],0,"The negative of can is can't.","unit-grammar","Cậu ấy không biết bơi nhưng biết chạy."),
-  mc("Our team is ___ than yours.",["fast","faster","fastest"],1,"Use -er + than to compare two things: faster.","unit-grammar","Đội chúng tôi nhanh hơn đội bạn."),
-  mc("She is the ___ player in our team.",["tall","taller","tallest"],2,"Use the + -est for the number one: tallest.","unit-grammar","Cô ấy là cầu thủ cao nhất đội.")
+  mc("Last year, he ___ swim, but now he can swim well.",["couldn't","can't","can"],0,"\"Last year\" = past. Not able in the past: couldn't.","unit-grammar","Năm ngoái cậu ấy chưa biết bơi, nhưng giờ bơi giỏi."),
+  mc("___ you ride a bike when you were five years old?",["Could","Can","Do"],0,"Past ability question: Could you ...?","unit-grammar","Lúc năm tuổi bạn có biết đi xe đạp không?"),
+  mc("They can ___ the ball, but they can't see it.",["hear","hears","hearing"],0,"After can, use the base verb: hear.","unit-grammar","Họ nghe được quả bóng, nhưng không nhìn thấy nó."),
+  mc("The fans were happy. The players waved to ___.",["they","them","their"],1,"After to, use them for more than one person.","unit-grammar","Người hâm mộ rất vui. Các cầu thủ vẫy tay chào họ.")
  ]},
 {id:'u5',e:'🏔️',title:'Incredible places',words:[
- W('mountain','⛰️','A very high hill.','We climbed a mountain in Sa Pa.','ngọn núi'),
- W('waterfall','🌊','Water that falls down from a high place.','The waterfall was loud and beautiful.','thác nước'),
+ W('bridge','🌉','A structure that lets people cross a river or a road.','We walked across the old bridge.','cây cầu'),
+ W('castle','🏰','A big old building with thick walls where kings and queens lived.','The castle was on top of the hill.','lâu đài'),
  W('cave','🕳️','A big hole in a hill or under the ground.','Bats live in the dark cave.','hang động'),
  W('desert','🏜️','A very dry place with lots of sand.','It is very hot and dry in the desert.','sa mạc'),
  W('island','🏝️','Land with water all around it.','We took a boat to a small island.','hòn đảo'),
- W('volcano','🌋','A mountain that can throw out hot rock and smoke.','The volcano exploded many years ago.','núi lửa'),
- W('rainforest','🌴','A thick forest in a hot, wet place.','Many colorful birds live in the rainforest.','rừng mưa nhiệt đới'),
- W('ocean','🐋','A very large area of salt water.','Whales swim in the ocean.','đại dương'),
- W('ancient','🏛️','Very, very old.','We visited an ancient temple in Hue.','cổ xưa'),
- W('tourist','📸','A person who travels to see interesting places.','A tourist took a photo of the bay.','khách du lịch'),
- W('explore','🧭','To go to a new place to find out about it.','I want to explore the jungle one day.','khám phá'),
- W('view','🌄','What you can see from a place.','The view from the top was amazing.','khung cảnh')
+ W('jungle','🌴','A thick forest in a hot, wet place.','Many colorful birds live in the jungle.','rừng rậm'),
+ W('plant','🌱','A living thing that grows in the ground, like a flower or a tree.','This plant needs a lot of water.','cây, thực vật'),
+ W('pyramid','🔺','A huge old stone building with a point on top.','The pyramid in Egypt is very old.','kim tự tháp'),
+ W('rock','🪨','A hard piece of stone.','There was a big rock in the river.','tảng đá'),
+ W('wave','🌊','A moving line of water on the sea.','The wave was higher than my head.','con sóng'),
+ W('exciting','🤩','Very interesting and fun, so you want to see more.','The trip to the cave was very exciting.','thú vị, hào hứng'),
+ W('dangerous','⚠️','Not safe. Someone can get hurt.','The road near the cliff is dangerous.','nguy hiểm'),
+ W('important','⭐','Very special, or something you must know or do.','It is important to protect the rainforest.','quan trọng'),
+ W('popular','🔥','Liked by many people.','This beach is very popular with tourists.','được ưa chuộng')
  ],grammar:[
-  mc("Mount Everest is the ___ mountain in the world.",["high","higher","highest"],2,"Use the + -est for the number one: highest.","unit-grammar","Everest là ngọn núi cao nhất thế giới."),
-  mc("A mountain is ___ than a hill.",["high","higher","highest"],1,"Use -er + than to compare two things: higher.","unit-grammar","Núi cao hơn đồi."),
-  mc("There ___ a big waterfall near my village.",["is","are","am"],0,"A waterfall = one thing. Use is.","unit-grammar","Gần làng tôi có một thác nước lớn."),
-  mc("There ___ many islands in Ha Long Bay.",["is","are","am"],1,"Many islands = more than one. Use are.","unit-grammar","Có nhiều hòn đảo ở vịnh Hạ Long.")
+  mc("The pyramid is ___ the trees.",["taller than","tall than","more tall than"],0,"Short adjective + -er + than: taller than.","unit-grammar","Kim tự tháp cao hơn những cái cây."),
+  mc("This is the ___ place in the city.",["busiest","busyest","most busy"],0,"busy → the busiest (y changes to i, then add -est).","unit-grammar","Đây là nơi nhộn nhịp nhất thành phố."),
+  mc("The homes by the beach are ___ than the homes in the city.",["more popular","popularer","most popular"],0,"Long adjective: more + adjective + than: more popular than.","unit-grammar","Nhà gần biển được ưa chuộng hơn nhà trong thành phố."),
+  mc("Many people think the ___ waves for surfing are in Australia.",["best","goodest","most good"],0,"good → better → the best.","unit-grammar","Nhiều người nghĩ những con sóng lướt ván tốt nhất nằm ở Úc.")
  ]},
-{id:'u6',e:'👗',title:'Fashion',words:[
- W('uniform','👔','Clothes that everyone at a school or job wears.','We wear a blue uniform to school.','đồng phục'),
- W('fashion','👗','The popular style of clothes at a certain time.','She loves fashion and draws new clothes.','thời trang'),
- W('style','😎','The way you dress or do things.','I like her style. She always looks cool.','phong cách'),
- W('jeans','👖','Strong blue trousers.','I wear jeans on weekends.','quần jeans'),
- W('jacket','🧥','A short coat.','Put on your jacket. It is cold outside.','áo khoác'),
- W('scarf','🧣','A long piece of cloth you wear around your neck.','She wore a red scarf in winter.','khăn quàng'),
- W('sneakers','👟','Soft shoes for sport.','I run in my new sneakers.','giày thể thao'),
- W('silk','🧵','A very soft and shiny cloth.','My mom\'s ao dai is made of silk.','lụa'),
- W('designer','✏️','A person who makes new designs for clothes.','The designer made a beautiful dress.','nhà thiết kế'),
- W('trendy','✨','Very popular and modern.','Those glasses look very trendy.','hợp thời trang'),
+{id:'u6',e:'👗',title:'Cool clothes',words:[
+ W('bracelets','📿','Jewelry that you wear around your wrist.','She wears two colorful bracelets.','vòng tay'),
  W('comfortable','🛋️','Nice and soft to wear. You feel good in it.','This T-shirt is soft and comfortable.','thoải mái'),
- W('ao dai','🇻🇳','A long traditional dress from Viet Nam.','She wore a beautiful ao dai on Tet.','áo dài')
+ W('leggings','👖','Tight trousers that stretch.','She wears leggings for yoga class.','quần legging'),
+ W('plain','🟦','Of one color, with no pattern.','He wore a plain white shirt.','trơn, một màu'),
+ W('pockets','🧥','Small bags sewn into clothes where you put things.','I keep my keys in my pockets.','túi áo, túi quần'),
+ W('polka dots','⚪','A pattern of small round spots.','Her dress has red polka dots.','họa tiết chấm bi'),
+ W('sneakers','👟','Soft shoes for sport.','I run in my new sneakers.','giày thể thao'),
+ W('stripes','🦓','Long, thin lines of color on cloth.','My shirt has blue and white stripes.','sọc'),
+ W('sunglasses','🕶️','Dark glasses that protect your eyes from the sun.','He put on sunglasses at the beach.','kính râm'),
+ W('frighten','😨','To make someone feel afraid.','A loud noise can frighten a small child.','làm sợ hãi'),
+ W('hurt','🤕','To cause pain to someone or something.','Tight shoes can hurt your feet.','làm đau'),
+ W('match','🧩','To look good together, or to be the same.','Your hat and scarf match.','hợp nhau, khớp'),
+ W('weaker','😔','Less strong than before.','He felt weaker after he was sick.','yếu hơn')
  ],grammar:[
-  mc("She is ___ a red dress today.",["wear","wears","wearing"],2,"\"Today\" here = now. Use is + wearing.","unit-grammar","Hôm nay cô ấy đang mặc váy đỏ."),
-  mc("I ___ jeans on weekends.",["wear","wears","wearing"],0,"\"On weekends\" = habit. After I, use wear.","unit-grammar","Tôi mặc quần jeans vào cuối tuần."),
-  mc("This jacket is ___ big for me.",["too","very much","enough"],0,"too + adjective means more than you want: too big.","unit-grammar","Cái áo khoác này quá to với tôi."),
-  mc("He ___ a uniform every day.",["wears","wear","wearing"],0,"After he, add -s: wears.","unit-grammar","Cậu ấy mặc đồng phục mỗi ngày.")
+  mc("Whose striped shirt is this? It's ___.",["mine","my","me"],0,"Use mine when there is no noun after it: It's mine.","unit-grammar","Áo sọc này của ai? Của tôi."),
+  mc("That bag isn't yours. It's ___.",["her","hers","she"],1,"hers = belongs to her (no noun after it).","unit-grammar","Cái túi đó không phải của bạn. Nó là của cô ấy."),
+  mc("Where are Mina and Jane? Are these coats ___?",["theirs","their","they"],0,"theirs = belongs to them (no noun after it).","unit-grammar","Mina và Jane đâu rồi? Những cái áo khoác này là của họ à?"),
+  mc("Whose sunglasses are these? They are ___.",["ours","our","we"],0,"ours = belongs to us (no noun after it).","unit-grammar","Kính râm này của ai? Của chúng tôi.")
  ]},
 {id:'u7',e:'📜',title:'Life in the past',words:[
- W('past','⏳','The time before now.','In the past, people had no phones.','quá khứ'),
- W('history','📜','The story of things that happened long ago.','I love learning about the history of Viet Nam.','lịch sử'),
- W('grandparents','👵','Your mother\'s and father\'s parents.','My grandparents live in a small village.','ông bà'),
- W('village','🏘️','A very small town in the countryside.','Life in the village was quiet.','ngôi làng'),
- W('letter','✉️','A written message you send by post.','He wrote a letter to his friend.','lá thư'),
- W('typewriter','⌨️','An old machine for writing with keys and paper.','My grandpa still has an old typewriter.','máy đánh chữ'),
- W('radio','📻','A machine you use to listen to music and news.','They listened to the radio every evening.','đài radio'),
- W('invent','💡','To make something completely new for the first time.','Someone had to invent the light bulb.','phát minh'),
- W('modern','🤖','New and using the latest ideas.','Our school has modern computers.','hiện đại'),
- W('change','🔄','To become different.','Cities change a lot over time.','thay đổi'),
- W('memory','💭','Something you remember from the past.','My best memory is our trip to the sea.','kỷ niệm'),
- W('century','📅','A period of one hundred years.','That bridge was built in the last century.','thế kỷ')
+ W('the back','↩️','The part behind something.','My dog sleeps at the back of the house.','phía sau'),
+ W('the front','↪️','The part of a building that you see first.','Our door is at the front of the house.','phía trước'),
+ W('elevator','🛗','A small room that carries people up and down in a building.','We took the elevator to the tenth floor.','thang máy'),
+ W('entrance','🚪','The place where you go into a building.','The entrance of the school is very wide.','lối vào'),
+ W('floor','🏢','One level of a building.','My apartment is on the fifth floor.','tầng'),
+ W('gate','🚧','A door in a fence or wall outside.','Please close the gate.','cổng'),
+ W('key','🔑','A small metal thing you use to open a door.','I lost my key.','chìa khóa'),
+ W('roof','🏠','The top of a building.','Rain fell on the roof all night.','mái nhà'),
+ W('downstairs','⬇️','On the lower floor of a building.','The kitchen is downstairs.','ở tầng dưới'),
+ W('upstairs','⬆️','On a higher floor of a building.','My bedroom is upstairs.','ở tầng trên'),
+ W('chalk','🖍️','A white stick you use to write or draw on a board or the ground.','The children drew with chalk.','phấn'),
+ W('circle','⭕','A round shape, like a ball seen flat.','Draw a circle on the paper.','hình tròn'),
+ W('glass','🥛','Hard, clear material that you can see through, like a window.','Be careful. The glass can break.','thủy tinh, kính'),
+ W('sidewalk','🚶','The path beside a road where people walk.','Walk on the sidewalk, not on the road.','vỉa hè'),
+ W('squares','🟩','Shapes with four equal sides.','The chess board has sixty-four squares.','hình vuông')
  ],grammar:[
-  mc("In the past, people ___ phones.",["didn't have","don't have","doesn't has"],0,"\"In the past\" = past. Use didn't + base verb.","unit-grammar","Ngày xưa người ta không có điện thoại."),
-  mc("My grandpa ___ in a village when he was young.",["lived","lives","live"],0,"\"When he was young\" = past. live + ed = lived.","unit-grammar","Ông tôi sống ở một ngôi làng khi còn trẻ."),
-  mc("___ your grandma write letters?",["Did","Do","Does"],0,"Past question: Did + subject + base verb.","unit-grammar","Bà bạn có viết thư không?"),
-  fl("Long ago, people ___ (not / have) computers.",["didn't have","did not have"],"didn't + base verb: didn't have.","unit-grammar","Ngày xưa người ta không có máy tính.")
+  mc("Last week, we talked ___ the pyramids.",["about","to","at"],0,"talk + about: talked about.","unit-grammar","Tuần trước chúng tôi đã nói về các kim tự tháp."),
+  mc("Today, we are looking ___ Egyptian houses.",["at","to","for"],0,"look + at: looking at.","unit-grammar","Hôm nay chúng tôi đang nhìn các ngôi nhà Ai Cập."),
+  mc("They waited ___ the rain to come.",["for","at","about"],0,"wait + for: waited for.","unit-grammar","Họ chờ mưa đến."),
+  mc("Long ago, children ___ draw squares on the sidewalk to play.",["had to","have to","has to"],0,"\"Long ago\" = past. have to → had to.","unit-grammar","Ngày xưa trẻ em phải vẽ ô vuông trên vỉa hè để chơi.")
+ ]},
+{id:'u8',e:'🥦',title:'Fresh food',words:[
+ W('broccoli','🥦','A green vegetable that looks like a small tree.','My mom cooks broccoli with garlic.','súp lơ xanh'),
+ W('cereal','🥣','A breakfast food made from grain. You eat it with milk.','I eat cereal with milk every morning.','ngũ cốc'),
+ W('chili pepper','🌶️','A small, spicy vegetable.','This soup has one chili pepper.','quả ớt'),
+ W('corn','🌽','A tall plant with yellow grains that you can eat.','We grilled corn on the fire.','bắp ngô'),
+ W('jam','🍓','A sweet, sticky food made from fruit. You put it on bread.','I like jam on my toast.','mứt'),
+ W('lettuce','🥬','A green leaf vegetable that you eat in salads.','Put some lettuce in the sandwich.','rau xà lách'),
+ W('nuts','🥜','Small, hard foods with a shell, like peanuts.','I eat nuts as a snack.','các loại hạt'),
+ W('olives','🫒','Small green or black fruits that are used to make oil.','She put olives on the pizza.','quả ô-liu'),
+ W('strawberry','🍓','A sweet red fruit that grows on a small plant.','I put a strawberry on top of the cake.','quả dâu tây'),
+ W('zucchini','🥒','A long, dark green vegetable that you cook.','We fried a zucchini with egg.','bí ngòi'),
+ W('fresh food','🍎','Food that is new and has not been kept for a long time.','Fresh food from the market tastes better.','thực phẩm tươi'),
+ W('junk food','🍟','Food that is not good for your body, like chips and candy.','You should not eat too much junk food.','đồ ăn vặt không tốt cho sức khỏe'),
+ W('seeds','🌱','Small things from a plant that can grow into new plants.','We planted seeds in the garden.','hạt giống'),
+ W('weeds','🌿','Wild plants that grow where you do not want them.','We pull out weeds from the vegetable garden.','cỏ dại')
+ ],grammar:[
+  mc("How ___ chili peppers are there?",["many","much","a lot"],0,"Chili peppers can be counted: How many.","unit-grammar","Có bao nhiêu quả ớt?"),
+  mc("How ___ cereal do you have for breakfast?",["much","many","some"],0,"Cereal cannot be counted: How much.","unit-grammar","Bạn ăn bao nhiêu ngũ cốc cho bữa sáng?"),
+  mc("Are there ___ vegetables in the fridge?",["any","a","an"],0,"In questions, use any: Are there any ...?","unit-grammar","Trong tủ lạnh có rau không?"),
+  mc("I ate ___ fresh food. Only a tiny bit.",["a little","a few","many"],0,"Food (fresh food) cannot be counted: a little.","unit-grammar","Tôi ăn một chút thực phẩm tươi. Chỉ một xíu thôi.")
+ ]},
+{id:'u9',e:'🔭',title:'The world of the future',words:[
+ W('app','📱','A computer program on a phone or a tablet.','I use a map app to find the way.','ứng dụng'),
+ W('charge a tablet','🔌','To put power into a tablet so that it works.','I charge a tablet every night.','sạc máy tính bảng'),
+ W('e-book','📖','A book that you read on a screen.','I read an e-book on the bus.','sách điện tử'),
+ W('go online','🌐','To connect to the internet.','We go online to do our homework.','lên mạng'),
+ W('headphones','🎧','Things you wear on your ears to listen to sound.','Use headphones in the library.','tai nghe'),
+ W('interactive whiteboard','🧑‍🏫','A big touch screen that a teacher uses in class.','The teacher wrote on the interactive whiteboard.','bảng trắng tương tác'),
+ W('laptop','💻','A small computer you can carry.','I do my homework on a laptop.','máy tính xách tay'),
+ W('microphone','🎙️','A tool that makes your voice louder.','The singer held the microphone.','micro'),
+ W('VR headset','🥽','A device you wear over your eyes to see a virtual world.','With a VR headset, we visited Mars.','kính thực tế ảo'),
+ W('Wi-Fi','📶','A wireless way to connect to the internet.','Is there Wi-Fi in this café?','mạng không dây'),
+ W('control','🎮','To make something do what you want.','He can control the robot with his phone.','điều khiển'),
+ W('drops','🪂','Lets something fall from above.','The drone drops a package at the door.','thả xuống'),
+ W('satellites','🛰️','Machines that go around the Earth in space.','Satellites help us take weather photos.','vệ tinh'),
+ W('send a text','💬','To write a short message on a phone and send it.','I send a text to my mom after school.','gửi tin nhắn')
+ ],grammar:[
+  mc("The robot ___ help a lot of students.",["will","is","does"],0,"Future: will + base verb.","unit-grammar","Con rô-bốt sẽ giúp rất nhiều học sinh."),
+  mc("They ___ miss any lessons.",["won't","don't will","aren't"],0,"Negative future: won't + base verb.","unit-grammar","Họ sẽ không bỏ lỡ bài học nào."),
+  mc("___ there be more drones in the future?",["Will","Do","Are"],0,"Future question: Will + there + be ...?","unit-grammar","Trong tương lai sẽ có nhiều máy bay không người lái hơn không?"),
+  mc("One day, we ___ robots in our class.",["will have","had","has"],0,"\"One day\" = future: will have.","unit-grammar","Một ngày nào đó lớp chúng ta sẽ có rô-bốt.")
+ ]},
+{id:'u10',e:'💪',title:'Feeling good!',words:[
+ W('asleep','😴','In the state of sleeping.','The baby is asleep.','đang ngủ'),
+ W('awake','👀','Not sleeping.','I was awake all night.','tỉnh táo, thức'),
+ W('dark','🌑','Without much brightness, like at night.','It is dark in the cave.','tối'),
+ W('dry','🏜️','Without any water on it.','Hang the towel so it can get dry.','khô'),
+ W('get exercise','🏃','To move your body to stay healthy.','You should get exercise every day.','tập thể dục'),
+ W('light','💡','Full of brightness, like the daytime.','The room is light because of the big windows.','sáng'),
+ W('strong','💪','Having a lot of power in your body.','He is strong enough to lift the box.','khỏe, mạnh'),
+ W('rest','🛌','To stop working and relax.','After the game, we rest for ten minutes.','nghỉ ngơi'),
+ W('weak','🥀','Without much power in the body.','My legs felt weak after the flu.','yếu'),
+ W('wet','💧','Covered with water or other liquid.','My shoes are wet because of the rain.','ướt'),
+ W('brush our teeth','🪥','To clean your teeth with a small brush.','We brush our teeth after every meal.','đánh răng'),
+ W('shampoo','🧴','A liquid you use to wash your hair.','This shampoo smells like flowers.','dầu gội đầu'),
+ W('soap','🧼','You use this with water to wash your hands and body.','Wash your hands with soap.','xà phòng'),
+ W('toothbrush','🪥','A small brush for cleaning your teeth.','Please put the toothbrush back in the cup.','bàn chải đánh răng'),
+ W('toothpaste','🦷','A soft cream you put on a brush to clean your teeth.','This toothpaste tastes like mint.','kem đánh răng'),
+ W('towel','🛁','A soft cloth you use to dry your body.','I dried my hair with a towel.','khăn tắm')
+ ],grammar:[
+  mc("You ___ get some exercise. It is good for you.",["should","shouldn't","must to"],0,"Good advice: should.","unit-grammar","Bạn nên tập thể dục. Nó tốt cho bạn."),
+  mc("You ___ eat a lot before you go to sleep.",["shouldn't","should","can"],0,"Advice not to do it: shouldn't.","unit-grammar","Bạn không nên ăn nhiều trước khi đi ngủ."),
+  mc("Why do birds clean their feathers? ___ it keeps them clean and strong.",["Because","So","But"],0,"Answer a why-question with Because.","unit-grammar","Tại sao chim làm sạch lông? Vì điều đó giữ chúng sạch và khỏe."),
+  mc("Your bedroom ___ be very light at night.",["shouldn't","should","can"],0,"Light makes it hard to sleep: shouldn't.","unit-grammar","Phòng ngủ của bạn không nên quá sáng vào ban đêm.")
+ ]},
+{id:'u11',e:'🏙️',title:'City life',words:[
+ W('airport','🛫','A place where planes arrive and leave.','We waited at the airport for two hours.','sân bay'),
+ W('bus station','🚌','A place where buses stop and people get on.','The bus station is near the market.','bến xe buýt'),
+ W('fire station','🚒','A building where firefighters wait for emergencies.','The fire station is next to the school.','trạm cứu hỏa'),
+ W('hotel','🏨','A building where travelers pay to stay and sleep.','We stayed in a hotel by the sea.','khách sạn'),
+ W('pharmacy','💊','A shop where you buy medicine.','I bought some cough medicine at the pharmacy.','hiệu thuốc'),
+ W('police station','🚓','A building where police officers work.','He went to the police station to report his lost bag.','đồn cảnh sát'),
+ W('restaurant','🍜','A place where you pay to eat meals.','We had dinner at a small restaurant.','nhà hàng'),
+ W('square','🏛️','A flat, open area in a city with buildings around it.','People meet in the square on Sundays.','quảng trường'),
+ W('train station','🚉','A place where trains stop and people get on.','My uncle waited for me at the train station.','ga tàu'),
+ W('university','🎓','A place where people study after high school.','My sister studies at a big university.','trường đại học'),
+ W('chimneys','🏭','Tall pipes on a roof or factory that let smoke out.','Smoke came out of the chimneys.','ống khói'),
+ W('city center','🌆','The middle part of a city.','The city center is full of shops and people.','trung tâm thành phố'),
+ W('highways','🛣️','Big, fast roads between cities.','Cars drive fast on highways.','đường cao tốc'),
+ W('office buildings','🏢','Tall buildings where people work at desks.','Many people work in the office buildings near the river.','tòa nhà văn phòng')
+ ],grammar:[
+  mc("He ___ to Miniatur Wunderland.",["has been","have been","is been"],0,"he + has been (present perfect).","unit-grammar","Anh ấy đã từng đến Miniatur Wunderland."),
+  mc("They ___ finished yet.",["haven't","hasn't","didn't been"],0,"they + haven't + past participle: haven't finished.","unit-grammar","Họ vẫn chưa làm xong."),
+  mc("She ___ the airport yet.",["hasn't seen","haven't seen","didn't seen"],0,"she + hasn't + past participle: hasn't seen.","unit-grammar","Cô ấy vẫn chưa nhìn thấy sân bay."),
+  mc("They ___ a big airport.",["have built","has built","are build"],0,"they + have + past participle: have built.","unit-grammar","Họ đã xây một sân bay lớn.")
+ ]},
+{id:'u12',e:'🌟',title:'You can do this!',words:[
+ W('crawl','🐛','To move on your hands and knees.','The baby can crawl very fast.','bò'),
+ W('discover','🔍','To find or learn something for the first time.','Scientists discover new animals every year.','khám phá'),
+ W('go hang gliding','🪂','To fly through the air under a big wing, without an engine.','My uncle wants to go hang gliding in the mountains.','chơi dù lượn'),
+ W('go horseback riding','🐎','To ride a horse for fun.','Let us go horseback riding on Sunday.','cưỡi ngựa'),
+ W('go kayaking','🛶','To move on water in a small, narrow boat with a paddle.','We go kayaking on the river.','chèo thuyền kayak'),
+ W('go snorkeling','🤿','To swim near the top of the sea and look at fish through a mask.','We want to go snorkeling at the coral reef.','lặn ống thở'),
+ W('jump off','🦘','To leave a high place by jumping down.','The boy likes to jump off the diving board.','nhảy xuống từ'),
+ W('smell','👃','To notice something with your nose.','I can smell fresh bread.','ngửi'),
+ W('swing','🎠','To move forwards and backwards through the air, like on a playground seat.','The children swing in the park.','đu đưa'),
+ W('taste','👅','To know the flavor of food with your mouth.','Please taste the soup.','nếm'),
+ W('coast','🏖️','The land next to the sea.','We drove along the coast.','bờ biển'),
+ W('hide','🙈','To go where nobody can see you.','The cat likes to hide under the bed.','trốn, ẩn nấp'),
+ W('splashed','💦','Hit water so that it flew everywhere.','The kids splashed in the pool.','đã té nước'),
+ W('skills','🛠️','Things you can do well because you practiced.','Cooking and drawing are skills that I want to learn.','kỹ năng'),
+ W('zipline','🧗','A strong rope that you slide down while you hang from it.','We slid across the valley on a zipline.','đường trượt dây'),
+ W('cliff','🏔️','A high, steep wall of rock, usually next to the sea.','Be careful near the edge of the cliff.','vách đá')
+ ],grammar:[
+  mc("___ you ever done something dangerous?",["Have","Do","Did"],0,"Experience question: Have you ever ...?","unit-grammar","Bạn đã bao giờ làm điều gì nguy hiểm chưa?"),
+  mc("___ she ever crawled through a tunnel?",["Has","Have","Did"],0,"she + Has: Has she ever ...?","unit-grammar","Cô ấy đã bao giờ bò qua một đường hầm chưa?"),
+  mc("Yesterday, I ___ snorkeling.",["went","have gone","go"],0,"\"Yesterday\" = a finished time. Use the past simple: went.","unit-grammar","Hôm qua tôi đã đi lặn ống thở."),
+  mc("Have you tried hang gliding? No, I ___.",["haven't","didn't","hasn't"],0,"Short answer: No, I haven't.","unit-grammar","Bạn đã thử dù lượn chưa? Chưa, tôi chưa thử.")
  ]}
 ];
 
