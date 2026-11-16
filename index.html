@@ -773,13 +773,14 @@ async function askPika(userMsg){
 
   const topics=getTopics();
   const memCtx=buildMemoryContext(currentTab,TOPIC);
-  const sys=(topics[TOPIC]?.s||'You are a friendly English teacher.')+' Do not say the learner\'s name in your responses.'+memCtx;
+  const STYLE=' TONE RULES: Be warm, kind and encouraging, like a friendly teacher. Use simple, easy words and short sentences (about 10 words). Reply with at most 2 short sentences, and end with ONE easy question. After the learner answers, start with a short praise such as "Great job!", "Nice try!" or "I like that!". If the learner makes a mistake, never criticise: gently say the correct sentence in your reply, then continue. If the learner seems stuck or gives a very short answer, help by offering two choices, for example "Do you like dogs or cats?".';
+  const sys=(topics[TOPIC]?.s||'You are a friendly English teacher.')+' Do not say the learner\'s name in your responses.'+STYLE+memCtx;
   const openings=[
-    'Hello! Please start. Greet briefly and ask your first question. Keep it short and natural.',
-    'Hi! Start the conversation with a different angle than usual. Ask something specific and unexpected about this topic.',
-    'Hey! Begin with a fun or surprising question about this topic that most people would not think to ask.',
-    'Start our session. Skip generic questions. Jump straight into something interesting and specific.',
-    'Hello! Open with a personal question related to this topic that feels like real conversation.'
+    'Hello! Please start. Say a short, warm hello and ask one easy question about this topic.',
+    'Hi! Start with a friendly hello and one simple, fun question about this topic.',
+    'Hey! Begin with a short, cheerful greeting. Then ask one easy question the learner can answer in a few words.',
+    'Start our session. Say hello in one short sentence, then ask one easy, friendly question about this topic.',
+    'Hello! Open with a warm hello and one simple personal question related to this topic.'
   ];
   // Tin nhắn đầu tiên gửi AI luôn là của "user" (yêu cầu của API); đánh dấu opener để không tính là lượt của bé
   if(!HIST.length)HIST.push({role:'user',content:openings[Math.floor(Math.random()*openings.length)],opener:true});
